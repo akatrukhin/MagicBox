@@ -1,7 +1,7 @@
 # MagicBox - Organize your workspace, keep files optimized, prepare images for publishing
 
 [![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)
-[!License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)
+![License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/katrukhin)
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/akatrukhin/MagicBox)
 

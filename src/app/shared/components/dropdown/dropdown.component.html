@@ -1,0 +1,37 @@
+<div class="dropdown-container">
+  <div class="dropdown-body f alc" (click)="open()">
+    <ng-content (click)="close()"></ng-content>
+  </div>
+
+  <div
+    class="dropdown"
+    [class.open]="dropdownState"
+    (clickOutside)="close()"
+    [clickOutsideEnabled]="outsideClickEnable"
+  >
+    <div class="inner">
+      <ul
+        @DropDownItemsAnimation
+        *ngIf="dropdownState"
+        class="dropdown-list-content"
+      >
+        <li
+          *ngFor="let item of dropdownList; trackBy: trackByFn"
+          class="stagger"
+        >
+          <p (click)="selected(item)">{{ item }}</p>
+          <input
+            #invisibleInput
+            *ngIf="item === 'Add Images'"
+            type="file"
+            class="select-files"
+            (change)="getFilesFromSystem()"
+            multiple
+            accept="image/*"
+          />
+          <hr *ngIf="!item" />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

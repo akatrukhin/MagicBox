@@ -1,0 +1,262 @@
+@import "./colors.scss";
+
+hr {
+  border-top: 1px solid var(--hr-color);
+}
+
+.f {
+  display: flex;
+}
+
+.c {
+  justify-content: center;
+}
+
+.sb {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sa {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dc {
+  flex-direction: column;
+}
+
+.alc {
+  align-items: center;
+}
+
+.alb {
+  align-items: baseline;
+}
+
+.g1 {
+  flex-grow: 1;
+}
+
+// Alings
+
+.tc {
+  text-align: center;
+}
+
+.none {
+  display: none;
+}
+
+.SF-Icon {
+  font-family: "SF Compact Display";
+  font-weight: 400;
+
+  &:hover {
+    font-weight: 600;
+  }
+}
+
+.title h1,
+.title input,
+h1 {
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--body-fg);
+  text-shadow: var(--title-shadow);
+}
+
+h2 {
+  opacity: 0.74;
+  font-weight: 700;
+  color: var(--body-fg);
+  text-shadow: var(--title-shadow);
+}
+
+//Altramarine Line
+.line {
+  position: relative;
+  z-index: 1;
+}
+.line:after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  left: -1px;
+  right: 0;
+  width: 100%;
+  transform: scale(1.08);
+  height: 12px;
+  z-index: -1;
+  background-color: #50e3c2;
+}
+
+//Margins
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb12 {
+  margin-bottom: 12px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb60 {
+  margin-bottom: 60px;
+}
+.mt30 {
+  margin-top: 30px;
+}
+
+// Buttons
+.main-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 136px;
+  padding: 0 20px;
+  height: 48px;
+  background: #28c3a1;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: 0 1px 2px rgba(15, 9, 64, 0.31);
+  box-shadow: var(--button-shadow);
+  border-radius: 30px;
+  text-align: center;
+  border: none;
+  transition: transform 0.3s, box-shadow 0.4s, opacity 0.2s, filter 3s,
+    background 0.4s;
+
+  &.disabled {
+    opacity: 0.8;
+    color: unquote("#ffffffe8");
+    text-shadow: 0 1px 2px rgba(15, 9, 64, 0.31);
+    box-shadow: 0 4px 43px 0 unquote("#49567966"),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s, filter 3s, box-shadow 0.4s, background 0.4s;
+    pointer-events: none;
+  }
+
+  &.red {
+    opacity: 0.8;
+    color: unquote("#ffffffe8");
+    background: $Red;
+    text-shadow: 0 1px 2px rgba(15, 9, 64, 0.31);
+    box-shadow: 0 4px 43px 0 rgba(217, 45, 45, 0.76),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s, filter 3s, box-shadow 0.4s, background 0.4s;
+  }
+}
+
+.size-value,
+.data-year {
+  opacity: 0.5;
+}
+
+.size {
+  .size-value {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.fade {
+  animation: 0.4s both fade;
+  will-change: opacity;
+}
+
+// Dialog
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1000;
+}
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 1;
+}
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.32);
+}
+.cdk-overlay-backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+}
+.cdk-global-overlay-wrapper {
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+}
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+}
+.cdk-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  outline: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.mat-dialog-container {
+  display: block;
+  padding: 24px 40px 32px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  outline: 0;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  max-height: inherit;
+}
+.mat-dialog-container {
+  background: #f3f4f5;
+  background-image: linear-gradient(-180deg, #f8f9fa 0%, #e1e7eb 100%);
+  box-shadow: 0 11px 15px -24px rgba(0, 0, 0, 0.2),
+    0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.87);
+}

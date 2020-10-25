@@ -1,0 +1,88 @@
+<div class="table-header">
+  <div class="type">Type</div>
+  <div class="name">Name</div>
+  <div class="date">Last Modified</div>
+  <div class="size">Original size</div>
+  <div class="status">Optimized size</div>
+</div>
+
+<virtual-scroller
+  #scroll
+  [items]="rows"
+  [stripedTable]="true"
+  [bufferAmount]="10"
+  [scrollAnimationTime]="50"
+>
+  <table>
+    <tbody #container>
+      <tr
+        *ngFor="let file of scroll.viewPortItems; trackBy: trackByFn"
+        (contextmenu)="onRightClick(file)"
+        (dblclick)="previewFile(file)"
+        (click)="addSelectedFile(file)"
+        [class.selected]="file.selected"
+      >
+        <td width="10%">
+          <div class="first-column">
+            <div class="file-format">
+              {{ file.original.type | fileType }}
+            </div>
+          </div>
+        </td>
+        <td width="44%">
+          <div class="column">
+            <b class="file-name">
+              {{
+                file.hasSourceFile
+                  ? (file.shrinked.name | fileName)
+                  : (file.original.name | fileName)
+              }}
+            </b>
+          </div>
+        </td>
+        <td width="17%">
+          <div
+            class="column"
+            [innerHtml]="file.original.lastModified | date"
+          ></div>
+        </td>
+        <td width="12%">
+          <div class="column" [innerHtml]="file.original.size | fileSize"></div>
+        </td>
+        <td width="17%">
+          <div class="column status last-column">
+            <div
+              *ngIf="
+                !(file.status === 'optimized') && !file.loading;
+                else OptimizedFile
+              "
+              class="not-optimized-label f alc"
+            >
+              <div [ngSwitch]="file.status">
+                <div *ngSwitchCase="'new'" class="not-optimized">
+                  <div class="label needs-updating"></div>
+                  Not optimized
+                </div>
+                <div *ngSwitchCase="'needs-update'" class="not-optimized">
+                  <div class="label needs-updating"></div>
+                  Update required
+                </div>
+                <div *ngSwitchCase="'removed'" class="not-optimized">
+                  <div class="label not-found"></div>
+                  File not found
+                </div>
+              </div>
+            </div>
+            <app-loader @LoaderAnimation *ngIf="file.loading"></app-loader>
+            <ng-template #OptimizedFile>
+              <div
+                *ngIf="!file.loading"
+                [innerHtml]="file.shrinked.size | fileSize"
+              ></div>
+            </ng-template>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</virtual-scroller>

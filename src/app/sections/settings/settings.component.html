@@ -1,0 +1,113 @@
+<div @ViewTransition>
+  <div class="header">
+    <h1>
+      Settings
+    </h1>
+  </div>
+  <div class="container">
+    <div class="settings-container">
+      <div class="setting f sb alc">
+        Appearance {{ appearance.theme }}
+        <select (change)="onThemeChange($event.target.value)" class="dropdown">
+          <option [selected]="appearance.theme === themes.Dark">Dark</option>
+          <option [selected]="appearance.theme === themes.Light">Light</option>
+        </select>
+      </div>
+      <div class="setting f sb alc" (click)="setNavigationBarStyle()">
+        Mini navigation bar
+        <app-toggle [checked]="appearance.smallNav"></app-toggle>
+      </div>
+      <hr />
+      <div
+        *ngFor="let setting of settings"
+        class="setting f sb alc"
+        (click)="setUserSettings(setting)"
+        (keyup.enter)="setUserSettings(setting)"
+        tabindex="1"
+      >
+        {{ setting.name }}
+        <app-toggle
+          *ngIf="checkOwnProperty(setting)"
+          [checked]="setting.status"
+        >
+        </app-toggle>
+      </div>
+    </div>
+
+    <h2>JPEG</h2>
+    <div class="setting f sb alc">
+      Compression
+      <input
+        type="number"
+        [(ngModel)]="images.jpeg.quality"
+        size="10"
+        maxlength="2"
+        min="0"
+        max="80"
+      />
+    </div>
+
+    <hr />
+
+    <h2>WEBP</h2>
+    <div class="setting f sb alc">
+      Compression
+      <input
+        type="number"
+        [(ngModel)]="images.webp.quality"
+        size="10"
+        maxlength="2"
+        min="0"
+        max="80"
+      />
+    </div>
+    <div class="setting f sb alc">
+      Alpha Compression
+      <input
+        type="number"
+        [(ngModel)]="images.webp.alpha"
+        size="10"
+        maxlength="2"
+        min="0"
+        max="80"
+      />
+    </div>
+
+    <hr />
+
+    <h2>TIFF</h2>
+    <div class="setting f sb alc">
+      Compression
+      <input
+        type="number"
+        [(ngModel)]="images.tiff.quality"
+        size="10"
+        maxlength="2"
+        min="10"
+        max="80"
+      />
+    </div>
+
+    <hr />
+
+    <h2>SVG</h2>
+    <div class="setting f sb alc">
+      Precision
+      <input
+        type="number"
+        [(ngModel)]="images.svg.precision"
+        size="10"
+        maxlength="1"
+        min="1"
+        max="8"
+      />
+    </div>
+
+    <hr />
+
+    <div class="version f sb alc">
+      <span>Version: {{ appVersion }}</span>
+      <span *ngIf="updateStatus" class="status">{{ updateStatus }}</span>
+    </div>
+  </div>
+</div>

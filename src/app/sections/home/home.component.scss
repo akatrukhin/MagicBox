@@ -1,0 +1,19 @@
+:host {
+  position: relative;
+  flex-grow: 1;
+  transition: all ease-in-out 0.3s;
+}
+
+.home-container {
+  position: absolute;
+  top: 3.5vh;
+  left: 0;
+  right: 3.5vh;
+  bottom: 4.5vh;
+  min-width: 680px;
+  user-select: none;
+  overflow-y: scroll;
+  background: var(--home-bg);
+  border-radius: 13px 21px 34px 21px;
+  box-shadow: var(--home-shadow);
+}

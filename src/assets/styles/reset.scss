@@ -1,0 +1,164 @@
+// HTML5 Reset Stylesheet
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+	margin:0;
+	padding:0;
+	border:0;
+	outline:0;
+	font-size:100%;
+	vertical-align:baseline;
+	background: transparent;
+}
+
+body {
+	line-height: 1;
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+	display: block;
+}
+
+ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+a {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+	text-decoration: none;
+}
+
+ins {
+	background-color: #ff9;
+	color: #000;
+	text-decoration: none;
+}
+
+mark {
+	background-color: #ff9;
+	color: #000;
+	font-style: italic;
+	font-weight: bold;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+	border-bottom: 1px dotted;
+	cursor: help;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+textarea, input, button { outline: none; }
+
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cccccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+input, select {
+	vertical-align:middle;
+}
+
+input {
+	display: block;
+	margin: 0;
+	box-shadow: none;
+	border-radius: none;
+	border: none;
+	background: transparent;
+}
+
+input::placeholder {
+	opacity: 1;
+	transition: opacity .3s ease;
+	text-overflow: ellipsis;
+}
+
+input:-moz-placeholder, input::-moz-placeholder {
+	opacity: 1;
+	transition: opacity .3s ease;
+	text-overflow: ellipsis;
+}
+
+input:focus::placeholder {
+	opacity: 0;
+	transition: opacity .3s ease;
+	text-overflow: ellipsis;
+}
+
+input:focus:-moz-placeholder, input:focus::-moz-placeholder {
+	opacity: 0;
+	transition: opacity .3s ease;
+	text-overflow: ellipsis;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+	outline: none;
+	background: transparent;
+}
+
+input:invalid, input:valid {
+	outline: none;
+	background: transparent;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+	background: transparent;
+	border: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+a, a:visited, a:focus {
+	color: inherit;
+}
+
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: none;
+}

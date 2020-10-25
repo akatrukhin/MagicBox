@@ -1,0 +1,330 @@
+<div class="images">
+  <!-- Tools -->
+  <div class="tools sb alc" [class.mb24]="set.files.length">
+    <!-- Title -->
+    <div class="title f alc">
+      <div class="name-container" *ngIf="!isItTemporarySet(); else import">
+        <input
+          class="name"
+          [class.mt16]="set.path"
+          value="{{ set.name }}"
+          [(ngModel)]="set.name"
+          maxlength="16"
+          size="{{ set.name.length }}"
+          (keyup)="setTitle($event)"
+        />
+        <div class="path" (click)="set.setPath()">
+          <span *ngIf="set.path" class="path-icon SF-Icon">􀈖</span>
+          {{ set.path }}
+        </div>
+      </div>
+      <ng-template #import>
+        <h1>{{ set.name }}</h1>
+      </ng-template>
+    </div>
+
+    <div class="set-info f alc">
+      <!-- View Mode -->
+      <div
+        *ngIf="!isItTemporarySet() && set.files.length"
+        class="view-mode"
+        [class.disable]="!set.files.length"
+        (click)="switchViewMode()"
+        [attr.aria-valuenow]="
+          set.viewMode === 'grid' ? 'List View' : 'Grid View'
+        "
+      >
+        <span
+          class="icon SF-Icon icon-List"
+          *ngIf="set.viewMode === 'grid'; else listIcon"
+        ></span>
+        <ng-template #listIcon>
+          <span class="icon SF-Icon icon-Grid"></span>
+        </ng-template>
+      </div>
+
+      <!-- Loading -->
+      <div class="stat loading-bar-container" *ngIf="loading.status; else stat">
+        <span [innerHtml]="loading.percentage | percentage"></span>
+      </div>
+
+      <!-- Stat -->
+      <ng-template #stat class="f sb alc">
+        <div class="stat f alc">
+          <span *ngIf="set.files.length">
+            <div
+              *ngIf="
+                set.statistics.notOptimized && !loading.status;
+                else shrinkedStat
+              "
+            >
+              <span class="label"
+                >{{ set.files.length }}
+                {{ set.files.length > 1 ? "files" : "file" }}:</span
+              >
+              <span
+                class="size"
+                [innerHtml]="set.statistics.totalFilesSize | fileSize"
+              ></span>
+            </div>
+          </span>
+          <ng-template #shrinkedStat>
+            <div class="file-stat" *ngIf="set.statistics.totalSavedSpace">
+              <span class="size-value">Decreased by:</span>
+              <span
+                class="percentage"
+                *ngIf="set.statistics.percentageOfSaved"
+                [innerHtml]="set.statistics.percentageOfSaved | percentage"
+              ></span>
+              &nbsp;<span class="size-value">|</span>&nbsp;
+              <span
+                class="size"
+                *ngIf="set.statistics.totalSavedSpace"
+                [innerHtml]="set.statistics.totalSavedSpace | fileSize"
+              ></span>
+            </div>
+          </ng-template>
+        </div>
+      </ng-template>
+
+      <!-- DropDown -->
+      <app-dropdown
+        [object]="set"
+        (status)="dropdownIsClosed = $event"
+        (selectedFiles)="setFilesFromSystem($event)"
+      >
+        <div class="dropdown f c alc" [class.closed]="!dropdownIsClosed">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="4">
+            <path
+              d="M2 4C.9 4 0 3 0 2 0 .9.9 0 2 0a2 2 0 1 1 0 4zm7 0C7.9 4 7 3 7 2 7 .9 8 0 9 0a2 2 0 1 1 0 4zm7 0c-1 0-2-1-2-2 0-1.1 1-2 2-2a2 2 0 1 1 0 4z"
+            />
+          </svg>
+        </div>
+      </app-dropdown>
+    </div>
+  </div>
+
+  <file-drop
+    customstyle=""
+    class="drop-container"
+    (onFileOver)="fileOver()"
+    (onFileLeave)="fileLeave()"
+    (onFileDrop)="dropped($event)"
+  >
+    <div @ImportAnimation class="drop-zone import" *ngIf="!set.files.length">
+      <div
+        class="drop-content-container"
+        *ngIf="isItTemporarySet(); else emptySet"
+      >
+        <div class="img image-animation"></div>
+
+        <div class="add-file-icon file-icon-animation">
+          <input
+            #inputFiles
+            id="inputFiles"
+            type="file"
+            class="select-files"
+            (change)="getFilesFromSystem()"
+            multiple
+            accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            width="32"
+            height="32"
+            class="plus-icon"
+          >
+            <defs>
+              <path
+                id="b"
+                d="M13 15H1.4C.6 15 0 14.6 0 14s.6-1 1.4-1H13V1.4c0-.8.4-1.4 1-1.4s1 .6 1 1.4V13h11.6c.8 0 1.4.4 1.4 1s-.6 1-1.4 1H15v11.6c0 .8-.4 1.4-1 1.4s-1-.6-1-1.4V15z"
+              />
+              <filter
+                id="a"
+                width="125%"
+                height="125%"
+                x="-12.5%"
+                y="-8.9%"
+                filterUnits="objectBoundingBox"
+              >
+                <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1" />
+                <feGaussianBlur
+                  in="shadowOffsetOuter1"
+                  result="shadowBlurOuter1"
+                  stdDeviation="1"
+                />
+                <feColorMatrix
+                  in="shadowBlurOuter1"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1371 0"
+                />
+              </filter>
+            </defs>
+            <g fill="none" transform="translate(2 1)">
+              <use fill="#000" filter="url(#a)" xlink:href="#b" />
+              <use fill="#FFF" xlink:href="#b" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="text stagger" [innerHTML]="noFilesTitle"></div>
+        <div class="formats stagger">
+          JPEG, PNG, GIF, TIFF, WEBP, SVG, SKETCH
+        </div>
+        <div class="shortcuts stagger">
+          or use shortcut <b>􀆔V</b> to paste SVG Markup
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="set.files.length"
+      [ngSwitch]="set.viewMode"
+      class="file-preview"
+      @ViewTransition
+    >
+      <app-table
+        *ngSwitchCase="'list'"
+        [rows]="set.files"
+        (fileRightClick)="onRightClick($event)"
+        (fileRightClickBody)="onRightClickBody($event)"
+        (selectFile)="selectFile($event)"
+      ></app-table>
+      <app-grid-view
+        *ngSwitchCase="'grid'"
+        [files]="set.files"
+        (fileRightClick)="onRightClick($event)"
+        (fileRightClickBody)="onRightClickBody($event)"
+        (selectFile)="selectFile($event)"
+      ></app-grid-view>
+    </div>
+  </file-drop>
+
+  <div
+    @FooterAnimation
+    class="footer f sb alc"
+    *ngIf="set.files.length && set.statistics.notOptimized"
+  >
+    <div *ngIf="!loading.status">
+      <div
+        *ngIf="set.statistics.notOptimized"
+        class="main-btn"
+        (click)="optimizeFiles()"
+      >
+        Optimize
+        <span class="not-optimized-count">{{
+          set.statistics.notOptimized
+        }}</span>
+      </div>
+    </div>
+    <div *ngIf="loading.status" class="main-btn red" (click)="stopProcess()">
+      Stop
+    </div>
+  </div>
+</div>
+
+<ng-template #emptySet>
+  <div @ImportAnimation class="drop-zone">
+    <div class="drop-content-container">
+      <div class="empty-set f dc">
+        <!-- Tip -->
+        <div class="tip sb stagger" *ngIf="!set.path">
+          <div class="tip__message f alc">
+            <div class="tip__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="49">
+                <path
+                  d="M24.31 26.97c.36 0 .61-.24.61-.6v-.95c0-1.66 2.46-2.65 2.46-5.8 0-3.34-2.3-5.62-5.7-5.62C18.3 14 16 16.28 16 19.62c0 3.15 2.46 4.14 2.46 5.8v.95c0 .36.25.6.6.6h5.25zm-.1 2.03c.42 0 .75-.34.75-.74 0-.4-.33-.75-.74-.75h-5.05a.75.75 0 00-.74.75c0 .4.32.74.74.74h5.05zm-2.52 1.83c1.11 0 1.9-.51 1.99-1.3H19.7c.07.79.86 1.3 1.98 1.3z"
+                />
+              </svg>
+            </div>
+            <span>Tip:</span> Select a folder if you wish to store separately
+            optimized files.
+          </div>
+          <button class="tip__action f alc c" (click)="setFolder()">
+            <div class="folder-icon SF-Icon">􀈖</div>
+            Set Export Folder
+          </button>
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-set__container f c dc alc">
+          <div class="empty-set__message f alc dc">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="193"
+              height="147"
+              viewBox="0 0 193 147"
+            >
+              <path
+                d="M163.8 146.8c18.52 0 28.75-10.16 28.75-28.53V71.95c0-11.85-1.45-16.84-6.93-23.7L161.7 17.4C151.22 4.03 146.07 0 131 0H61.47C46.41 0 41.33 4.03 30.86 17.4L6.93 48.26C1.53 55.19 0 60.1 0 71.95v46.32c0 18.37 10.23 28.52 28.76 28.52H163.8zM96.27 92.16c-12.41 0-19.98-8.38-19.98-18.94v-1.28c0-3.8-2.34-7.5-7.1-7.5H25.63c-3.38 0-3.95-2.82-2.26-5.07l28.52-36.74c2.9-3.79 6.29-5.56 10.96-5.56h66.87c4.67 0 7.98 1.77 10.88 5.56l28.52 36.74c1.7 2.25 1.2 5.07-2.18 5.07h-43.58c-4.84 0-7.1 3.7-7.1 7.5v1.28c0 10.56-7.57 18.94-19.97 18.94z"
+                opacity="0.13"
+              />
+            </svg>
+            Current set is empty
+
+            <div class="empty-set__add-files f alc image-animation">
+              <div class="add-file-icon file-icon-animation">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 32 32"
+                  class="plus-icon"
+                >
+                  <defs>
+                    <path
+                      id="b"
+                      d="M13 15H1.4C.6 15 0 14.6 0 14s.6-1 1.4-1H13V1.4c0-.8.4-1.4 1-1.4s1 .6 1 1.4V13h11.6c.8 0 1.4.4 1.4 1s-.6 1-1.4 1H15v11.6c0 .8-.4 1.4-1 1.4s-1-.6-1-1.4V15z"
+                    />
+                    <filter
+                      id="a"
+                      width="125%"
+                      height="125%"
+                      x="-12.5%"
+                      y="-8.9%"
+                      filterUnits="objectBoundingBox"
+                    >
+                      <feOffset
+                        dy="1"
+                        in="SourceAlpha"
+                        result="shadowOffsetOuter1"
+                      />
+                      <feGaussianBlur
+                        in="shadowOffsetOuter1"
+                        result="shadowBlurOuter1"
+                        stdDeviation="1"
+                      />
+                      <feColorMatrix
+                        in="shadowBlurOuter1"
+                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1371 0"
+                      />
+                    </filter>
+                  </defs>
+                  <g fill="none" transform="translate(2 1)">
+                    <use fill="#000" filter="url(#a)" xlink:href="#b" />
+                    <use fill="#FFF" xlink:href="#b" />
+                  </g>
+                </svg>
+              </div>
+              Add files from the system or import it from other sets
+              <input
+                #inputFiles
+                id="inputFiles"
+                type="file"
+                class="select-files"
+                (change)="getFilesFromSystem()"
+                multiple
+                accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
+              />
+            </div>
+
+            <div class="shortcuts stagger">
+              or use shortcut <b>􀆔V</b> to paste SVG Markup
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

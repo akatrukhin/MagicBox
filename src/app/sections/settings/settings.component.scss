@@ -1,0 +1,92 @@
+h1 {
+  margin: 24px 33px 0;
+}
+
+.container {
+  padding: 18px 50px 34px;
+
+  hr {
+    opacity: 0.4;
+  }
+
+  .setting {
+    width: 100%;
+    max-width: 400px;
+    height: 40px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--settings-container-fg);
+    border-radius: 7px;
+
+    input {
+      background-color: var(--settings-input-bg);
+      line-height: 32px;
+      border-radius: 5px;
+      padding: 0 17px;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--settings-input-fg);
+    }
+  }
+}
+
+.settings-container {
+  border-radius: 14px;
+  background-color: var(--settings-container-bg);
+  box-shadow: 0px 14px 32px -15px rgba(6, 23, 53, 0.14);
+  padding: 12px 32px;
+  margin: 20px -16px 62px;
+}
+
+.update-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 136px;
+  padding: 0 20px;
+  margin: 24px 0;
+  height: 48px;
+  background: #28c3a1;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: 0 1px 2px rgba(15, 9, 64, 0.31);
+  box-shadow: 0 4px 43px 0 rgba(45, 217, 179, 0.76),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  text-align: center;
+  border: none;
+  transition: transform 0.3s, box-shadow 0.4s, opacity 0.2s, filter 3s,
+    background 0.4s;
+}
+
+.dropdown {
+  width: 97px;
+  height: 30px;
+  border: none;
+  font-weight: 600;
+  appearance: none;
+  padding: 0 12px;
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 6px);
+  background-position-y: 50%;
+  background-size: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 4'%3E%3Cdefs/%3E%3Cpath d='M0 0h8.8l-3 3.3a2 2 0 01-3 0L0 0z'/%3E%3C/svg%3E");
+  background-color: var(--settings-dropdown);
+}
+
+.version {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--settings-container-fg);
+  opacity: 0.3;
+
+  .status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 64px;
+  }
+}

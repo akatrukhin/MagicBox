@@ -1,0 +1,38 @@
+@keyframes symbols {
+  50% {
+    opacity: 0.1;
+    transform: translateY(-3px) scale(.5);
+  }
+  100% {
+    opacity: .5;
+    transform: translateY(0) scale(1);
+  }
+}
+
+:host {
+  display: flex;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 18px;
+
+  .p {
+    opacity: .5;
+    animation: symbols .7s ease-in-out infinite;
+  }
+
+  .p2 {
+    animation-delay: .3s;
+  }
+
+  .p3 {
+    animation-delay: .6s;
+  }
+
+  .p4 {
+    animation-delay: .9s;
+  }
+
+  .p5 {
+    animation-delay: 1.2s;
+  }
+}

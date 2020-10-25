@@ -1,0 +1,54 @@
+{
+  "productName": "Magic Box",
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+    "**/*",
+    "!*.ts",
+    "!.gitattributes",
+    "!.gitignore",
+    "!.gitmodules",
+    "!LICENSE.md",
+    "!package.json",
+    "!package-lock.json",
+    "!src/",
+    "!e2e/",
+    "!angular.json",
+    "!_config.yml",
+    "postinstall-web.js",
+    "!postinstall.js",
+    "!publish.sh",
+    "!README.md",
+    "!tsconfig-serve.json",
+    "!tsconfig.json",
+    "!tslint.json",
+    "!yarn.lock"
+  ],
+  "win": {
+    "icon": "dist",
+    "target": ["portable"]
+  },
+  "mac": {
+    "category": "public.app-category.developer-tools",
+    "icon": "src/app-icon.icns",
+    "type": "distribution",
+    "extendInfo": {
+      "NSAppTransportSecurity": {
+        "NSAllowsArbitraryLoads": true
+      }
+    },
+    "target": ["zip"]
+  },
+  "linux": {
+    "icon": "dist",
+    "target": ["AppImage"]
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "akatrukhin",
+      "repo": "MagicBox"
+    }
+  ]
+}

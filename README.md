@@ -28,7 +28,9 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
   - CSS background (URI encoded)
   - React ready*
   - Serializing CG/UIPaths (iOS, MacOS)
-- PX to REM converter*\
+- PX to REM converter*
+
+* - Comming soon
 
 ## Preview
 

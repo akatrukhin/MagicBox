@@ -38,7 +38,8 @@
         "NSAllowsArbitraryLoads": true
       }
     },
-    "target": ["zip"]
+    "target": ["zip"],
+    "publish": ["github"]
   },
   "linux": {
     "icon": "dist",

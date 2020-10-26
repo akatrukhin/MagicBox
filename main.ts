@@ -4,6 +4,7 @@ import {
   dialog,
   OpenDialogOptions,
   Notification,
+  NotificationConstructorOptions,
 } from "electron";
 import { autoUpdater } from "electron-updater";
 
@@ -52,43 +53,19 @@ try {
       AutoUpdaterInit();
     }
   });
-  // Quit when all windows are closed.
-  app.on("window-all-closed", () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== "darwin") {
-      app.quit();
-    }
-  });
 
-  app.on("activate", () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (!win) {
-      buildAppUI();
-    }
-  });
-
-  ipcMain.on("setAutoUpdater", () => AutoUpdaterInit());
-  ipcMain.on("checkForUpdates", () => autoUpdater.checkForUpdates());
-  ipcMain.on("optimizeImage", (event, file, customPath?: string) =>
+  ipcMain.on("set-auto-updater", () => AutoUpdaterInit());
+  ipcMain.on("check-for-updates", () => autoUpdater.checkForUpdates());
+  ipcMain.on("file-optimization", (event, file, customPath?: string) =>
     ProcessFile(file, customPath)
   );
-  ipcMain.on("setFolder", () => {
-    const options: OpenDialogOptions = {
-      properties: [
-        "openDirectory",
-        "createDirectory",
-        "noResolveAliases",
-        "treatPackageAsDirectory",
-      ],
-      message:
-        "All optimized images will be automaticly exported to selected folder",
-    };
-    dialog.showOpenDialog(null, options, (filePaths) => {
-      win.webContents.send("setFolder", filePaths);
-    });
-  });
+  ipcMain.on(
+    "show-notification",
+    (e, message: NotificationConstructorOptions) => {
+      const notification = new Notification(message);
+      notification.show();
+    }
+  );
   ipcMain.on("quitAndInstall", (event, arg) => {
     log.info(event);
     log.info(arg);

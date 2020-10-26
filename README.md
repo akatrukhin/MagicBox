@@ -50,3 +50,10 @@ Image Export
 
 Light/Dark Mode
 ![ScreenShot](https://katrukhin.com/magic-box/screen-shot-9.png)
+
+
+## Contributing
+
+Pull Requests are welcome!
+
+Please run prettier on all of your PRs before submitting, this can be done with `prettier --write` in the project directory

@@ -1,8 +1,6 @@
 import {
   app,
   ipcMain,
-  dialog,
-  OpenDialogOptions,
   Notification,
   NotificationConstructorOptions,
 } from "electron";
@@ -18,7 +16,7 @@ import {
   AppMenuInit,
   AutoUpdaterInit,
   ProcessFile,
-  ProcessSVGfromClipboard,
+  optimizeClipboardSVG,
   SettingsInitialization,
   buildAppUI,
 } from "./scripts";
@@ -38,16 +36,16 @@ try {
       autoUpdater.checkForUpdates();
     }
     // Handler for when text data is copied into the clipboard
-    clipboardWatcher({
-      onTextChange: (SVGxml: string) => {
-        // XML Validator
-        if (settings.get("app.clipboardWatcher")) {
-          if (parser.validate(SVGxml) && SVGxml.includes("<svg")) {
-            ProcessSVGfromClipboard(SVGxml);
-          }
-        }
-      },
-    });
+    // clipboardWatcher({
+    //   onTextChange: (SVGxml: string) => {
+    //     // XML Validator
+    //     if (settings.get("app.clipboardWatcher")) {
+    //       if (parser.validate(SVGxml) && SVGxml.includes("<svg")) {
+    //         optimizeClipboardSVG("get-svg-from-clipboard", SVGxml);
+    //       }
+    //     }
+    //   },
+    // });
 
     if (settings.get("app.updateCheck")) {
       AutoUpdaterInit();

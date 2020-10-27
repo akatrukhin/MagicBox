@@ -38,21 +38,21 @@ export class SetService {
         .remote.require("electron-settings");
       this.remote = window.require("electron").remote;
       this.fs = window.require("fs");
+      this.ipcRenderer = window.require("electron").ipcRenderer;
 
       if (this.settings.get("app.fileWatcher")) {
         this.startWatchAllFiles();
       }
 
       if (this.settings.has("sets")) {
-        const json = JSON.parse(JSON.stringify(this.settings.get("sets")));
-
-        for (const key in json) {
-          if (json.hasOwnProperty(key)) {
-            const set = json[key];
-            // tslint:disable-next-line: no-use-before-declare
-            this.Sets.push(new Set({ ...set }));
-          }
-        }
+        const json = this.settings.get("sets");
+        console.log("Restored Data: ", Array.from(json));
+        Array.from(json).forEach((item: object) => {
+          console.log({ item });
+          const set = new Set({ ...item });
+          set.setStatistics();
+          this.Sets.push(set);
+        });
       }
     }
   }
@@ -71,32 +71,32 @@ export class SetService {
     });
     set.setStatistics();
     this.saveSets();
-  }
+  };
 
   public getSet = (id: string): Set => {
     return this.Sets.find((set) => set.id === id);
-  }
+  };
 
   public saveSet = (id: string): void => {
     // TODO:
     this.getSet(id);
     console.log(this.settings.get("sets"));
-  }
+  };
 
   public saveSets = (): void => {
     if (this.isElectron) {
       if (this.settings.has("sets")) {
         this.settings.delete("sets");
       }
-      this.settings.set("sets", JSON.stringify(this.Sets));
+      this.settings.set("sets", JSON.parse(JSON.stringify(this.Sets)));
     }
-  }
+  };
 
   private unsubscribeFile = (file: AppFile): void => {
     if (this.isElectron && file.original.path) {
       this.fs.unwatchFile(file.original.path);
     }
-  }
+  };
 
   public resetFileStatus = (setId: string): void => {
     const set = this.getSet(setId);
@@ -107,25 +107,23 @@ export class SetService {
     });
     this.getSet(setId).setStatistics();
     this.saveSets();
-  }
+  };
 
   public removeAllFilesInSet = (setId: string): void => {
     const set = this.getSet(setId);
     set.files.length = 0;
     set.setStatistics();
     this.saveSets();
-  }
+  };
 
   public async exportFolder(setId: string) {
-    this.ipcRenderer.send("setFolder");
+    this.ipcRenderer.send("set-project-folder");
     const set = this.getSet(setId);
     await new Promise((resolve) => {
-      try {
-        this.ipcRenderer.once("setFolder", (event, path) => {
-          set.path = path[0];
-          resolve();
-        });
-      } catch (error) {}
+      ipcRenderer.once("get-folder-path", (event, path) => {
+        set.path = path[0];
+        resolve();
+      });
     });
     // Move files to assigned folder
     set.files.forEach((file) => {
@@ -164,13 +162,13 @@ export class SetService {
         this.router.navigate(["/import"]);
       }
     });
-  }
+  };
 
   public updateStatistics = () => {
     this.Sets.forEach((set) => {
       set.setStatistics();
     });
-  }
+  };
 
   private watchFile = (file: AppFile, set: Set): void => {
     if (this.settings.get("app.fileWatcher")) {
@@ -208,7 +206,7 @@ export class SetService {
       set.setStatistics();
       this.saveSets();
     }
-  }
+  };
 
   private startWatchAllFiles = (): void => {
     if (this.settings.get("app.fileWatcher")) {
@@ -218,7 +216,7 @@ export class SetService {
         });
       });
     }
-  }
+  };
 
   public watchFiles = (files: AppFile[], set: Set): void => {
     if (this.settings.get("app.fileWatcher")) {
@@ -229,14 +227,13 @@ export class SetService {
     } else {
       console.log("Files tracking is disbaled");
     }
-  }
+  };
 
   public addSet = (name: string, files: AppFile[]) => {
-    console.log("addSet ", files.length);
     const newSet = new Set({ name, files });
     this.Sets.push(newSet);
     this.saveSets();
-  }
+  };
 
   public createSetFromImport = () => {
     this.addSet("From import", [...Import.files]);
@@ -244,7 +241,7 @@ export class SetService {
     setTimeout(() => {
       this.router.navigate(["/sets/" + this.Sets[this.Sets.length - 1].id]);
     });
-  }
+  };
 
   public isItStaticSet(setId: string): boolean {
     return setId === Import.id || setId === Clipboard.id;

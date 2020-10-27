@@ -75,6 +75,10 @@
   --navigation-feedback-shadow: 1px 2px 0 rgba(62, 68, 76, 0.3),
     inset 0 1px 2px 0 rgba(62, 68, 76, 0.3);
 
+  --navigation-context-menu-bg: rgba(39, 42, 47, 0.97);
+  --navigation-context-menu-shadow: none;
+  --navigation-context-menu-border: 1px solid rgba(255, 255, 255, 0.1);
+
   /* Images */
   --images-view-mode-fg: var(--body-fg);
   --images-view-mode-bg: var(--container-bg-30);
@@ -82,6 +86,8 @@
   --images-dropdown-fg: rgba(255, 255, 255, 0.75);
   --images-dropdown-bg: var(--container-bg-30);
   --images-shortcut-fg: rgba(255, 255, 255, 0.34);
+  --images-button-shadow: 0 2px 36px 0 rgba(45, 217, 179, 0.46),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0);
 
   --button-shadow: 0 4px 43px 0 rgba(45, 217, 179, 0.76),
     inset 0 -1px 0 0 #0f422f91;

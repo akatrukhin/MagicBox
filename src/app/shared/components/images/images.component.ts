@@ -33,7 +33,7 @@ import {
 })
 export class ImagesComponent implements OnChanges, OnInit {
   @Input() set: Set;
-  @Input() noFilesTitle = "Drop files here to add them to the list";
+  @Input() noFilesTitle = "Drop images here to add them to the list";
   @ViewChild("inputFiles") inputFiles: ElementRef;
 
   // UI
@@ -68,7 +68,7 @@ export class ImagesComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    if (this.set.files) {
+    if (this.set.files.length) {
       this.set.files.forEach((file) => {
         if (file.selected) {
           file.selected = false;
@@ -109,7 +109,10 @@ export class ImagesComponent implements OnChanges, OnInit {
   // Set file from system
   public getFilesFromSystem() {
     const files: File[] = this.inputFiles.nativeElement.files;
+    console.log(`%cProcessing ${files.length} files`, "font-weight: bold");
     this.setFilesFromSystem(files);
+    this.set.setStatistics();
+    console.log(`%cProcessing process completed`, "font-weight: bold");
     // this.webWorkerService.run(watchFiles, this.set.files);
   }
 

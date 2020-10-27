@@ -108,7 +108,12 @@
       </ng-template>
     </div>
   </div>
-  <div @ViewTransition class="tab-container" *ngSwitchCase="1">
+  <div
+    @ViewTransition
+    (contextmenu)="onRightClick(file)"
+    class="tab-container"
+    *ngSwitchCase="1"
+  >
     <ngx-codemirror
       class="code-editor"
       [(ngModel)]="svgCode[currentState]"

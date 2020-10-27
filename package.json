@@ -1,7 +1,7 @@
 {
   "name": "magic-box",
-  "version": "0.0.1",
-  "description": "Organize & optimize",
+  "version": "0.0.6",
+  "description": "Organize your workspace, keep files optimized, prepare images for publishing",
   "homepage": "https://katrukhin.com",
   "author": {
     "name": "Alexander Katrukhin",
@@ -9,10 +9,10 @@
   },
   "keywords": [
     "MagicBox",
-    "Organization",
-    "Optimization",
-    "Images",
-    "Shrink"
+    "files optimization",
+    "shrink images",
+    "sketch app",
+    "svg editor"
   ],
   "main": "main.js",
   "private": true,
@@ -52,7 +52,7 @@
     "electron-is-dev": "^1.1.0",
     "electron-log": "^2.2.17",
     "electron-settings": "^3.2.0",
-    "electron-updater": "^4.2.0",
+    "electron-updater": "4.2.0",
     "electron-window-state": "^5.0.3",
     "events": "^3.0.0",
     "fast-xml-parser": "^3.15.1",
@@ -67,15 +67,15 @@
     "mozjpeg-js": "^3.3.1",
     "ng-click-outside": "^4.0.0",
     "ngx-file-drop": "^5.0.0",
-    "ngx-perfect-scrollbar": "^6.3.1",
     "ngx-tabs": "0.0.13",
     "ngx-virtual-scroller": "^3.0.3",
     "path": "^0.12.7",
     "pngquant-bin": "^5.0.1",
     "rxjs-compat": "^6.5.4",
-    "sharp": "^0.25.3",
+    "sharp": "^0.25.4",
     "shelljs": "^0.8.2",
     "svgo": "^1.3.2",
+    "username": "^3.0.0",
     "web-animations-js": "^2.3.2"
   },
   "devDependencies": {
@@ -96,11 +96,13 @@
     "@types/jasmine": "^2.8.9",
     "@types/jasminewd2": "^2.0.8",
     "@types/jszip": "^3.1.6",
-    "@types/node": "^10.17.13",
+    "@types/node": "^10.17.42",
     "codelyzer": "^4.5.0",
     "core-js": "^2.6.11",
+    "dotenv": "^8.2.0",
     "electron": "^3.1.13",
     "electron-builder": "^20.44.4",
+    "electron-notarize": "^1.0.0",
     "electron-reload": "^1.5.0",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "^4.2.1",
@@ -111,16 +113,48 @@
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^1.5.1",
     "node-notifier": "^5.4.3",
+    "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
     "protractor": "^5.4.1",
     "rxjs": "^6.5.4",
-    "rxjs-tslint": "^0.1.5",
+    "rxjs-tslint": "^0.1.8",
     "ts-node": "^7.0.1",
     "tslint": "^5.20.1",
-    "typescript": "3.1.6",
+    "typescript": "3.2.4",
     "wait-on": "^3.3.0",
     "webdriver-manager": "^12.1.7",
     "webpack": "^4.41.5",
     "zone.js": "^0.8.26"
+  },
+  "build": {
+    "productName": "Magic Box",
+    "appId": "com.electron.magic-box",
+    "directories": {
+      "output": "release/"
+    },
+    "mac": {
+      "icon": "build/app-icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "./build/entitlements.mac.plist",
+      "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
+      "type": "distribution",
+      "extendInfo": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      },
+      "target": [
+        "zip"
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "akatrukhin",
+        "repo": "MagicBox"
+      }
+    ],
+    "afterSign": "scripts/notarize.js"
   }
 }

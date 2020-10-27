@@ -111,7 +111,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       setting.status = !setting.status;
       this.saveSettings();
       if (setting.name === ESettings.updateCheck && setting.status) {
-        this.electronService.ipcRenderer.send("setAutoUpdater");
+        this.electronService.ipcRenderer.send("set-auto-updater");
       }
     }
   }

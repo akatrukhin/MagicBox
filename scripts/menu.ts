@@ -4,7 +4,7 @@ import * as path from "path";
 import * as parser from "fast-xml-parser";
 import * as username from "username";
 import { autoUpdater } from "electron-updater";
-import { ProcessSVGPasteFromClipboard } from "./process-image";
+import { optimizeClipboardSVG } from "./process-image";
 import { createWindow, win } from "./window";
 
 export const AppMenuInit = () =>
@@ -75,7 +75,7 @@ export const AppMenuInit = () =>
                 parser.validate(clipboardData) &&
                 clipboardData.includes("<svg")
               ) {
-                ProcessSVGPasteFromClipboard(clipboardData);
+                optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
               }
             },
           },

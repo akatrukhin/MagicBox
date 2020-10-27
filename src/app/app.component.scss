@@ -9,6 +9,7 @@
   flex-direction: column;
   height: 100vh;
   max-height: 100vh;
+  z-index: 1;
 
   .clipboard-container {
     flex-basis: 0;

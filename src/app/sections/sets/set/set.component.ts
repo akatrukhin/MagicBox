@@ -9,7 +9,7 @@ import { Set } from "../../../data";
   template: `
     <app-images
       [set]="set"
-      [noFilesTitle]="'Drop files here to add them to the set'"
+      [noFilesTitle]="'Drop images here to add them to the set'"
     ></app-images>
   `,
 })

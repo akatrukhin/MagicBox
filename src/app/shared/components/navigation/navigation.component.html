@@ -62,7 +62,7 @@
           <div
             class="subitem-inner"
             routerLinkActive="set-active"
-
+            [routerLink]="['/sets', set.id]"
           >
             <span>{{ set.name }}</span>
             <div *ngIf="getNotOptimizied(set)" class="new-files">

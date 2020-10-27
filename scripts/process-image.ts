@@ -326,7 +326,7 @@ export const ProcessFile = (file, customPath?: string) => {
   });
 };
 
-export const ProcessSVGfromClipboard = (SVGxml: string) => {
+export const optimizeClipboardSVG = (event: string, SVGxml: string) => {
   const evenodd = `fill-rule="evenodd"`;
   const nonzero = `fill-rule="nonzero"`;
   SVGPluginSettings()
@@ -336,18 +336,7 @@ export const ProcessSVGfromClipboard = (SVGxml: string) => {
         result.data.replace(evenodd, "");
         result.data.replace(nonzero, "");
       }
-      win.webContents.send("svg-from-clipboard", {
-        source: SVGxml,
-        optimized: result.data,
-      });
-    });
-};
-
-export const ProcessSVGPasteFromClipboard = (SVGxml: string) => {
-  SVGPluginSettings()
-    .optimize(SVGxml)
-    .then((result) => {
-      win.webContents.send("svgPasteFromClipboard", {
+      win.webContents.send(event, {
         source: SVGxml,
         optimized: result.data,
       });

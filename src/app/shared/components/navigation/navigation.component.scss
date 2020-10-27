@@ -3,6 +3,10 @@
   --sub-navigation-width: 230px;
 }
 
+:host {
+  z-index: 2;
+}
+
 @mixin slim-navigation {
   min-width: auto;
   max-width: 77px;
@@ -74,7 +78,8 @@
       padding: 48px 0 0;
       border-radius: 12px 20px 24px 20px;
       overflow: hidden;
-      background-color: rgba(39, 42, 47, 0.97);
+      background-color: var(--navigation-context-menu-bg);
+      box-shadow: var(--navigation-context-menu-shadow);
       z-index: 999;
 
       .subitem {
@@ -100,7 +105,7 @@
       left: 0;
       width: 0;
       padding-left: 54px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: var(--navigation-context-menu-border);
       z-index: 1000;
     }
 
@@ -118,8 +123,9 @@
 
       .title,
       .sets {
-        width: var(--sub-navigation-width);
-        overflow: hidden;
+        width: 230px;
+        overflow-x: hidden;
+        overflow-y: auto;
         white-space: nowrap;
       }
 
@@ -132,7 +138,7 @@
 
       .sets {
         height: auto;
-        max-height: 800px;
+        max-height: 70vh;
         transition: width 0.15s ease-in-out, max-height 0.075s ease-out;
         will-change: width, max-height;
         transition-delay: 0.1s;
@@ -257,7 +263,7 @@
       position: absolute;
       width: 138px;
       height: 124px;
-      background-color: rgba(59, 214, 180, 0.17);
+      background-color: var(--nav-accent-shadow);
       border-radius: 50%;
       left: -50px;
       top: -31px;

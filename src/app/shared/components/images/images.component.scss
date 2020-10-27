@@ -269,8 +269,7 @@
       height: 64px;
       border-radius: 24px;
       background: var(--accent-color);
-      box-shadow: 0 2px 36px 0 rgba(45, 217, 179, 0.46),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0);
+      box-shadow: var(--images-button-shadow);
       border-radius: 26.5px;
       transform: translate3d(0);
 
@@ -379,7 +378,6 @@
       }
 
       &__message {
-        opacity: 0.89;
         font-weight: 700;
         font-size: 20px;
         color: var(--empty-state-message-fg);
@@ -396,7 +394,6 @@
         padding: 14px 34px;
         background: var(--empty-state-add-files-bg);
         border-radius: 15px;
-        opacity: 0.89;
         font-weight: 600;
         font-size: 14px;
         color: var(--empty-state-add-files-fg);

@@ -1,7 +1,7 @@
 [data-theme="sidebar"] {
-  --accent-color: rgb(13, 210, 167);
-  --accent-color-2: #2dd597;
-  --accent-color-dark: #239a70;
+  --accent-color: #4f94f9;
+  --accent-color-2: #4f94f9;
+  --accent-color-dark: #0782d0;
 
   --window-bg: url(./assets/img/window-background.png),
     linear-gradient(-180deg, #f8f9fad5 0, #e1e7ebe8 100%);
@@ -49,7 +49,7 @@
 
   /* Navigation */
 
-  --nav-accent-shadow: rgba(13, 210, 167, 0.31);
+  --nav-accent-shadow: #0782d01a;
   --nav-active-icon: var(--accent-color-dark);
   --nav-active-icon-shadow: 0 1px 0px rgba(255, 255, 255, 0.66),
     0 0 51px #3bd6b452;
@@ -76,6 +76,11 @@
   --navigation-feedback-boder: 2px solid transparent;
   --navigation-feedback-shadow: none;
 
+  --navigation-context-menu-bg: white;
+  --navigation-context-menu-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  --navigation-context-menu-border: 1px solid rgba(0, 0, 0, 0.1);
+
   /* Images */
   --images-view-mode-fg: #b9bfce;
   --images-view-mode-bg: #f5f5f5;
@@ -83,6 +88,8 @@
   --images-dropdown-fg: #b9bfce;
   --images-dropdown-bg: #f5f5f5;
   --images-shortcut-fg: rgba(255, 255, 255, 0.34);
+  --images-button-shadow: 0 2px 36px 0 #0782d040,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0);
 
   --button-shadow: 0 4px 43px 0 rgba(45, 217, 179, 0.76),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);

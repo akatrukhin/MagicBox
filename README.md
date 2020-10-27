@@ -12,8 +12,8 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
 ## Features
 
 - Icon manager
-- Sketch App files optimization
-- Reduce files size:
+- Optimize and reduce files
+- Followed formats supported:
   - SVG
   - JPEG
   - PNG
@@ -29,6 +29,8 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
   - React ready*
 - Font manager*
 - PX to REM converter*
+
+
 
  *Comming soon
 

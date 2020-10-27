@@ -1,4 +1,4 @@
-# MagicBox - Organize your workspace, keep files optimized, prepare images for publishing
+# MagicBox - Organize your workspace, keep files optimized
 
 [![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)
 ![License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)

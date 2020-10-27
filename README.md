@@ -29,7 +29,7 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
   - Serializing CG/UIPaths (iOS, MacOS)
 - PX to REM converter\*
 
-  \*Comming soon
+<sup><i>\*Comming soon</i></sup>
 
 #
 

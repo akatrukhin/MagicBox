@@ -1,13 +1,12 @@
-# MagicBox - Organize your workspace, keep files optimized
+![MagicBox - Organize your workspace, keep files optimized](https://katrukhin.com/magic-box/github-header-1.png)
 
-[![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)
-![License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/katrukhin)
-[![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/akatrukhin/MagicBox)
+#
 
-MagicBox is a tool to minify images, graphics, design source files. Organize a workspace by creating files sets, assign them to project, track file updates, export to project.
+<p align=center>MagicBox is a tool to minify images, graphics, design source files. Organize a workspace by creating files sets, assign them to project, track file updates, export to project.</p>
 
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-3.png)
+#
+
+![ScreenShot](https://katrukhin.com/magic-box/screen-shot-4.png)
 
 ## Features
 
@@ -33,6 +32,12 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
 
 
  *Comming soon
+ 
+[![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)
+![License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/katrukhin)
+[![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/akatrukhin/MagicBox)
+
 
 ## Contributing
 

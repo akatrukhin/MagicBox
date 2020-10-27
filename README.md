@@ -32,26 +32,6 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
 
  *Comming soon
 
-## Preview
-
-Files manager
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-4.png)
-
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-5.png)
-
-File Preview
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-6.png)
-
-SVG Code Preview
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-7.png)
-
-Image Export
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-8.png)
-
-Light/Dark Mode
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-9.png)
-
-
 ## Contributing
 
 Pull Requests are welcome!

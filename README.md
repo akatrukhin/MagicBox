@@ -1,4 +1,4 @@
-![MagicBox - Organize your workspace, keep files optimized](https://katrukhin.com/magic-box/github-header-1.png)
+![MagicBox - Organize your workspace, keep files optimized](https://katrukhin.com/magic-box/github-header-3.jpg)
 
 #
 

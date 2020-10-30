@@ -21,7 +21,7 @@
   - TIFF
   - SKETCH
   - FIGMA*
-- Conver SVG to:
+- Convert SVG to:
   - Base64 string
   - CSS background (URI encoded)
   - Serializing CG/UIPaths (iOS, MacOS)*

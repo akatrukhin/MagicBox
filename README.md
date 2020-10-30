@@ -31,7 +31,7 @@
 
 
 
- <sup><i>*Comming soon</i></sup>
+ <sup><i>*Coming soon</i></sup>. 
 #
 
 [![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)

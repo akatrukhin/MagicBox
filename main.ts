@@ -1,26 +1,21 @@
 import {
   app,
   ipcMain,
-  dialog,
-  OpenDialogOptions,
   Notification,
   NotificationConstructorOptions,
 } from "electron";
 import { autoUpdater } from "electron-updater";
-
 import * as settings from "electron-settings";
 import * as log from "electron-log";
 import * as clipboardWatcher from "electron-clipboard-watcher";
 import * as parser from "fast-xml-parser";
-
 import {
-  win,
   AppMenuInit,
   AutoUpdaterInit,
   ProcessFile,
-  ProcessSVGfromClipboard,
   SettingsInitialization,
   buildAppUI,
+  optimizeClipboardSVG,
 } from "./scripts";
 
 log.info("App starting...");
@@ -30,9 +25,9 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on("ready", () => {
-    buildAppUI();
     SettingsInitialization();
     AppMenuInit();
+    buildAppUI();
 
     if (settings.get("app.updateCheck", {}) === true) {
       autoUpdater.checkForUpdates();
@@ -43,7 +38,7 @@ try {
         // XML Validator
         if (settings.get("app.clipboardWatcher")) {
           if (parser.validate(SVGxml) && SVGxml.includes("<svg")) {
-            ProcessSVGfromClipboard(SVGxml);
+            optimizeClipboardSVG("get-svg-from-clipboard", SVGxml);
           }
         }
       },

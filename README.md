@@ -1,39 +1,40 @@
-# MagicBox - Organize your workspace, keep files optimized
+```
+sudo npm i --unsafe-perm=true --allow-root
+```
 
-[![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)
-![License: CC-NC](https://img.shields.io/badge/License-CCNC-blue.svg)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/katrukhin)
-[![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/akatrukhin/MagicBox)
+---
 
-MagicBox is a tool to minify images, graphics, design source files. Organize a workspace by creating files sets, assign them to project, track file updates, export to project.
+### Electron
 
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-3.png)
+```
+sudo npm run electron:mac --unsafe-perm=true --allow-root
+npm install electron --verbose
+```
 
-## Features
+### Sharp
 
-- Icon manager
-- Font manager*
-- Sketch App files optimization
-- Reduce files size:
-  - SVG
-  - JPEG
-  - PNG
-  - GIF
-  - WEBP
-  - TIFF
-  - SKETCH
-  - FIGMA*
-- Conver SVG to:
-  - Base64 string
-  - CSS background (URI encoded)
-  - React ready*
-  - Serializing CG/UIPaths (iOS, MacOS)
-- PX to REM converter*
+```
+sudo npm install --arch=x64 --platform=darwin sharp --unsafe-perm=true --allow-root
+```
 
- *Comming soon
+### SASS
 
-## Contributing
+```
+sudo npm rebuild node-sass --unsafe-perm=true --allow-root
+```
 
-Pull Requests are welcome!
+# AppStore approve process
 
-Please run prettier on all of your PRs before submitting, this can be done with `prettier --write` in the project directory
+https://support.apple.com/en-us/HT204397
+https://github.com/electron/electron-notarize
+
+# App Update
+
+# Publishing
+
+GH_TOKEN=\${GH_TOKEN} yarn run electron:publish
+
+# Apple Notarization
+
+https://habr.com/ru/post/455874/
+https://cdaringe.com/bsnd-electron

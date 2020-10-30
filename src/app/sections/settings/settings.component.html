@@ -7,7 +7,7 @@
   <div class="container">
     <div class="settings-container">
       <div class="setting f sb alc">
-        Appearance {{ appearance.theme }}
+        Appearance
         <select (change)="onThemeChange($event.target.value)" class="dropdown">
           <option [selected]="appearance.theme === themes.Dark">Dark</option>
           <option [selected]="appearance.theme === themes.Light">Light</option>

@@ -4,7 +4,7 @@ import * as settings from "electron-settings";
 
 export enum Themes {
   Dark = "ultra-dark",
-  Light = "sidebar",
+  Light = "light",
 }
 
 @Injectable({

@@ -28,7 +28,7 @@ enum ESettings {
   notification = "Enable notifications",
   suffix = "Add .min suffix to shrinked file",
   updateCheck = "Auto-updates",
-  defaultGridView = "Files preview as Grid",
+  // defaultGridView = "Files preview as Grid",
   clipboardWatcher = "Clipboard SVG watcher",
   fileWatcher = "Track files updates",
 }
@@ -111,7 +111,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       setting.status = !setting.status;
       this.saveSettings();
       if (setting.name === ESettings.updateCheck && setting.status) {
-        this.electronService.ipcRenderer.send("setAutoUpdater");
+        this.electronService.ipcRenderer.send("set-auto-updater");
       }
     }
   }

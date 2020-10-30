@@ -247,7 +247,8 @@
         right: 0;
         width: 38%;
         min-width: 240px;
-        background-image: url("../../../../assets/img/import.svg");
+        opacity: 0.7;
+        background-image: var(--import-bg-1);
       }
 
       &:before {
@@ -257,7 +258,7 @@
         height: 100%;
         background-position: bottom left;
         background-size: contain;
-        background-image: url("../../../../assets/img/import-2.svg");
+        background-image: var(--import-bg-2);
       }
     }
 
@@ -269,8 +270,7 @@
       height: 64px;
       border-radius: 24px;
       background: var(--accent-color);
-      box-shadow: 0 2px 36px 0 rgba(45, 217, 179, 0.46),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0);
+      box-shadow: var(--images-button-shadow);
       border-radius: 26.5px;
       transform: translate3d(0);
 
@@ -379,13 +379,12 @@
       }
 
       &__message {
-        opacity: 0.89;
         font-weight: 700;
         font-size: 20px;
         color: var(--empty-state-message-fg);
         letter-spacing: -0.12px;
 
-        svg {
+        .set-icon {
           margin-bottom: 24px;
         }
       }
@@ -396,7 +395,6 @@
         padding: 14px 34px;
         background: var(--empty-state-add-files-bg);
         border-radius: 15px;
-        opacity: 0.89;
         font-weight: 600;
         font-size: 14px;
         color: var(--empty-state-add-files-fg);
@@ -436,8 +434,9 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 20px;
-      height: 10px;
+      width: 40px;
+      height: 40px;
+      opacity: 0.2;
       background-color: var(--empty-state-tip-icon);
       border-radius: 50%;
       filter: blur(15px);

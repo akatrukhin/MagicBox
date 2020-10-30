@@ -127,7 +127,7 @@ export class OptimizationService {
       try {
         file.loading = true;
         this.electronService.ipcRenderer.send(
-          "optimizeImage",
+          "file-optimization",
           file,
           customPath ? customPath : null
         );

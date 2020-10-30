@@ -13,7 +13,7 @@ import { FileDropModule } from "ngx-file-drop";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CodemirrorModule } from "@ctrl/ngx-codemirror";
 import { TabsModule } from "ngx-tabs";
-import { VirtualScrollerModule } from "ngx-virtual-scroller";
+// import { VirtualScrollerModule } from "ngx-virtual-scroller";
 
 import {
   MatTableModule,
@@ -99,7 +99,7 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
     MatTableModule,
     MatSortModule,
     MatDialogModule,
-    VirtualScrollerModule,
+    // VirtualScrollerModule,
     CodemirrorModule,
     TabsModule,
 

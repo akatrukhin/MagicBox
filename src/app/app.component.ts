@@ -33,14 +33,14 @@ export class AppComponent {
     private themeService: ThemeService,
     private setService: SetService
   ) {
-    console.log("AppConfig", AppConfig);
-
     this.themeService.initTheme();
 
     if (electronService.isElectron) {
-      console.log(process.env);
-      console.log("Run in electron");
-      console.log("Electron ipcRenderer", this.electronService.ipcRenderer);
+      console.log("c%Enviropment", "font-weight: bold");
+      Object.keys(process.env).forEach((item) =>
+        console.log(`${item}: ${process.env[item]}`)
+      );
+      console.log("\n");
 
       if (this.electronService.settings.get("other.path")) {
         this.router.navigate([this.electronService.settings.get("other.path")]);
@@ -56,7 +56,7 @@ export class AppComponent {
 
       if (this.electronService.settings.get("app.clipboardWatcher")) {
         this.electronService.ipcRenderer.on(
-          "svgFromClipboard",
+          "get-svg-from-clipboard",
           (event, svg) => {
             if (svg.source !== svgCopiedFromApp) {
               this.electronService.showNotification({
@@ -78,7 +78,7 @@ export class AppComponent {
       }
 
       this.electronService.ipcRenderer.on(
-        "svgPasteFromClipboard",
+        "paste-svg-from-clipboard",
         (event, svg) => {
           const optimizedSVG = new AppFile(
             this.createSvgFile(svg.source),
@@ -86,6 +86,11 @@ export class AppComponent {
           );
           optimizedSVG.hasSourceFile = true;
           optimizedSVG.status = FileStatus.optimized;
+
+          console.log(
+            `Route: ${this.currentRoute} recieved SVG from clipboard: \n`,
+            optimizedSVG
+          );
 
           switch (true) {
             case this.currentRoute.includes("/import"):
@@ -106,14 +111,17 @@ export class AppComponent {
               const set = this.setService.getSet(setId);
               if (set) {
                 set.files.push(optimizedSVG);
+                set.setStatistics();
+                this.setService.saveSets();
               }
               break;
           }
         }
       );
-    } else {
-      console.log("Run in browser");
     }
+    this.previewFileService.viewStatus.subscribe((viewStatus: boolean) => {
+      this.previewView = viewStatus;
+    });
   }
 
   public showClipboard() {

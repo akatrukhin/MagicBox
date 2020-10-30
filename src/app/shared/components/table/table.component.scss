@@ -3,11 +3,15 @@
   flex-direction: column;
   width: 100%;
   height: calc(100% + 20px);
+  max-height: calc(92vh - 68px);
   margin-top: -20px;
+  // Temporary disabled virtaul scroll
+  // Waiting until will all envirement will be up to date
+  overflow-y: scroll;
 
-  virtual-scroller {
-    flex-grow: 1;
-  }
+  // virtual-scroller {
+  //   flex-grow: 1;
+  // }
 }
 
 .table-header {
@@ -41,12 +45,12 @@
   }
 }
 
-::ng-deep {
-  .scrollable-content {
-    padding: 0 0 100px 0;
-    will-change: transform;
-  }
-}
+// ::ng-deep {
+//   .scrollable-content {
+//     padding: 0 0 100px 0;
+//     will-change: transform;
+//   }
+// }
 
 table {
   width: calc(100% - 68px);

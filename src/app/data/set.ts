@@ -63,7 +63,7 @@ export class Set extends Entity {
       (file) =>
         file.status === FileStatus.new || file.status === FileStatus.needsUpdate
     );
-  }
+  };
 
   public setStatistics = (): void => {
     const totalFilesSize = this.files.reduce(
@@ -84,7 +84,7 @@ export class Set extends Entity {
       percentageOfSaved,
       totalFilesSize,
     };
-  }
+  };
 }
 
 export const Import = new Set({ id: "import", name: StaticSets.Import });

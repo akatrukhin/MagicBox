@@ -45,3 +45,13 @@
 Pull Requests are welcome!
 
 Please run prettier on all of your PRs before submitting, this can be done with `prettier --write` in the project directory
+
+## Credits
+* Electron: <https://electronjs.org>
+* sharp: <https://github.com/lovell/sharp>
+* pngquant: <https://pngquant.org/>
+* mozjpg: <https://github.com/mozilla/mozjpeg>
+* SVGO: <https://github.com/svg/svgo>
+* Settings Framework: <https://github.com/nathanbuchar/electron-settings>
+* gifsicle: <https://github.com/kohler/gifsicle>
+

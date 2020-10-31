@@ -20,7 +20,7 @@
   - WEBP
   - TIFF
   - SKETCH
-  - FIGMA*
+
 - Convert SVG to:
   - Base64 string
   - CSS background (URI encoded)

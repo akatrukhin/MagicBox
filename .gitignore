@@ -12,6 +12,8 @@ src/**/*.js
 !postinstall-web.js
 app/*.js
 app/*.js.map
+.env
+!/scripts/notarize.js
 
 # dependencies
 /node_modules

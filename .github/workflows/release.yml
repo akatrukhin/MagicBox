@@ -34,11 +34,11 @@ jobs:
         env:
           MACOS_CERT: ${{ secrets.MAC_CERTS }}
           MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}
+      - name: TypeScript compile
+        uses: icrawl/action-eslint@v1
       - name: Set up build environment
         run: |
           yarn install
-      - name: TypeScript compile
-        uses: icrawl/action-tsc@v1
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS image

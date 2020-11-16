@@ -1,12 +1,17 @@
 {
   "name": "magic-box",
+  "homepage": "https://www.katrukhin.com/MagicBox",
   "version": "0.1.6",
   "description": "Organize your workspace, keep files optimized, prepare images for publishing",
-  "homepage": "https://katrukhin.com",
   "author": {
     "name": "Alexander Katrukhin",
     "email": "a.katrukhin@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/akatrukhin/MagicBox.git"
+  },
+  "license": "CC BY-NC 4.0",
   "keywords": [
     "MagicBox",
     "files optimization",
@@ -130,6 +135,7 @@
     "directories": {
       "output": "release/"
     },
+    "copyright": "MagicBox is licensed under CC BY-NC 4.0.",
     "files": [
       "**/*",
       "!*.ts",
@@ -150,6 +156,7 @@
       "icon": "./build/app-icon.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
+      "artifactName": "MagicBox-${version}-${arch}.${ext}",
       "entitlements": "./build/entitlements.mac.plist",
       "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
       "category": "public.app-category.developer-tools",

@@ -31,7 +31,8 @@ jobs:
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
-        run: ./scripts/add-osx-cert.sh
+        run: |
+        sh ./scripts/add-osx-cert.sh
         env:
           MACOS_CERT: ${{ secrets.MAC_CERTS }}
           MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}

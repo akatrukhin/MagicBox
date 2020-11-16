@@ -1,0 +1,84 @@
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  margin-right: 26px;
+}
+.checked.switch:after {
+  content: "On";
+}
+.switch:after {
+  content: "Off";
+}
+.checked.switch:after,
+.switch:after {
+  position: absolute;
+  opacity: 0.7;
+  font-weight: 600;
+  font-size: 11px;
+  height: 20px;
+  line-height: 20px;
+  right: 0;
+  transform: translateX(calc(100% + 8px));
+}
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--toggle-off-bg);
+  box-shadow: inset 0 0 3px rgba(10, 19, 56, 0.13);
+  transition: background-color 0.4s, box-shadow 0.4s;
+  will-change: background-color, box-shadow;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: rgba(132, 140, 158, 0.5);
+  transition: 0.367s;
+  border-radius: 50%;
+}
+
+.checked .slider {
+  background-color: var(--accent-color);
+  box-shadow: 0 5px 21px -5px rgba(59, 214, 180, 0.6);
+}
+
+.slider:focus {
+  box-shadow: 0 0 1px var(--accent-color);
+}
+
+.checked .slider:before {
+  transform: translateX(20px);
+  background-color: #fff;
+  box-shadow: 0 0px 18px -1px rgba(15, 9, 64, 0.4);
+}
+
+.checked.disable .slider {
+  background-color: rgba(185, 191, 206, 0.3);
+  cursor: pointer;
+}
+
+.checked.disable.switch:after {
+  content: "On";
+  opacity: 0.4;
+  color: #b9bfce;
+}
+
+.disable.switch:after {
+  content: "Off";
+  opacity: 0.4;
+  color: #b9bfce;
+}
+
+.disable.switch .slider:before {
+  background-color: rgba(132, 140, 158, 0.4);
+}

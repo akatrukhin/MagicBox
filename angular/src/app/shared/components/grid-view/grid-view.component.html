@@ -1,0 +1,101 @@
+<virtual-scroller
+  #scroll
+  [items]="files"
+  [bufferAmount]="10"
+  [enableUnequalChildrenSizes]="true"
+  (contextmenu)="onRightClickBody()"
+>
+  <div
+    class="file-grid"
+    *ngFor="let file of scroll.viewPortItems; let i = index; trackBy: trackByFn"
+  >
+    <div
+      class="file"
+      [id]="file.id"
+      (contextmenu)="onRightClick(file)"
+      (dblclick)="previewFile(file)"
+      (click)="addSelectedFile(file)"
+      [class.selected]="file.selected"
+    >
+      <div
+        class="preview"
+        [ngClass]="{
+          double: file.hasSourceFile,
+          sketch: file.original.type.includes('sketch')
+        }"
+      >
+        <div
+          *ngIf="file.original.path; else svgData"
+          class="image"
+          [style.background-image]="
+            'url(' + getPreviewURI(file.original.path) + ')'
+          "
+        ></div>
+        <ng-template #svgData>
+          <div
+            class="image"
+            [ngStyle]="{
+              'background-image': getEncodedSvgCSSBackground(file.shrinked.data)
+            }"
+          ></div>
+        </ng-template>
+        <div class="file-format">
+          {{ file.original.type | fileType }}
+        </div>
+      </div>
+      <div class="desc">
+        <div class="name">
+          {{
+            file.hasSourceFile
+              ? (file.shrinked.name | fileName)
+              : (file.original.name | fileName)
+          }}
+        </div>
+
+        <div
+          *ngIf="
+            !(file.status === 'optimized') && !file.loading;
+            else OptimizedFile
+          "
+          class="not-optimized-label f alc"
+        >
+          <div [ngSwitch]="file.status">
+            <div *ngSwitchCase="'needs-update'">
+              <div class="label needs-updating"></div>
+              Update required
+            </div>
+            <div *ngSwitchCase="'new'">
+              <div class="label needs-updating"></div>
+              Not optimized
+            </div>
+            <div *ngSwitchCase="'removed'">
+              <div class="label not-found"></div>
+              File not found
+            </div>
+          </div>
+        </div>
+
+        <app-loader @LoaderAnimation *ngIf="file.loading"></app-loader>
+
+        <ng-template #OptimizedFile>
+          <div class="f">
+            <div
+              *ngIf="!file.loading"
+              class="file-percentage"
+              [innerHtml]="
+                100 - (file.shrinked.size / file.original.size) * 100
+                  | percentage
+              "
+            ></div>
+            <div
+              *ngIf="!file.loading"
+              class="file-size"
+              [innerHtml]="file.shrinked.size | fileSize"
+            ></div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</virtual-scroller>
+<ng-content></ng-content>

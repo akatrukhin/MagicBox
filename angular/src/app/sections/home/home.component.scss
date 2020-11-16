@@ -1,0 +1,20 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  margin: 3.5vh 3.5vh 4.5vh 0;
+  min-width: 680px;
+  user-select: none;
+  overflow-y: scroll;
+  background: var(--home-bg);
+  border-radius: 13px 21px 34px;
+  box-shadow: var(--home-shadow);
+}

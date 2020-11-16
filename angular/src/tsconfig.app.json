@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "module": "es2020",
+    "baseUrl": "",
+    "types": []
+  },
+  "include": ["main.ts", "polyfill.ts"],
+  "exclude": ["**/*.spec.ts", "**/workers/*.worker.ts"],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "preserveWhitespaces": true
+  }
+}

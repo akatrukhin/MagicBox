@@ -1,0 +1,83 @@
+@import "assets/styles/mixins.scss";
+@import "assets/styles/reset.scss";
+@import "assets/styles/global-rules.scss";
+@import "assets/styles/theme-dark.scss";
+@import "assets/styles/theme-light.scss";
+
+@import "~codemirror/lib/codemirror";
+@import "~codemirror/theme/duotone-light";
+
+html {
+  width: 100vw;
+  height: 100vh;
+  background-blend-mode: overlay;
+  background-image: var(--window-bg);
+  box-shadow: var(--body-shadow);
+  background-size: var(--widnow-bg-size);
+  transition: background-image ease-out 0.4s;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-kerning: normal;
+}
+*,
+div {
+  box-sizing: border-box;
+}
+
+button {
+  -webkit-app-region: no-drag;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  height: 100%;
+  // overflow: auto;
+  min-width: 256px;
+  min-height: 256px;
+}
+
+.drop-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  & > div {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+
+    .ngx-file-drop__content {
+      display: flex;
+      flex-grow: 1;
+      height: auto;
+      color: inherit;
+      flex-direction: column;
+    }
+
+    &.over {
+      background: transparent;
+    }
+
+    .content {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      color: var(--container-fg);
+    }
+  }
+
+  #dropZone.over {
+    background: transparent;
+  }
+}

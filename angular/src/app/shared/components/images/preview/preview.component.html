@@ -1,0 +1,235 @@
+<div class="header sb">
+  <div class="title">
+    <div class="icon SF-Icon icon-Back" (click)="goBack()">􀆉</div>
+    <h1 class="file-name">
+      {{ file[currentState].name | fileName }}.<span class="file-format">{{
+        file[currentState].type | fileType
+      }}</span>
+    </h1>
+  </div>
+
+  <div class="f alc">
+    <div *ngIf="isFileOptimized(); else fileStatus" class="file-stat f">
+      <span class="size-value">Decreased by:</span>
+      <div
+        class="file-percentage"
+        [innerHtml]="
+          100 - (file.shrinked.size / file.original.size) * 100 | percentage
+        "
+      ></div>
+      &nbsp;<span class="size-value">|</span>&nbsp;
+      <div class="file-size" [innerHtml]="file.shrinked.size | fileSize"></div>
+    </div>
+    <ng-template #fileStatus>
+      <div [ngSwitch]="file.status" class="not-optimized-label">
+        <div *ngSwitchCase="'needs-update'">
+          <div class="label needs-updating"></div>
+          Update required
+        </div>
+        <div *ngSwitchCase="'new'">
+          <div class="label needs-updating"></div>
+          Not optimized
+        </div>
+        <div *ngSwitchCase="'removed'">
+          <div class="label not-found"></div>
+          File not found
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- DropDown -->
+    <app-dropdown
+      [object]="file"
+      (status)="dropdownIsClosed = $event"
+      style="pointer-events: none"
+    >
+      <div class="dropdown f c alc" [class.closed]="!dropdownIsClosed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="4">
+          <path
+            d="M2 4C.9 4 0 3 0 2 0 .9.9 0 2 0a2 2 0 1 1 0 4zm7 0C7.9 4 7 3 7 2 7 .9 8 0 9 0a2 2 0 1 1 0 4zm7 0c-1 0-2-1-2-2 0-1.1 1-2 2-2a2 2 0 1 1 0 4z"
+          />
+        </svg>
+      </div>
+    </app-dropdown>
+  </div>
+</div>
+
+<div class="tools sb alc">
+  <div *ngIf="tabs.length > 1 || file.hasSourceFile" class="tabs">
+    <ul class="tabs-container">
+      <li
+        *ngFor="let tab of tabs; let i = index; trackBy: trackByFn"
+        [class.active]="activeTabId === tab.id"
+        class="tabs-item"
+        (click)="setActiveTabId(tab.id)"
+      >
+        {{ tab.label }}
+      </li>
+    </ul>
+  </div>
+
+  <div
+    class="file-state f alc"
+    *ngIf="file.hasSourceFile && file.original.type !== 'sketch'"
+    (click)="switchFileSource()"
+  >
+    <div
+      class="icon SF-Icon icon-Switch"
+      [class.optimized]="currentState !== 'original'"
+    >
+      􀉂
+    </div>
+    Show
+    {{ currentState === "original" ? "optimized" : "source" }}
+  </div>
+</div>
+
+<div [ngSwitch]="activeTabId" class="tabs-body">
+  <div
+    @ViewTransition
+    (contextmenu)="onRightClick(file)"
+    class="tab-container"
+    *ngSwitchCase="0"
+  >
+    <div class="preview">
+      <img
+        *ngIf="file[currentState].path; else svgData"
+        class="image"
+        [src]="getPreviewURI(file[currentState].path)"
+      />
+      <ng-template #svgData>
+        <div
+          class="image"
+          [ngStyle]="{
+            'background-image': getEncodedSvgCSSBackground(
+              file[currentState].data
+            )
+          }"
+        ></div>
+      </ng-template>
+    </div>
+  </div>
+  <div
+    @ViewTransition
+    (contextmenu)="onRightClick(file)"
+    class="tab-container"
+    *ngSwitchCase="1"
+  >
+    <ngx-codemirror
+      class="code-editor"
+      [(ngModel)]="svgCode[currentState]"
+      [options]="codeEditorOptions"
+    >
+    </ngx-codemirror>
+  </div>
+
+  <div
+    @ViewTransition
+    class="tab-container sketch-attachments"
+    *ngSwitchCase="2"
+  >
+    <div
+      class="loading"
+      *ngIf="!sketchAttachments.root.length; else Loaded"
+    ></div>
+    <ng-template #Loaded>
+      <h3>Main data</h3>
+      <hr />
+      <table>
+        <tbody>
+          <tr *ngFor="let file of sketchAttachments.root; trackBy: trackByFn">
+            <td width="10%">
+              <div class="first-column">
+                <div class="file-format">
+                  {{ file.name | fileExtention }}
+                </div>
+              </div>
+            </td>
+            <td width="60%">
+              <div class="column">
+                {{ file.name | fileName }}
+              </div>
+            </td>
+            <td width="30%">
+              <div
+                class="column last-column"
+                [innerHtml]="file._data.compressedSize | fileSize"
+              ></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="sketchAttachments.images && sketchAttachments.images.length">
+        <h3>Included images</h3>
+        <hr />
+        <table>
+          <tbody
+            *ngFor="let file of sketchAttachments.images; trackBy: trackByFn"
+          >
+            <tr *ngIf="file.name">
+              <td width="10%">
+                <div class="first-column">
+                  <div class="file-format">
+                    {{ file.name | fileExtention }}
+                  </div>
+                </div>
+              </td>
+              <td width="60%">
+                <div class="column">
+                  {{ file.name | fileName }}
+                </div>
+              </td>
+              <td width="30%">
+                <div
+                  class="column last-column"
+                  [innerHtml]="file._data.compressedSize | fileSize"
+                ></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="sketchAttachments.pages && sketchAttachments.pages.length">
+        <h3>Pages data</h3>
+        <hr />
+        <table>
+          <tbody
+            *ngFor="let file of sketchAttachments.pages; trackBy: trackByFn"
+          >
+            <tr *ngIf="file.name">
+              <td width="10%">
+                <div class="first-column">
+                  <div class="file-format">
+                    {{ file.name | fileExtention }}
+                  </div>
+                </div>
+              </td>
+              <td width="60%">
+                <div class="column">
+                  {{ file.name | fileName }}
+                </div>
+              </td>
+              <td width="30%">
+                <div
+                  class="column last-column"
+                  [innerHtml]="file._data.compressedSize | fileSize"
+                ></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div @FooterAnimation class="footer f sb alc" *ngIf="!isFileOptimized()">
+  <div *ngIf="!file.loading">
+    <div class="main-btn" (click)="optimizeFile()">Optimize</div>
+  </div>
+  <div *ngIf="file.loading" class="main-btn red" (click)="stopProcess()">
+    Stop
+  </div>
+</div>

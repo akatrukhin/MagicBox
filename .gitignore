@@ -1,17 +1,18 @@
 # compiled output
 /dist
-/tmp
-/out-tsc
-/app-builds
-/release
+/electron/release
 src/**/*.js
 !src/karma.conf.js
 *.js
 *.js.map
 !postinstall.js
 !postinstall-web.js
-app/*.js
-app/*.js.map
+electron/scripts/*.js
+electron/scripts/*.js.map
+!electron/scripts/get-pkg-version.js
+
+# enviropment
+.env
 
 # dependencies
 /node_modules
@@ -53,4 +54,3 @@ yarn-error.log
 # System Files
 .DS_Store
 Thumbs.db
-© 2019 GitHub, Inc.

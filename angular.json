@@ -3,22 +3,30 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-electron": {
+    "magic-box": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "angular/src",
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"],
-            "styles": ["src/styles.scss"],
-            "scripts": []
+            "outputPath": "angular/dist",
+            "index": "angular/src/index.html",
+            "main": "angular/src/main.ts",
+            "tsConfig": "angular/src/tsconfig.app.json",
+            "polyfills": "angular/src/polyfills.ts",
+            "assets": [
+              "angular/src/assets/i18n",
+              "angular/src/assets/fonts",
+              "angular/src/about.html"
+            ],
+            "styles": ["angular/src/styles.scss"],
+            "scripts": [],
+            "customWebpackConfig": {
+              "path": "./angular/angular.webpack.js"
+            },
+            "webWorkerTsConfig": "./angular/tsconfig.worker.json"
           },
           "configurations": {
             "dev": {
@@ -27,14 +35,31 @@
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
-              "aot": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "web": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.web.ts"
                 }
               ]
             },
@@ -50,83 +75,75 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "angular/ngsw-config.json"
             }
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "magic-box:build"
           },
           "configurations": {
             "dev": {
-              "browserTarget": "angular-electron:build:dev"
+              "browserTarget": "magic-box:build:dev"
+            },
+            "web": {
+              "browserTarget": "magic-box:build:web"
             },
             "production": {
-              "browserTarget": "angular-electron:build:production"
+              "browserTarget": "magic-box:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "magic-box:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills-test.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
+            "main": "angular/src/test.ts",
+            "polyfills": "angular/src/polyfills-test.ts",
+            "tsConfig": "angular/src/tsconfig.spec.json",
+            "karmaConfig": "angular/src/karma.conf.js",
             "scripts": [],
-            "styles": ["src/styles.scss"],
-            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "styles": ["angular/src/styles.scss"],
+            "assets": [
+              "angular/src/assets/i18n",
+              "angular/src/assets/fonts",
+              "angular/src/about.html"
+            ],
+            "customWebpackConfig": {
+              "path": "./angular/angular.webpack.js"
+            }
           }
         }
       }
     },
-    "angular-electron-e2e": {
+    "magic-box-e2e": {
       "root": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "angular-electron:serve"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
+      "projectType": "application"
     }
   },
-  "defaultProject": "angular-electron",
+  "defaultProject": "magic-box",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

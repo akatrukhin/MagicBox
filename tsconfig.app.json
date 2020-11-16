@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "target": "es5",
+    "types": ["node"],
+    "lib": ["es2017", "es2016", "es2015", "dom"]
+  },
+  "angularCompilerOptions": {
+    "genDir": "aot",
+    "skipMetadataEmit": true
+  },
+  "files": ["electron/main.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

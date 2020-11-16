@@ -1,42 +1,134 @@
 name: Build/release
-on: push
+on:
+  push:
+    branches:
+      - main
+    tags:
+      # Build on every tag in the form v1.2.3-something.4
+      - "v*"
+defaults:
+  run:
+    shell: bash # Run everything using bash
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-latest]
-
+  build_macos:
+    name: macOS build
+    runs-on: macos-latest
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-
-      - name: Install Node.js, NPM and Yarn
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 10
-
-      - name: Create Angular App
+          node-version: "12.x"
+      - name: Retrieve tag version
+        id: ref
         run: |
-          npm run build:prod
-
-      - name: Prepare for app notarization
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          mkdir -p ~/private_keys/
-          echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
-
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          pkgver=$(node ./scripts/get-pkg-version.js)
+          echo ::set-output name=version::$pkgver
+      - name: Set up build environment
+        run: yarn install --frozen-lockfile
+      # Save the macOS certificate on this runner for forge to access it in the
+      # next step below.
+      - name: Retrieve code signing certificate
+        run: ./scripts/add-osx-cert.sh
         env:
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
-          API_KEY_ID: ${{ secrets.api_key_id }}
-          API_KEY_ISSUER_ID: ${{ secrets.api_key_issuer_id }}
+          MACOS_CERT: ${{ secrets.MAC_CERTS }}
+          MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}
+      # This step also signs and notarizes the app. NOTE that forge does this,
+      # as we shall not notarize and/or sign the resulting DMG file as well!
+      - name: Build macOS image
+        run: yarn run electron:mac
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+      - name: Cache macOS zip file
+        uses: actions/upload-artifact@v1
+        with:
+          name: MagicBox-${{steps.ref.outputs.version}}.dmg
+          path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
+      - name: Cache macOS ZIP release
+        uses: actions/upload-artifact@v1
+        with:
+          name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          path: ./release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
+      - name: Cache the checksums file
+        uses: actions/upload-artifact@v1
+        with:
+          name: latest-mac.yml
+          path: ./release/latest-mac.yml
+  # after the three builds, this job downloads all assets, creates and verifies
+  # SHA256 checksums, and finally creates a release draft and uploads all
+  # assets to it.
+  prepare_release:
+    name: Prepare release draft
+    # Make sure (and wait until) the builds have succeeded
+    needs: [build_macos]
+    runs-on: macos-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Retrieve tag version
+        id: ref
+        run: |
+          pkgver=$(node ./scripts/get-pkg-version.js)
+          echo ::set-output name=version::$pkgver
+      # First, download all resulting assets from the previous steps.
+      - name: Download macOS image
+        uses: actions/download-artifact@v1
+        with:
+          name: MagicBox-${{steps.ref.outputs.version}}.dmg
+          path: .
+      - name: Download macOS zip file
+        uses: actions/download-artifact@v1
+        with:
+          name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          path: .
+      - name: Download the checksums file
+        uses: actions/download-artifact@v1
+        with:
+          name: latest-mac.yml
+          path: .
+      - name: Create a new release draft
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{steps.ref.outputs.version}} # tag_name is required, but can be overridden during edit
+          release_name: Release ${{steps.ref.outputs.version}} # release_name is required
+          body: If you can read this, I have forgotten to fill in the changelog. Sorry!
+          draft: true # Always create as draft, so that we can populate the remaining values easily
+
+      # And finally, upload app files
+      - name: Upload macOS image
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./MagicBox-${{steps.ref.outputs.version}}.dmg
+          asset_name: MagicBox-${{steps.ref.outputs.version}}.dmg
+          asset_content_type: application/octet-stream
+      - name: Upload macOS zip file
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          asset_name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          asset_content_type: application/zip
+      - name: Upload the checksums
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./latest-mac.yml
+          asset_name: latest-mac.yml
+          asset_content_type: application/x-yaml

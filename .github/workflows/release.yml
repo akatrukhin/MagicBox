@@ -26,20 +26,24 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
-      - name: Set up build environment
-        run: yarn install --frozen-lockfile
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
         run: |
-        sh ./scripts/add-osx-cert.sh
+          sh ./scripts/add-osx-cert.sh
         env:
           MACOS_CERT: ${{ secrets.MAC_CERTS }}
           MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}
+      - name: Set up build environment
+        run: |
+          yarn install
+      - name: TypeScript compile
+        uses: icrawl/action-tsc@v1
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS image
-        run: yarn run electron:mac
+        run: |
+          yarn run electron:mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}

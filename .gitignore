@@ -1,8 +1,5 @@
 # compiled output
 /dist
-/tmp
-/out-tsc
-/app-builds
 /release
 src/**/*.js
 !src/karma.conf.js
@@ -10,8 +7,9 @@ src/**/*.js
 *.js.map
 !postinstall.js
 !postinstall-web.js
-app/*.js
-app/*.js.map
+scripts/*.js
+scripts/*.js.map
+!scripts/get-pkg-version.js
 
 # dependencies
 /node_modules
@@ -53,4 +51,3 @@ yarn-error.log
 # System Files
 .DS_Store
 Thumbs.db
-© 2019 GitHub, Inc.

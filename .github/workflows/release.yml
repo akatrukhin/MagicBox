@@ -24,14 +24,14 @@ jobs:
       - name: Retrieve tag version
         id: ref
         run: |
-          pkgver=$(node scripts/get-pkg-version.js)
+          pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
       - name: Set up build environment
         run: yarn install --frozen-lockfile
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
-        run: scripts/add-osx-cert.sh
+        run: ./scripts/add-osx-cert.sh
         env:
           MACOS_CERT: ${{ secrets.MAC_CERTS }}
           MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}
@@ -46,17 +46,17 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}.dmg
-          path: release/MagicBox-${{steps.ref.outputs.version}}.dmg
+          path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
       - name: Cache macOS ZIP release
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
-          path: release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          path: ./release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
       - name: Cache the checksums file
         uses: actions/upload-artifact@v1
         with:
           name: latest-mac.yml
-          path: release/latest-mac.yml
+          path: ./release/latest-mac.yml
   # after the three builds, this job downloads all assets, creates and verifies
   # SHA256 checksums, and finally creates a release draft and uploads all
   # assets to it.
@@ -75,7 +75,7 @@ jobs:
       - name: Retrieve tag version
         id: ref
         run: |
-          pkgver=$(node scripts/get-pkg-version.js)
+          pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
       # First, download all resulting assets from the previous steps.
       - name: Download macOS image
@@ -111,7 +111,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: MagicBox-${{steps.ref.outputs.version}}.dmg
+          asset_path: ./MagicBox-${{steps.ref.outputs.version}}.dmg
           asset_name: MagicBox-${{steps.ref.outputs.version}}.dmg
           asset_content_type: application/octet-stream
       - name: Upload macOS zip file
@@ -120,7 +120,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          asset_path: ./MagicBox-${{steps.ref.outputs.version}}-mac.zip
           asset_name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
           asset_content_type: application/zip
       - name: Upload the checksums
@@ -129,6 +129,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: latest-mac.yml
+          asset_path: ./latest-mac.yml
           asset_name: latest-mac.yml
           asset_content_type: application/x-yaml

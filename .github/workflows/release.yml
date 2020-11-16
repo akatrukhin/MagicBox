@@ -32,7 +32,7 @@ jobs:
       # next step below.
       - name: Retrieve code signing certificate
         run: |
-        sh ./scripts/add-osx-cert.sh
+          sh ./scripts/add-osx-cert.sh
         env:
           MACOS_CERT: ${{ secrets.MAC_CERTS }}
           MACOS_CERT_PASS: ${{ secrets.MAC_CERTS_PASSWORD }}

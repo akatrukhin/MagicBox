@@ -57,13 +57,10 @@
           @navigationNewItem
           *ngFor="let set of sets; let i = index"
           tabindex="1"
+          [routerLink]="['/sets', set.id]"
           (contextmenu)="onRightClick(set)"
         >
-          <div
-            class="subitem-inner"
-            routerLinkActive="set-active"
-
-          >
+          <div class="subitem-inner" routerLinkActive="set-active">
             <span>{{ set.name }}</span>
             <div *ngIf="getNotOptimizied(set)" class="new-files">
               {{ getNotOptimizied(set) }}

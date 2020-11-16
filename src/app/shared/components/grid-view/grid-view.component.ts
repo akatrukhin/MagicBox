@@ -40,7 +40,6 @@ export class GridViewComponent {
 
   public previewFile(file: AppFile) {
     this.isSingleClick = false;
-    console.log('p', file);
     this.previewFileService.showPreviewFile(file);
   }
 

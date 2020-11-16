@@ -4,7 +4,7 @@ import * as settings from "electron-settings";
 
 export enum Themes {
   Dark = "ultra-dark",
-  Light = "sidebar",
+  Light = "light",
 }
 
 @Injectable({
@@ -13,7 +13,6 @@ export enum Themes {
 export class ThemeService {
   remote: typeof remote;
   settings: typeof settings;
-
   constructor() {
     // Conditional imports
     if (this.isElectron()) {
@@ -28,6 +27,10 @@ export class ThemeService {
     document.documentElement.setAttribute("data-theme", theme);
     const window = this.remote.getCurrentWindow();
     window.setVibrancy(theme);
+    if (process.platform === "darwin") {
+      this.remote.systemPreferences.appLevelAppearance =
+        theme === Themes.Light ? "light" : "dark";
+    }
   }
 
   public initTheme(): void {

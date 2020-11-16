@@ -1,17 +1,17 @@
-import { app, shell, Menu, clipboard } from "electron";
+import { shell, Menu, clipboard } from "electron";
 import * as url from "url";
 import * as path from "path";
 import * as parser from "fast-xml-parser";
 import * as username from "username";
 import { autoUpdater } from "electron-updater";
-import { ProcessSVGPasteFromClipboard } from "./process-image";
+import { optimizeClipboardSVG } from "./process-image";
 import { createWindow, win } from "./window";
 
 export const AppMenuInit = () =>
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       {
-        label: app.getName(),
+        label: "MagicBox",
         submenu: [
           {
             label: "About MagicBox",
@@ -75,7 +75,7 @@ export const AppMenuInit = () =>
                 parser.validate(clipboardData) &&
                 clipboardData.includes("<svg")
               ) {
-                ProcessSVGPasteFromClipboard(clipboardData);
+                optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
               }
             },
           },

@@ -2,8 +2,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 7vh);
-  height: 100%;
+  width: 100%;
+  max-width: 88vw;
+  max-height: 92vh;
+  min-height: 92vh;
   margin: 3.5vh 3.5vh 4.5vh 3.5vh;
   overflow-y: scroll;
   color: var(--preview-fg);

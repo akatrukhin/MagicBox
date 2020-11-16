@@ -14,4 +14,4 @@ setTimeout(() => {
   platformBrowserDynamic().bootstrapModule(AppModule, {
     preserveWhitespaces: false,
   });
-}, 200);
+});

@@ -127,7 +127,7 @@ export class OptimizationService {
       try {
         file.loading = true;
         this.electronService.ipcRenderer.send(
-          "optimizeImage",
+          "file-optimization",
           file,
           customPath ? customPath : null
         );
@@ -146,6 +146,9 @@ export class OptimizationService {
         this.electronService.ipcRenderer.once(
           file.id,
           (event, path: string) => {
+            if (path === "error") {
+              return Error;
+            }
             file.shrinked = new IFile(path, file.original.type);
             file.hasSourceFile =
               file.shrinked.path !== file.original.path ? true : false;

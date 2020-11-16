@@ -3,20 +3,24 @@
   display: flex;
   width: 100%;
   height: calc(100% + 20px);
+  max-height: calc(92vh - 68px);
   margin-top: -20px;
+  // Temporary disabled virtaul scroll
+  // Waiting until will all envirement will be up to date
+  overflow-y: scroll;
 
-  virtual-scroller {
-    flex-grow: 1;
-  }
+  //   virtual-scroller {
+  //     flex-grow: 1;
+  //   }
 
-  ::ng-deep {
-    .scrollable-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 204px);
-      justify-content: space-between;
-      padding: 0px 24px 100px 24px;
-    }
-  }
+  //   ::ng-deep {
+  //     .scrollable-content {
+  //       display: grid;
+  //       grid-template-columns: repeat(auto-fill, 204px);
+  //       justify-content: space-between;
+  //       padding: 0px 24px 100px 24px;
+  //     }
+  //   }
 }
 
 .file {
@@ -198,4 +202,12 @@
       }
     }
   }
+}
+
+.grid-view {
+  display: grid;
+  flex-grow: 1;
+  grid-template-columns: repeat(auto-fill, 204px);
+  justify-content: space-between;
+  padding: 0px 24px 100px 24px;
 }

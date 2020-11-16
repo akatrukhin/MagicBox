@@ -33,7 +33,7 @@ import {
 })
 export class ImagesComponent implements OnChanges, OnInit {
   @Input() set: Set;
-  @Input() noFilesTitle = "Drop files here to add them to the list";
+  @Input() noFilesTitle = "Drop images here to add them to the list";
   @ViewChild("inputFiles") inputFiles: ElementRef;
 
   // UI
@@ -68,7 +68,7 @@ export class ImagesComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    if (this.set.files) {
+    if (this.set.files.length) {
       this.set.files.forEach((file) => {
         if (file.selected) {
           file.selected = false;
@@ -78,6 +78,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     }
     this.dropdownService.setList(this.set);
     this.set.setStatistics();
+    this.setService.saveSets();
   }
 
   public async optimizeFiles() {
@@ -102,6 +103,7 @@ export class ImagesComponent implements OnChanges, OnInit {
       await this.convertingFile(file);
     }
     this.set.setStatistics();
+    this.setService.saveSets();
     // this.webWorkerService.run(watchFiles, this.set.files);
     console.log(`%cProcessing process completed`, "font-weight: bold");
   }
@@ -109,7 +111,11 @@ export class ImagesComponent implements OnChanges, OnInit {
   // Set file from system
   public getFilesFromSystem() {
     const files: File[] = this.inputFiles.nativeElement.files;
+    console.log(`%cProcessing ${files.length} files`, "font-weight: bold");
     this.setFilesFromSystem(files);
+    this.set.setStatistics();
+    this.setService.saveSets();
+    console.log(`%cProcessing process completed`, "font-weight: bold");
     // this.webWorkerService.run(watchFiles, this.set.files);
   }
 
@@ -179,15 +185,6 @@ export class ImagesComponent implements OnChanges, OnInit {
 
   public removeSelectedFiles(): void {
     this.setService.removeFiles(this.set.id, this.selectedFiles);
-  }
-
-  // Drag and Drop features
-  public fileOver(): void {
-    // console.log(event);
-  }
-
-  public fileLeave(): void {
-    // console.log(event);
   }
 
   public selectFile(file: AppFile): void {

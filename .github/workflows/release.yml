@@ -38,8 +38,7 @@ jobs:
         run: |
           yarn install
       - name: TypeScript compile
-        run: | 
-          tsc -p tsconfig.json
+        uses: stepek/tsc-action@master
       - name: Compile Angular
         run: |
           yarn run build:prod

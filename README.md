@@ -4,11 +4,9 @@
 
 MagicBox is a tool to minify images, graphics, design source files. Organize a workspace by creating file sets, assign them to project, track file updates, export to project.
 
-#
-
-![ScreenShot](https://katrukhin.com/magic-box/screen-shot-5.png)
-
 ## Features
+
+<img align="right" width="400" height="auto" src="https://katrukhin.com/magic-box/preview.gif">
 
 - Icon manager
 - Font manager*
@@ -30,8 +28,6 @@ MagicBox is a tool to minify images, graphics, design source files. Organize a w
 - PX to REM converter*
 
  *Comming soon
- 
- ![ScreenShot](https://katrukhin.com/magic-box/screen-shot-7.png)
  
  #
 [![Author](https://img.shields.io/badge/Author-katrukhin-brightgreen.svg)](https://katrukhin.com)

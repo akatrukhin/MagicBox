@@ -1,7 +1,7 @@
 import * as os from "os";
 import * as settings from "electron-settings";
 import * as SVGO from "svgo";
-import { remote } from "electron";
+import { systemPreferences } from "electron";
 
 export const SketchPluginsRoot =
   os.homedir() + "/Library/Application Support/MagicBox/";
@@ -71,7 +71,7 @@ export const DefaultAppSettings = JSON.parse(
     },
     appearance: {
       theme:
-        remote.systemPreferences.appLevelAppearance === "light"
+        systemPreferences.appLevelAppearance === "light"
           ? "light"
           : "ultra-dark",
       smallNav: false,

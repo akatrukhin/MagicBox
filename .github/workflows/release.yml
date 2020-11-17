@@ -37,6 +37,8 @@ jobs:
       - name: Set up build environment
         run: |
           yarn install
+      #- name: TypeScript compile
+      #  uses: FuLagann/tsc-build-push@v1
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Compile Angular

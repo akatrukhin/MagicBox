@@ -29,7 +29,6 @@ jobs:
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
-        if: matrix.os == 'macos-latest' && startsWith(github.ref, 'refs/tags/')
         run: |
           chmod +x ./scripts/add-osx-cert.sh && ./scripts/add-osx-cert.sh
         env:
@@ -44,7 +43,7 @@ jobs:
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS image
         run: |
-          yarn run electron:mac && ls
+          yarn run electron:mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}

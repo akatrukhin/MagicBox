@@ -100,9 +100,8 @@ jobs:
       - name: Create a new release draft
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github_token: ${{ secrets.github_token }}
           tag_name: ${{steps.ref.outputs.version}} # tag_name is required, but can be overridden during edit
           release_name: Release ${{steps.ref.outputs.version}} # release_name is required
           body: If you can read this, I have forgotten to fill in the changelog. Sorry!
@@ -111,27 +110,24 @@ jobs:
       # And finally, upload app files
       - name: Upload macOS image
         uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github_token: ${{ secrets.github_token }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./MagicBox-${{steps.ref.outputs.version}}.dmg
           asset_name: MagicBox-${{steps.ref.outputs.version}}.dmg
           asset_content_type: application/octet-stream
       - name: Upload macOS zip file
         uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github_token: ${{ secrets.github_token }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./MagicBox-${{steps.ref.outputs.version}}-mac.zip
           asset_name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
           asset_content_type: application/zip
       - name: Upload the checksums
         uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github_token: ${{ secrets.github_token }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./latest-mac.yml
           asset_name: latest-mac.yml

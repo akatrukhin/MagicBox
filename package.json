@@ -82,6 +82,12 @@
     "web-animations-js": "^2.3.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "eslint": "^7.8.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-config-standard-with-typescript": "^19.0.1",
+    "eslint-loader": "^4.0.2",
     "@angular-devkit/build-angular": "^0.10.7",
     "@angular/cli": "^7.3.9",
     "@angular/common": "^7.2.15",

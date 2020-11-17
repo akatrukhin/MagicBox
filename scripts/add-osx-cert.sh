@@ -1,34 +1,23 @@
 #!/usr/bin/env sh
 
-# This script takes the macOS code sign certificate from the secret env
-# variable, saves it on the runner, and finally adds it to the keychain
-# so that electron-forge can access it to sign the built app.
-
-# Original source of this script:
-# https://dev.to/rwwagner90/signing-electron-apps-with-github-actions-4cof
-
 KEY_CHAIN=build.keychain
-CERT_FILE=certificate.p12
+CERTIFICATE_P12=certificate.p12
 
 # Recreate the certificate from the secure environment variable
-echo "$MAC_CERTS" | base64 --decode > $CERT_FILE
+echo $MAC_CERTS | base64 --decode > $CERTIFICATE_P12
 
-# Create a new keychain using the password "actions"
+#create a keychain
 security create-keychain -p actions $KEY_CHAIN
 
-# Make the keychain the default so that electron-forge finds it
+# Make the keychain the default so identities are found
 security default-keychain -s $KEY_CHAIN
 
-# Unlock the keychain using the previously chosen, very secure password
+# Unlock the keychain
 security unlock-keychain -p actions $KEY_CHAIN
 
-# Import our certificate into the (now default) created keychain and also allow
-# the codesign binary to access said certificate.
-security import $CERT_FILE -k $KEY_CHAIN -P "$MAC_CERTS_PASSWORD" -T /usr/bin/codesign;
+security import $CERTIFICATE_P12 -k $KEY_CHAIN -P $MAC_CERTS_PASSWORD -T /usr/bin/codesign;
 
-# Since macOS Sierra, the following command is necessary.
-# Further information: https://stackoverflow.com/a/40039594
 security set-key-partition-list -S apple-tool:,apple: -s -k actions $KEY_CHAIN
 
-# Remove the certificate file again
-rm -f $CERT_FILE
+# remove certs
+rm -fr *.p12

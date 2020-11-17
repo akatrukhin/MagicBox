@@ -39,7 +39,7 @@ jobs:
         run: |
           yarn install
       - name: TypeScript compile
-        uses: icrawl/action-eslint@v1
+        uses: icrawl/action-tsc@v1
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS image

@@ -32,8 +32,8 @@ jobs:
         run: |
           sh ./scripts/add-osx-cert.sh
         env:
-          MACOS_CERT: ${{ secrets.CSC_LINK }}
-          MACOS_CERT_PASS: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
       - name: Set up build environment
         run: |
           yarn install

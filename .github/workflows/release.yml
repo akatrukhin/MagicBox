@@ -36,22 +36,22 @@ jobs:
           MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
       - name: Set up build environment
         run: |
-          yarn install
-      - name: Angular build
-        run: |
-          yarn run build:prod
+          npm install
+      #- name: Angular build
+      #  run: |
+      #    npm run build:prod
       - name: MacOS Build
         run: |
-          npx electron-builder build --mac
+          npm run electron:mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      - name: MacOS zip file
+      - name: MacOS DMG image
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}.dmg
           path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
-      - name: MacOS ZIP release
+      - name: MacOS zip file
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}-mac.zip

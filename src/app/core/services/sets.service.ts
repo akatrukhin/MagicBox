@@ -56,7 +56,18 @@ export class SetService {
   }
 
   public removeFiles = (setID: string, files: AppFile[]): void => {
-    const set = this.getSet(setID);
+    let set;
+    switch (true) {
+      case setID === "import":
+        set = Import;
+        break;
+      case setID === "clipboard":
+        set = Clipboard;
+        break;
+      default:
+        set = this.getSet(setID);
+        break;
+    }
     files.forEach((file) => {
       // Stop watching
       if (this.isElectron && this.getFromSettings("app.fileWatcher")) {

@@ -40,9 +40,6 @@ jobs:
       - name: Angular App Build
         run: |
           yarn run build:prod
-      - name: TypeScript
-        run: |
-          npm run postinstall:electron && npm run electron:serve-tsc && ng build "-c" "production" && node postinstall && tsc -p tsconfig.json
       - name: MacOS Build
         run: |
           npx electron-builder build --mac

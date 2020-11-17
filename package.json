@@ -104,6 +104,7 @@
     "dotenv": "^8.2.0",
     "electron": "8.5.3",
     "electron-builder": "22.9.1",
+    "electron-builder-notarize": "^1.2.0",
     "electron-notarize": "^1.0.0",
     "electron-reload": "^1.5.0",
     "jasmine-core": "^3.5.0",
@@ -193,6 +194,7 @@
         "owner": "akatrukhin",
         "repo": "MagicBox"
       }
-    ]
+    ],
+    "afterSign": "electron-builder-notarize"
   }
 }

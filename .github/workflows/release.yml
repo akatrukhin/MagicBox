@@ -32,12 +32,12 @@ jobs:
         run: |
           sh ./scripts/add-osx-cert.sh
         env:
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          MAC_CERTS: ${{ secrets.MAC_CERTS }}
+          MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
       - name: Set up build environment
         run: |
           yarn install
-      - name: Angular App Build
+      - name: Angular build
         run: |
           yarn run build:prod
       - name: MacOS Build
@@ -45,25 +45,25 @@ jobs:
           npx electron-builder build --mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      - name: Cache macOS zip file
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      - name: MacOS zip file
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}.dmg
           path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
-      - name: Cache macOS ZIP release
+      - name: MacOS ZIP release
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
           path: ./release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
-      - name: Cache the checksums file
+      - name: Checksums file
         uses: actions/upload-artifact@v1
         with:
           name: latest-mac.yml
           path: ./release/latest-mac.yml
-  # after the three builds, this job downloads all assets, creates and verifies
-  # SHA256 checksums, and finally creates a release draft and uploads all
-  # assets to it.
+  #
+  #
+  #
   prepare_release:
     name: Prepare release draft
     # Make sure (and wait until) the builds have succeeded

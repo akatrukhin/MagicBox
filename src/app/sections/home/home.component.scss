@@ -8,7 +8,8 @@
   position: absolute;
   top: 3.5vh;
   left: 0;
-  right: 3.5vh;
+  width: calc(100% - 3.5vh);
+  margin-right: 3.5vh;
   bottom: 4.5vh;
   min-width: 680px;
   user-select: none;

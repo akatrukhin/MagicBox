@@ -16,6 +16,8 @@ export const AppMenuInit = () =>
           {
             label: "About MagicBox",
             click() {
+              // TSlint issue, should refer to line 40
+              // tslint:disable-next-line:prefer-const
               let about = createWindow({
                 windowSize: {
                   width: 300,

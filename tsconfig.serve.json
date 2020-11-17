@@ -9,6 +9,6 @@
     "types": ["node"],
     "lib": ["es2017", "es2016", "es2015", "dom"]
   },
-  "files": ["main.ts"],
+  "files": ["main.ts", "scripts/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

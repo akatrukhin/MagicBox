@@ -18,6 +18,6 @@
   "rules": {
     "semicolon": false
   },
-  "include": ["main.ts", "scripts/*", "src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

@@ -193,7 +193,6 @@
         "owner": "akatrukhin",
         "repo": "MagicBox"
       }
-    ],
-    "afterSign": "electron-builder-notarize"
+    ]
   }
 }

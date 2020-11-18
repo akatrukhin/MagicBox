@@ -1,11 +1,11 @@
-<!-- <virtual-scroller
+<virtual-scroller
   #scroll
   [items]="files"
   [bufferAmount]="10"
   [enableUnequalChildrenSizes]="true"
   (contextmenu)="onRightClickBody()"
-> -->
-<div class="grid-view" (contextmenu)="onRightClickBody()">
+>
+  <!-- <div class="grid-view" (contextmenu)="onRightClickBody()"> -->
   <div
     class="file-container"
     *ngFor="let file of files; let i = index; trackBy: trackByFn"
@@ -97,5 +97,5 @@
       </div>
     </div>
   </div>
-</div>
-<!-- </virtual-scroller> -->
+  <!-- </div> -->
+</virtual-scroller>

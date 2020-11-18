@@ -227,10 +227,10 @@ export class SetService {
     }
   };
 
-  public watchFiles = (files: AppFile[], set: Set): void => {
+  public watchFiles = (set: Set): void => {
     if (this.settings.get("app.fileWatcher")) {
       console.log("Checking files ... ");
-      files.forEach((file) => {
+      set.files.forEach((file) => {
         this.watchFile(file, set);
       });
     } else {

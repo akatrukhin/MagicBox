@@ -13,8 +13,8 @@ import { FileDropModule } from "ngx-file-drop";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CodemirrorModule } from "@ctrl/ngx-codemirror";
 import { TabsModule } from "ngx-tabs";
-// import { VirtualScrollerModule } from "ngx-virtual-scroller";
-
+// Temporary disabled
+import { VirtualScrollerModule } from "ngx-virtual-scroller";
 import {
   MatTableModule,
   MatSortModule,
@@ -42,6 +42,8 @@ import {
   DialogComponent,
   PreviewComponent,
 } from "./shared/components";
+
+// Pipes
 import {
   DatePipe,
   SizePipe,
@@ -50,6 +52,8 @@ import {
   PercentagePipe,
   SketchAttachmentFileExtentionPipe,
 } from "./shared/pipes";
+
+// Services
 import {
   ElectronService,
   OptimizationService,
@@ -59,6 +63,7 @@ import {
   SetService,
 } from "./core/services";
 import { DropdownService } from "./shared/components/dropdown/dropdown.service";
+import { WebWorkerService } from "./core/services/web-worker/web-worker";
 
 @NgModule({
   declarations: [
@@ -99,7 +104,7 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
     MatTableModule,
     MatSortModule,
     MatDialogModule,
-    // VirtualScrollerModule,
+    VirtualScrollerModule,
     CodemirrorModule,
     TabsModule,
 
@@ -116,6 +121,7 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
     DropdownService,
     ThemeService,
     SetService,
+    WebWorkerService,
   ],
   entryComponents: [DialogComponent],
   bootstrap: [AppComponent],

@@ -40,18 +40,18 @@ jobs:
       #- name: Angular build
       #  run: |
       #    npm run build:prod
-      - name: MacOS Build
+      - name: MacOS build
         run: |
           npm run electron:mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      - name: MacOS DMG image
+      - name: MacOS image
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}.dmg
           path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
-      - name: MacOS zip file
+      - name: MacOS archive
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}-mac.zip

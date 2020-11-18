@@ -147,7 +147,7 @@ export class OptimizationService {
           file.id,
           (event, path: string) => {
             if (path === "error") {
-              return Error;
+              throw new Error();
             }
             file.shrinked = new IFile(path, file.original.type);
             file.hasSourceFile =

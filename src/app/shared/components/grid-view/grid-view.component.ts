@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AppFile } from "../../../data";
-import { PreviewFileService } from "../../../core/services";
 
-import { LoaderAnimation } from "../../../shared/animations";
-import { getEncodedSvgCSSBackground } from "../../../shared/utilities";
+import { LoaderAnimation } from "../../animations";
 
 @Component({
   selector: "app-grid-view",
@@ -17,30 +15,29 @@ export class GridViewComponent {
   @Output() fileRightClickBody = new EventEmitter();
   @Output() selectFile = new EventEmitter();
 
-  private isSingleClick = true;
+  previewFile: AppFile;
 
-  constructor(private previewFileService: PreviewFileService) {}
+  public getPreviewURI(path: string): string {
+    return `"${encodeURI(path)
+      .replace("(", "%28")
+      .replace(")", "%29")}"`;
+  }
 
   public getEncodedSvgCSSBackground(data: string): string {
-    return getEncodedSvgCSSBackground(data);
+    return `url("data:image/svg+xml,${data
+      .replace(/"/g, "'")
+      .replace(/>\s{1,}</g, "><")
+      .replace(/\s{2,}/g, " ")
+      .replace(/[\r\n%#()<>?\[\\\]^`{|}]/g, encodeURIComponent)}")`;
   }
 
   public addSelectedFile(file: AppFile): void {
-    this.isSingleClick = true;
-    setTimeout(() => {
-      if (this.isSingleClick) {
-        this.selectFile.emit(file);
-      }
-    }, 250);
+    this.selectFile.emit(file);
   }
 
   public onRightClick(file: AppFile): void {
     this.fileRightClick.emit(file);
-  }
-
-  public previewFile(file: AppFile) {
-    this.isSingleClick = false;
-    this.previewFileService.showPreviewFile(file);
+    console.log(file);
   }
 
   public onRightClickBody(): void {

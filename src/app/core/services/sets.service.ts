@@ -228,8 +228,11 @@ export class SetService {
   };
 
   public watchFiles = (set: Set): void => {
+    console.log(this.settings.get("app.fileWatcher"), "app.fileWatcher");
     if (this.settings.get("app.fileWatcher")) {
-      console.log("Checking files ... ");
+      console.log(
+        `Traking files changes in ${set.name} for ${set.files.length}`
+      );
       set.files.forEach((file) => {
         this.watchFile(file, set);
       });

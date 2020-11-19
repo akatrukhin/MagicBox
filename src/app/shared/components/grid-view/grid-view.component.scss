@@ -29,18 +29,18 @@
   padding: 14px 16px;
   border-radius: 13px;
   margin-bottom: 6px;
-  transition: background-color ease 0.1s, box-shadow ease-in 0.2s;
+  transition: background-color ease 0.1s, box-shadow ease 0.1s;
   will-change: background-color, box-shadow;
 
   &:hover {
     background-color: var(--grid-view-file-hover-bg);
     box-shadow: var(--grid-view-file-hover-shadow);
-    transition: background-color ease 0.1s;
-    will-change: background-color;
+    transition: background-color ease 0.1s 0.1s, box-shadow ease 0.1s 0.1s;
+    will-change: background-color, box-shadow;
 
     .preview {
       box-shadow: var(--grid-file-preview-shadow-hover);
-      transition: box-shadow 0.4s;
+      transition: box-shadow 0.4s 0.1s;
       will-change: box-shadow;
 
       .file-format {

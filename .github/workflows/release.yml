@@ -37,20 +37,20 @@ jobs:
       - name: Set up build environment
         run: |
           npm install
-      #- name: Angular build
-      #  run: |
-      #    npm run build:prod
+      - name: Angular build
+       run: |
+          npm run build:prod
       - name: MacOS build
         run: |
-          npm run electron:mac
+          npx electron-builder build --mac
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      - name: MacOS image
-        uses: actions/upload-artifact@v1
-        with:
-          name: MagicBox-${{steps.ref.outputs.version}}.dmg
-          path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
+      # - name: MacOS image
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #     name: MagicBox-${{steps.ref.outputs.version}}.dmg
+      #      path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
       - name: MacOS archive
         uses: actions/upload-artifact@v1
         with:

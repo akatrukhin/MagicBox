@@ -15,7 +15,7 @@ import {
   DialogService,
   SetService,
 } from "../../../core/services";
-import { WebWorkerService } from "../../../core/services/web-worker/web-worker";
+import { WebWorkerService } from "ngx-web-worker";
 import { Set, ViewMode, AppFile, IFile } from "../../../data";
 import { DropdownService } from "../dropdown/dropdown.service";
 
@@ -31,6 +31,7 @@ import {
   templateUrl: "./images.component.html",
   styleUrls: ["./images.component.scss"],
   animations: [ImportAnimation, FooterAnimation, LoadingBar, ViewTransition],
+  providers: [WebWorkerService],
 })
 export class ImagesComponent implements OnChanges, OnInit {
   @Input() set: Set;
@@ -79,7 +80,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     }
     this.dropdownService.setList(this.set);
     this.set.setStatistics();
-    this.setService.saveSets();
+    // this.setService.saveSets();
   }
 
   public async optimizeFiles() {
@@ -96,34 +97,26 @@ export class ImagesComponent implements OnChanges, OnInit {
   // Drag and Drop
   // Tray extends EventEmitter 'drop-files'
   public async dropped(event: UploadEvent) {
-    // console.log(
-    //   `%cProcessing ${event.files.length} files`,
-    //   "font-weight: bold"
-    // );
+    console.time(`%cProcessing ${event.files.length} files`);
     for (const file of event.files) {
       await this.convertingFile(file);
     }
     this.set.setStatistics();
     this.setService.saveSets();
-    this.webWorkerService.run(
-      () => this.setService.watchFiles(this.set),
-      this.set.files
-    );
-    // console.log(`%cProcessing process completed`, "font-weight: bold");
+    this.webWorkerService.run(this.setService.watchFiles, this.set.files);
+
+    console.timeEnd(`%cProcessing ${event.files.length} files`);
   }
 
   // Set file from system
   public getFilesFromSystem() {
     const files: File[] = this.inputFiles.nativeElement.files;
-    // console.log(`%cProcessing ${files.length} files`, "font-weight: bold");
+    console.log(`%cProcessing ${files.length} files`, "font-weight: bold");
     this.setFilesFromSystem(files);
     this.set.setStatistics();
     this.setService.saveSets();
-    // console.log(`%cProcessing process completed`, "font-weight: bold");
-    this.webWorkerService.run(
-      () => this.setService.watchFiles(this.set),
-      this.set.files
-    );
+    this.webWorkerService.run(this.setService.watchFiles, this.set.files);
+    console.log(`%cProcessing process completed`, "font-weight: bold");
   }
 
   public setFilesFromSystem(files: File[]): void {
@@ -135,11 +128,14 @@ export class ImagesComponent implements OnChanges, OnInit {
     }
   }
 
-  private async convertingFile(file: UploadFile) {
-    // console.time(`${file.fileEntry.name}`);
+  hello(arg) {
+    console.log("Fired HEllO with", arg);
+  }
 
+  private async convertingFile(file: UploadFile) {
+    console.time(`${file.fileEntry.name}`);
     await this.setFile(file);
-    // console.timeEnd(`${file.fileEntry.name}`);
+    console.timeEnd(`${file.fileEntry.name}`);
   }
 
   private setFile(file: UploadFile) {

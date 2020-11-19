@@ -71,7 +71,8 @@
     "ng-click-outside": "^4.0.0",
     "ngx-file-drop": "^5.0.0",
     "ngx-tabs": "0.0.13",
-    "ngx-virtual-scroller": "^3.0.3",
+    "ngx-virtual-scroller": "^1.0.17",
+    "ngx-web-worker": "8.0.0",
     "path": "^0.12.7",
     "pngquant-bin": "^5.0.1",
     "rxjs-compat": "^6.5.4",
@@ -168,7 +169,6 @@
         }
       },
       "target": [
-        "dmg",
         "zip"
       ]
     },

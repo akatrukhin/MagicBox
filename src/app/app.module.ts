@@ -63,7 +63,6 @@ import {
   SetService,
 } from "./core/services";
 import { DropdownService } from "./shared/components/dropdown/dropdown.service";
-import { WebWorkerService } from "./core/services/web-worker/web-worker";
 
 @NgModule({
   declarations: [
@@ -121,7 +120,6 @@ import { WebWorkerService } from "./core/services/web-worker/web-worker";
     DropdownService,
     ThemeService,
     SetService,
-    WebWorkerService,
   ],
   entryComponents: [DialogComponent],
   bootstrap: [AppComponent],

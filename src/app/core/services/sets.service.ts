@@ -17,7 +17,7 @@ export class SetService {
 
   public getFromSettings(params: string) {
     if (this.isElectron) {
-      return this.settings.get(params);
+      return this.settings.getSync(params);
     }
   }
 
@@ -40,13 +40,13 @@ export class SetService {
       this.fs = window.require("fs");
       this.ipcRenderer = window.require("electron").ipcRenderer;
 
-      if (this.settings.get("app.fileWatcher")) {
+      if (this.settings.getSync("app.fileWatcher")) {
         this.startWatchAllFiles();
       }
 
       if (this.settings.has("sets")) {
-        const json = this.settings.get("sets");
-        Array.from(json).forEach((item: object) => {
+        const sets = [...this.settings.getSync("sets") as Array<any>];
+        sets.forEach((item: object) => {
           const set = new Set({ ...item });
           set.setStatistics();
           this.Sets.push(set);
@@ -89,15 +89,12 @@ export class SetService {
   public saveSet = (id: string): void => {
     // TODO:
     this.getSet(id);
-    console.log(this.settings.get("sets"));
+    console.log(this.settings.getSync("sets"));
   };
 
   public saveSets = (): void => {
     if (this.isElectron) {
-      if (this.settings.has("sets")) {
-        this.settings.delete("sets");
-      }
-      this.settings.set("sets", JSON.parse(JSON.stringify(this.Sets)));
+      this.settings.setSync("sets", this.Sets);
     }
   };
 
@@ -140,12 +137,12 @@ export class SetService {
         this.fs.rename(
           file.shrinked.path,
           set.path + "/" + file.shrinked.name,
-          () => {}
+          () => { }
         );
         file.shrinked.path = set.path + "/" + file.shrinked.name;
       }
     });
-    if (this.settings.get("app.notification")) {
+    if (this.settings.getSync("app.notification")) {
       const Notification = this.remote.Notification;
       new Notification({
         title: `Files are moved`,
@@ -180,7 +177,7 @@ export class SetService {
   };
 
   private watchFile = (file: AppFile, set: Set): void => {
-    if (this.settings.get("app.fileWatcher")) {
+    if (this.settings.getSync("app.fileWatcher")) {
       console.log(
         `File check:`,
         `c%${file.original.name}`,
@@ -218,7 +215,7 @@ export class SetService {
   };
 
   private startWatchAllFiles = (): void => {
-    if (this.settings.get("app.fileWatcher")) {
+    if (this.settings.getSync("app.fileWatcher")) {
       this.Sets.forEach((set) => {
         set.files.forEach((file) => {
           this.watchFile(file, set);
@@ -228,8 +225,8 @@ export class SetService {
   };
 
   public watchFiles = (set: Set): void => {
-    console.log(this.settings.get("app.fileWatcher"), "app.fileWatcher");
-    if (this.settings.get("app.fileWatcher")) {
+    console.log(this.settings.getSync("app.fileWatcher"), "app.fileWatcher");
+    if (this.settings.getSync("app.fileWatcher")) {
       console.log(
         `Traking files changes in ${set.name} for ${set.files.length}`
       );

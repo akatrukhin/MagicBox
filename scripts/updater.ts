@@ -9,7 +9,7 @@ import { win } from "./window";
 
 autoUpdater.logger = log;
 
-export function AutoUpdaterInit() {
+export function autoUpdaterInit() {
   autoUpdater.setFeedURL({
     provider: "github",
     owner: "akatrukhin",

@@ -11,9 +11,9 @@
           [(ngModel)]="set.name"
           maxlength="16"
           size="{{ set.name.length }}"
-          (keyup)="setTitle($event)"
+          (keyup)="setTitle()"
         />
-        <div class="path" (click)="set.setPath()">
+        <div class="path" (click)="setFolder()">
           <span *ngIf="set.path" class="path-icon SF-Icon">􀈖</span>
           {{ set.path }}
         </div>
@@ -104,99 +104,105 @@
     </div>
   </div>
 
-  <file-drop
-    customstyle=""
+  <ngx-file-drop
     class="drop-container"
+    dropZoneClassName=""
     (onFileDrop)="dropped($event)"
   >
-    <div @ImportAnimation class="drop-zone import" *ngIf="!set.files.length">
-      <div
-        class="drop-content-container"
-        *ngIf="isItTemporarySet(); else emptySet"
-      >
-        <div class="img image-animation"></div>
+    <ng-template ngx-file-drop-content-tmp>
+      <div @ImportAnimation class="drop-zone import" *ngIf="!set.files.length">
+        <div
+          class="drop-content-container"
+          *ngIf="isItTemporarySet(); else emptySet"
+        >
+          <div class="img image-animation"></div>
 
-        <div class="add-file-icon file-icon-animation">
-          <input
-            #inputFiles
-            id="inputFiles"
-            type="file"
-            class="select-files"
-            (change)="getFilesFromSystem()"
-            multiple
-            accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="32"
-            height="32"
-            class="plus-icon"
-          >
-            <defs>
-              <path
-                id="b"
-                d="M13 15H1.4C.6 15 0 14.6 0 14s.6-1 1.4-1H13V1.4c0-.8.4-1.4 1-1.4s1 .6 1 1.4V13h11.6c.8 0 1.4.4 1.4 1s-.6 1-1.4 1H15v11.6c0 .8-.4 1.4-1 1.4s-1-.6-1-1.4V15z"
-              />
-              <filter
-                id="a"
-                width="125%"
-                height="125%"
-                x="-12.5%"
-                y="-8.9%"
-                filterUnits="objectBoundingBox"
-              >
-                <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1" />
-                <feGaussianBlur
-                  in="shadowOffsetOuter1"
-                  result="shadowBlurOuter1"
-                  stdDeviation="1"
+          <div class="add-file-icon file-icon-animation">
+            <input
+              #inputFiles
+              id="inputFiles"
+              type="file"
+              class="select-files"
+              (change)="getFilesFromSystem()"
+              multiple
+              accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="32"
+              height="32"
+              class="plus-icon"
+            >
+              <defs>
+                <path
+                  id="b"
+                  d="M13 15H1.4C.6 15 0 14.6 0 14s.6-1 1.4-1H13V1.4c0-.8.4-1.4 1-1.4s1 .6 1 1.4V13h11.6c.8 0 1.4.4 1.4 1s-.6 1-1.4 1H15v11.6c0 .8-.4 1.4-1 1.4s-1-.6-1-1.4V15z"
                 />
-                <feColorMatrix
-                  in="shadowBlurOuter1"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1371 0"
-                />
-              </filter>
-            </defs>
-            <g fill="none" transform="translate(2 1)">
-              <use fill="#000" filter="url(#a)" xlink:href="#b" />
-              <use fill="#FFF" xlink:href="#b" />
-            </g>
-          </svg>
-        </div>
+                <filter
+                  id="a"
+                  width="125%"
+                  height="125%"
+                  x="-12.5%"
+                  y="-8.9%"
+                  filterUnits="objectBoundingBox"
+                >
+                  <feOffset
+                    dy="1"
+                    in="SourceAlpha"
+                    result="shadowOffsetOuter1"
+                  />
+                  <feGaussianBlur
+                    in="shadowOffsetOuter1"
+                    result="shadowBlurOuter1"
+                    stdDeviation="1"
+                  />
+                  <feColorMatrix
+                    in="shadowBlurOuter1"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1371 0"
+                  />
+                </filter>
+              </defs>
+              <g fill="none" transform="translate(2 1)">
+                <use fill="#000" filter="url(#a)" xlink:href="#b" />
+                <use fill="#FFF" xlink:href="#b" />
+              </g>
+            </svg>
+          </div>
 
-        <div class="text stagger" [innerHTML]="noFilesTitle"></div>
-        <div class="formats stagger">
-          JPEG, PNG, GIF, TIFF, WEBP, SVG, SKETCH
-        </div>
-        <div class="shortcuts stagger">
-          or use shortcut <b>􀆔V</b> to paste SVG Markup
+          <div class="text stagger" [innerHTML]="noFilesTitle"></div>
+          <div class="formats stagger">
+            JPEG, PNG, GIF, TIFF, WEBP, SVG, SKETCH
+          </div>
+          <div class="shortcuts stagger">
+            or use shortcut <b>􀆔V</b> to paste SVG Markup
+          </div>
         </div>
       </div>
-    </div>
 
-    <div
-      *ngIf="set.files.length"
-      [ngSwitch]="set.viewMode"
-      class="file-preview"
-      @ViewTransition
-    >
-      <app-table
-        *ngSwitchCase="'list'"
-        [rows]="set.files"
-        (fileRightClick)="onRightClick($event)"
-        (fileRightClickBody)="onRightClickBody($event)"
-        (selectFile)="selectFile($event)"
-      ></app-table>
-      <app-grid-view
-        *ngSwitchCase="'grid'"
-        [files]="set.files"
-        (fileRightClick)="onRightClick($event)"
-        (fileRightClickBody)="onRightClickBody($event)"
-        (selectFile)="selectFile($event)"
-      ></app-grid-view>
-    </div>
-  </file-drop>
+      <div
+        *ngIf="set.files.length"
+        [ngSwitch]="set.viewMode"
+        class="files-preview"
+        @ViewTransition
+      >
+        <app-table
+          *ngSwitchCase="'list'"
+          [rows]="set.files"
+          (fileRightClick)="onRightClick($event)"
+          (fileRightClickBody)="onRightClickBody()"
+          (selectFile)="selectFile($event)"
+        ></app-table>
+        <app-grid-view
+          *ngSwitchCase="'grid'"
+          [files]="set.files"
+          (fileRightClick)="onRightClick($event)"
+          (fileRightClickBody)="onRightClickBody()"
+          (selectFile)="selectFile($event)"
+        ></app-grid-view>
+      </div>
+    </ng-template>
+  </ngx-file-drop>
 
   <div
     @FooterAnimation

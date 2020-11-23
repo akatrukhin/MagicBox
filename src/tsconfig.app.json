@@ -2,14 +2,15 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "esNext",
+    "module": "es2020",
     "baseUrl": "",
-    "types": [],
-    "paths": {
-      "@core/*": ["app/core/*"],
-      "@data/*": ["app/data/*"],
-      "@shared/*": ["app/shared/*"]
-    }
+    "types": []
   },
-  "exclude": ["**/*.spec.ts"]
+  "include": ["main.ts", "polyfill.ts"],
+  "exclude": ["**/*.spec.ts"],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "preserveWhitespaces": true
+  }
 }

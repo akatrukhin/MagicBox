@@ -2,7 +2,7 @@
   --accent-color: rgb(59, 214, 180);
   --accent-color-2: #2dd597;
 
-  --window-bg: url(./assets/img/window-background.png);
+  --window-bg: url("../img/window-background.png");
   --widnow-bg-size: 32px;
 
   --body-bg: #0f0940;
@@ -93,8 +93,8 @@
     inset 0 -1px 0 0 #0f422f91;
 
   /* Import */
-  --import-bg-1: url(./assets/img/import.svg);
-  --import-bg-2: url(./assets/img/import-2.svg);
+  --import-bg-1: url("../img/import.svg");
+  --import-bg-2: url("../img/import-2.svg");
 
   /* Grid View */
   --grid-file-preview-bg: #fff;

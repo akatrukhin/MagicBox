@@ -53,7 +53,7 @@ export class ContextMenuService {
     private dialogService: DialogService,
     private electronService: ElectronService,
     private setService: SetService
-  ) {}
+  ) { }
 
   private menuItems = {
     sourceFileLabel: {
@@ -116,7 +116,7 @@ export class ContextMenuService {
     copyFileAsBase64: (file: AppFile) => {
       return {
         label: ContextMenuLabels.ImageToBase64,
-        click: () => {},
+        click: () => { },
         // base64.base64(file.shrinked.path, (err, base64code: string) => {
         //   this.electronService.clipboard.writeText(base64code);
         // }),

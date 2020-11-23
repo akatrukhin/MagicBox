@@ -23,14 +23,14 @@ export class NavigationComponent {
     public electronService: ElectronService,
     private contextMenuService: ContextMenuService,
     private setService: SetService
-  ) {}
+  ) { }
 
   public getNotOptimizied(set: Set): number {
     return set.statistics.notOptimized;
   }
 
   public setClipboardLink(): boolean {
-    return Boolean(this.electronService.settings.get("app.clipboardWatcher"));
+    return Boolean(this.electronService.settings.getSync("app.clipboardWatcher"));
   }
 
   public isThereNotOptimizedFiles(): boolean {
@@ -52,7 +52,7 @@ export class NavigationComponent {
   }
 
   public navigationStatus(): boolean {
-    return Boolean(this.electronService.settings.get("appearance.smallNav"));
+    return Boolean(this.electronService.settings.getSync("appearance.smallNav"));
   }
 
   public onRightClick(set: Set): void {

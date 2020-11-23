@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
+import { MatTableDataSource } from "@angular/material/table";
 import { PreviewFileService } from "../../../core/services";
 import { AppFile } from "../../../data";
 
@@ -27,7 +27,7 @@ export class TableComponent implements OnChanges {
   dataSource = new MatTableDataSource(this.rows);
   isSingleClick = true;
 
-  constructor(private previewFileService: PreviewFileService) {}
+  constructor(private previewFileService: PreviewFileService) { }
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.rows);

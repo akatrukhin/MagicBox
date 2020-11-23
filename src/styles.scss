@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 @import "assets/styles/mixins.scss";
 @import "assets/styles/reset.scss";
 @import "assets/styles/global-rules.scss";
@@ -47,12 +46,22 @@ body {
 .drop-container {
   display: flex;
   flex-grow: 1;
+  flex-direction: column;
 
   & > div {
     position: relative;
     display: flex;
+    flex-direction: column;
     width: 100%;
     flex-grow: 1;
+
+    .ngx-file-drop__content {
+      display: flex;
+      flex-grow: 1;
+      height: auto;
+      color: inherit;
+      flex-direction: column;
+    }
 
     &.over {
       background: transparent;

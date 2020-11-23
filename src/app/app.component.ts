@@ -40,19 +40,19 @@ export class AppComponent {
       );
       console.log("\n");
 
-      if (electronService.settings.get("other.path")) {
-        this.router.navigate([electronService.settings.get("other.path")]);
+      if (electronService.settings.getSync("other.path")) {
+        this.router.navigate([electronService.settings.getSync("other.path")]);
       }
 
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          electronService.settings.set("other", { path: event.url });
+          electronService.settings.setSync("other", { path: event.url });
           previewFileService.componentViewStatus(false);
           this.currentRoute = event.url;
         }
       });
 
-      if (electronService.settings.get("app.clipboardWatcher")) {
+      if (electronService.settings.getSync("app.clipboardWatcher")) {
         electronService.ipcRenderer.on(
           "get-svg-from-clipboard",
           (event, svg) => {

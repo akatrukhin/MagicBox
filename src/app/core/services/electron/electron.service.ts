@@ -55,7 +55,7 @@ export class ElectronService {
   }
 
   public showNotification(message: NotificationConstructorOptions) {
-    if (this.settings.get("app.notification") && !this.mainWindow.isFocused()) {
+    if (this.settings.getSync("app.notification") && !this.mainWindow.isFocused()) {
       const Notification = this.remote.Notification;
       const notification = new Notification(message);
       notification.show();

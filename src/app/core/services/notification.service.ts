@@ -24,7 +24,7 @@ export class NotificationService {
   }
 
   showNotification = (message: NotificationConstructorOptions) => {
-    if (this.settings.get("app.notification")) {
+    if (this.settings.getSync("app.notification")) {
       const Notification = this.remote.Notification;
       const notification = new Notification(message);
       notification.show();

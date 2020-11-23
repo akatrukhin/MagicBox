@@ -55,17 +55,18 @@
 </div>
 
 <div class="tools sb alc">
-  <tabset
-    *ngIf="tabs.length > 1 || file.hasSourceFile"
-    class="page-tabs"
-    (onSelect)="updateTab($event)"
-  >
-    <tab
-      *ngFor="let tab of tabs; let i = index; trackBy: trackByFn"
-      [active]="tab == tab.id"
-      [title]="tab.label"
-    ></tab>
-  </tabset>
+  <div *ngIf="tabs.length > 1 || file.hasSourceFile" class="tabs">
+    <ul class="tabs-container">
+      <li
+        *ngFor="let tab of tabs; let i = index; trackBy: trackByFn"
+        [class.active]="activeTabId === tab.id"
+        class="tabs-item"
+        (click)="setActiveTabId(tab.id)"
+      >
+        {{ tab.label }}
+      </li>
+    </ul>
+  </div>
 
   <div
     class="file-state f alc"
@@ -83,7 +84,7 @@
   </div>
 </div>
 
-<div [ngSwitch]="currentTab" class="tabs-container">
+<div [ngSwitch]="activeTabId" class="tabs-body">
   <div
     @ViewTransition
     (contextmenu)="onRightClick(file)"

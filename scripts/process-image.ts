@@ -17,7 +17,7 @@ import * as gif from "gifsicle";
 import * as sharp from "sharp";
 
 import { win } from "./window";
-import { SVGPluginSettings, SketchPluginsRoot } from "./config";
+import { svgoPluginSettings, SKETCH_APP_ROOT } from "./config";
 
 const sendToRenderer = (err, id, _path) => {
   if (!err) {
@@ -40,7 +40,7 @@ const setNewPath = (filePath: string, customPath?: string) => {
   }
   makeDir.sync(objPath.dir);
   // Check Settings
-  const suffix = settings.get("app.suffix") ? ".min" : "";
+  const suffix = settings.getSync("app.suffix") ? ".min" : "";
   objPath.base = objPath.name + suffix + objPath.ext;
   return path.format(objPath);
 };
@@ -52,7 +52,7 @@ const unpackSketchFile = (file) => {
         "-o",
         file.original.path,
         "-d",
-        SketchPluginsRoot,
+        SKETCH_APP_ROOT,
       ])
       .on("exit", () => {
         resolve(`💾  Sketch file unpacked`);
@@ -76,20 +76,20 @@ const deleteFolderRecursive = (folder: string) => {
   }
 };
 
-const packSketchFile = (newPath, file) => {
-  return new Promise((resolve) => {
+const packSketchFile = (newPath, file): Promise<void> => {
+  return new Promise((resolve): void => {
     const output = fs.createWriteStream(newPath);
     const sketch = archiver("zip", {
       zlib: { level: 9 },
     });
     output.on("close", () => {
       log.info(sketch.pointer() + " total bytes");
-      deleteFolderRecursive(SketchPluginsRoot);
+      deleteFolderRecursive(SKETCH_APP_ROOT);
       sendToRenderer(null, file.id, newPath);
       resolve();
     });
     sketch.pipe(output);
-    sketch.directory(SketchPluginsRoot, false).finalize();
+    sketch.directory(SKETCH_APP_ROOT, false).finalize();
   });
 };
 
@@ -120,7 +120,7 @@ const optimizeJSONValues = (json) => {
   }
 };
 
-const optmizeJSON = (filePath: string) =>
+const optmizeJSON = (filePath: string): Promise<void> =>
   new Promise((resolve) => {
     fs.readFile(filePath, "utf8", (err, contents) => {
       const json = JSON.parse(contents);
@@ -155,7 +155,7 @@ const optimizeSketchSourceImages = (sources, newPath, file) => {
               () => {
                 const input = fs.readFileSync(data);
                 const out = mozjpegJs.encode(input, {
-                  quality: settings.get("jpeg.quality"),
+                  quality: settings.getSync("jpeg.quality"),
                 });
                 fs.writeFile(data, out.data, (_error) => {
                   resolve(`${data} optimized`);
@@ -174,8 +174,8 @@ const optimizeSketchSourceImages = (sources, newPath, file) => {
             sharp(data)
               .webp({
                 lossless: true,
-                quality: settings.get("webp.quality"),
-                alphaQuality: settings.get("webp.alpha"),
+                quality: settings.getSync("webp.quality"),
+                alphaQuality: settings.getSync("webp.alpha"),
                 nearLossless: true,
               })
               .toFile(data, () => resolve(`${data} optimized`));
@@ -185,7 +185,7 @@ const optimizeSketchSourceImages = (sources, newPath, file) => {
             sharp(data)
               .tiff({
                 compression: "lzw",
-                quality: settings.get("tiff.quality"),
+                quality: settings.getSync("tiff.quality"),
                 squash: true,
               })
               .toFile(data, () => resolve(`${data} optimized`));
@@ -211,7 +211,7 @@ const optimizeSketchFile = (file, newPath) => {
   unpackSketchFile(file).then((resolve) => {
     log.info(resolve);
     glob(
-      SketchPluginsRoot + "/**/*.{jpg,jpeg,png,gif,json,tiff,webp}",
+      SKETCH_APP_ROOT + "/**/*.{jpg,jpeg,png,gif,json,tiff,webp}",
       (error, sources) => {
         optimizeSketchSourceImages(sources, newPath, file);
       }
@@ -232,7 +232,7 @@ export const ProcessFile = (file, customPath?: string) => {
       case ".svg": {
         const evenodd = `fill-rule="evenodd"`;
         const nonzero = `fill-rule="nonzero"`;
-        SVGPluginSettings()
+        svgoPluginSettings()
           .optimize(data)
           .then((result) => {
             if (
@@ -263,7 +263,7 @@ export const ProcessFile = (file, customPath?: string) => {
           () => {
             const input = fs.readFileSync(file.original.path);
             const out = mozjpegJs.encode(input, {
-              quality: settings.get("jpeg.quality"),
+              quality: settings.getSync("jpeg.quality"),
             });
             fs.writeFile(newPath, out.data, (_error) => {
               sendToRenderer(_error, file.id, newPath);
@@ -292,8 +292,8 @@ export const ProcessFile = (file, customPath?: string) => {
         sharp(file.original.path)
           .webp({
             lossless: true,
-            quality: settings.get("webp.quality"),
-            alphaQuality: settings.get("webp.alpha"),
+            quality: settings.getSync("webp.quality"),
+            alphaQuality: settings.getSync("webp.alpha"),
             nearLossless: true,
           })
           .toFile(newPath, (error) => sendToRenderer(error, file.id, newPath));
@@ -303,7 +303,7 @@ export const ProcessFile = (file, customPath?: string) => {
         sharp(file.original.path)
           .tiff({
             compression: "lzw",
-            quality: settings.get("tiff.quality"),
+            quality: settings.getSync("tiff.quality"),
             squash: true,
           })
           .toFile(newPath, (error) => sendToRenderer(error, file.id, newPath));
@@ -329,7 +329,7 @@ export const ProcessFile = (file, customPath?: string) => {
 export const optimizeClipboardSVG = (event: string, SVGxml: string) => {
   const evenodd = `fill-rule="evenodd"`;
   const nonzero = `fill-rule="nonzero"`;
-  SVGPluginSettings()
+  svgoPluginSettings()
     .optimize(SVGxml)
     .then((result) => {
       if (result.data.includes(evenodd) && result.data.includes(nonzero)) {

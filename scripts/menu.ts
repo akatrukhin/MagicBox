@@ -7,7 +7,7 @@ import { autoUpdater } from "electron-updater";
 import { optimizeClipboardSVG } from "./process-image";
 import { createWindow, win } from "./window";
 
-export const AppMenuInit = () =>
+export const appMenuInit = () =>
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       {
@@ -16,8 +16,6 @@ export const AppMenuInit = () =>
           {
             label: "About MagicBox",
             click() {
-              // TSlint issue, should refer to line 40
-              // tslint:disable-next-line:prefer-const
               let about = createWindow({
                 windowSize: {
                   width: 300,
@@ -67,20 +65,20 @@ export const AppMenuInit = () =>
           { role: "redo" },
           { type: "separator" },
           { role: "copy" },
-          // { role: "paste" },
-          {
-            label: "Paste SVG code",
-            accelerator: "CmdOrCtrl+V",
-            click() {
-              const clipboardData = clipboard.readText();
-              if (
-                parser.validate(clipboardData) &&
-                clipboardData.includes("<svg")
-              ) {
-                optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
-              }
-            },
-          },
+          { role: "paste" },
+          // {
+          //   label: "Paste SVG code",
+          //   accelerator: "CmdOrCtrl+V",
+          //   click() {
+          //     const clipboardData = clipboard.readText();
+          //     if (
+          //       parser.validate(clipboardData) &&
+          //       clipboardData.includes("<svg")
+          //     ) {
+          //       optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
+          //     }
+          //   },
+          // },
         ],
       },
       {
@@ -103,7 +101,7 @@ export const AppMenuInit = () =>
                 path.join(
                   "/Users/",
                   username.sync(),
-                  "/Library/logs/magic-box/log.log"
+                  "/Library/logs/MagicBox/log.log"
                 )
               );
             },

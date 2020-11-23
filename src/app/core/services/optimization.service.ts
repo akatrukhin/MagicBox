@@ -29,7 +29,7 @@ export class OptimizationService {
   constructor(
     private electronService: ElectronService,
     private setService: SetService
-  ) {}
+  ) { }
 
   public stopProcess() {
     console.warn("Optimization thread was stoped");
@@ -85,7 +85,7 @@ export class OptimizationService {
     }
     set.setStatistics();
     this.setService.saveSets();
-    if (this.electronService.settings.get("app.notification")) {
+    if (this.electronService.settings.getSync("app.notification")) {
       this.electronService.showNotification({
         title: `Completed`,
         body: `${convertSize(

@@ -3,10 +3,10 @@ import * as settings from "electron-settings";
 import * as SVGO from "svgo";
 import { systemPreferences } from "electron";
 
-export const SketchPluginsRoot =
+export const SKETCH_APP_ROOT =
   os.homedir() + "/Library/Application Support/MagicBox/";
 
-const SVGOSettings = {
+const SVGO_SETTINGS = {
   removeDoctype: true,
   removeXMLProcInst: true,
   removeComments: true,
@@ -46,68 +46,50 @@ const SVGOSettings = {
   removeScriptElement: true,
 };
 
-export const SVGPluginSettings = (): SVGO => {
-  const plugins = Object.keys(SVGOSettings).map((item) => {
-    return {
-      [item]: {
-        active: SVGOSettings[item],
-      },
-    };
-  });
-  return new SVGO({
-    floatPrecision: settings.get("images.svg.precision"),
-    plugins,
-  });
-};
-
-export const DefaultAppSettings = JSON.parse(
-  JSON.stringify({
-    app: {
-      notification: true,
-      suffix: true,
-      updateCheck: true,
-      clipboardWatcher: false,
-      fileWatcher: true,
+export const DEFAULT_APP_SETTINGS = {
+  app: {
+    notification: true,
+    suffix: true,
+    updateCheck: true,
+    clipboardWatcher: false,
+    fileWatcher: true,
+  },
+  appearance: {
+    theme: systemPreferences.getEffectiveAppearance() === "light" ? "light" : "ultra-dark",
+    smallNav: false,
+  },
+  // Image Settings
+  images: {
+    jpeg: {
+      quality: 56,
     },
-    appearance: {
-      theme:
-        systemPreferences.appLevelAppearance === "light"
-          ? "light"
-          : "ultra-dark",
-      smallNav: false,
+    webp: {
+      quality: 55,
+      alpha: 55,
     },
-    // Image Settings
-    images: {
-      jpeg: {
-        quality: 56,
-      },
-      webp: {
-        quality: 55,
-        alpha: 55,
-      },
-      tiff: {
-        quality: 55,
-      },
-      svg: {
-        precision: 1,
-      },
+    tiff: {
+      quality: 55,
     },
-    other: {
-      // The last user session router path
-      path: "",
+    svg: {
+      precision: 1,
     },
-    sets: [
-      {
-        name: "Demo Icon Set",
-        id: "2xeu8rxh4",
-        viewMode: "grid",
-        files: [
-          {
-            id: "3feuvrwl5",
-            status: "optimized",
-            hasSourceFile: true,
-            original: {
-              data: `
+  },
+  other: {
+    // The last user session router path
+    path: "",
+  },
+  sets: [
+    {
+      name: "Demo Icon Set",
+      id: "2xeu8rxh4",
+      viewMode: "grid",
+      files: [
+        {
+          id: "3feuvrwl5",
+          status: "optimized",
+          hasSourceFile: true,
+          original: {
+            data: `
               <?xml version="1.0" encoding="UTF-8"?>
               <svg width="285px" height="273px" viewBox="0 0 285 273" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                   <title>121 Insert Oval Flat</title>
@@ -132,36 +114,49 @@ export const DefaultAppSettings = JSON.parse(
                       </g>
                   </g>
               </svg>`,
-              lastModified: 1603739943243,
-              name: "SVG Sample",
-              path: undefined,
-              size: 2118,
-              type: "image/svg+xml",
-            },
-            shrinked: {
-              data: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 285 273"><defs><filter id="a" width="262.2%" height="262.2%" x="-81.1%" y="-81.1%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter><filter id="b" width="231.9%" height="221.2%" x="-65.9%" y="-60.6%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter><filter id="c" width="241.2%" height="239.5%" x="-70.6%" y="-69.8%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter></defs><g fill="none" fill-rule="nonzero"><path fill="#556080" d="M91 78c0 21.4 10.4 31 41.4 31H165V35H91v43z" filter="url(#a)" opacity=".2" transform="translate(60 50)"/><path fill="#434C6D" d="M91 68.4L57.3 10 0 109h58.2C63.7 91.2 71 80.3 91 80.3" filter="url(#b)" opacity=".2" transform="translate(60 50)"/><path fill="#25B99A" d="M134 120c0 24-18.7 43-42.5 43S49 144 49 120s18.7-43 42.5-43S134 96 134 120" filter="url(#c)" opacity=".2" transform="translate(60 50)"/><path fill="#556080" d="M151 118c0 21.4 10.4 31 41.4 31H225V75h-74v43z"/><path fill="#434C6D" d="M151 108.4L117.3 50 60 149h58.2c5.5-17.8 12.8-28.7 32.8-28.7"/><path fill="#25B99A" d="M194 160c0 24-18.7 43-42.5 43S109 184 109 160s18.7-43 42.5-43 42.5 19 42.5 43"/></g></svg>`,
-              lastModified: 1603739943248,
-              name: "SVG Sample",
-              path: undefined,
-              size: 1301,
-              type: "image/svg+xml",
-            },
+            lastModified: 1603739943243,
+            name: "SVG Sample",
+            path: undefined,
+            size: 2118,
+            type: "image/svg+xml",
           },
-        ],
-        statistics: {
-          notOptimized: 0,
-          totalSavedSpace: 0,
-          percentageOfSaved: null,
-          totalFilesSize: 0,
+          shrinked: {
+            data: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 285 273"><defs><filter id="a" width="262.2%" height="262.2%" x="-81.1%" y="-81.1%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter><filter id="b" width="231.9%" height="221.2%" x="-65.9%" y="-60.6%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter><filter id="c" width="241.2%" height="239.5%" x="-70.6%" y="-69.8%" filterUnits="objectBoundingBox"><feGaussianBlur in="SourceGraphic" stdDeviation="20"/></filter></defs><g fill="none" fill-rule="nonzero"><path fill="#556080" d="M91 78c0 21.4 10.4 31 41.4 31H165V35H91v43z" filter="url(#a)" opacity=".2" transform="translate(60 50)"/><path fill="#434C6D" d="M91 68.4L57.3 10 0 109h58.2C63.7 91.2 71 80.3 91 80.3" filter="url(#b)" opacity=".2" transform="translate(60 50)"/><path fill="#25B99A" d="M134 120c0 24-18.7 43-42.5 43S49 144 49 120s18.7-43 42.5-43S134 96 134 120" filter="url(#c)" opacity=".2" transform="translate(60 50)"/><path fill="#556080" d="M151 118c0 21.4 10.4 31 41.4 31H225V75h-74v43z"/><path fill="#434C6D" d="M151 108.4L117.3 50 60 149h58.2c5.5-17.8 12.8-28.7 32.8-28.7"/><path fill="#25B99A" d="M194 160c0 24-18.7 43-42.5 43S109 184 109 160s18.7-43 42.5-43 42.5 19 42.5 43"/></g></svg>`,
+            lastModified: 1603739943248,
+            name: "SVG Sample",
+            path: undefined,
+            size: 1301,
+            type: "image/svg+xml",
+          },
         },
+      ],
+      statistics: {
+        notOptimized: 0,
+        totalSavedSpace: 0,
+        percentageOfSaved: null,
+        totalFilesSize: 0,
       },
-    ],
-  })
-);
+    },
+  ],
+}
 
-export function SettingsInitialization() {
-  // settings.deleteAll();
-  if (!Object.keys(settings.getAll()).length) {
-    settings.setAll(DefaultAppSettings);
+export const svgoPluginSettings = (): SVGO => {
+  const plugins = Object.keys(SVGO_SETTINGS).map((item) => {
+    return {
+      [item]: {
+        active: SVGO_SETTINGS[item],
+      },
+    };
+  });
+  return new SVGO({
+    floatPrecision: settings.getSync("images.svg.precision"),
+    plugins,
+  });
+};
+
+export function settingsInitialization() {
+  settings.unsetSync();
+  if (!Object.keys(settings.getSync()).length) {
+    settings.setSync(DEFAULT_APP_SETTINGS);
   }
 }

@@ -15,6 +15,7 @@ import * as log from "electron-log";
 
 export let win: BrowserWindow = null;
 
+// tslint:disable
 export interface IWinConfig {
   position?: {
     x: number;
@@ -25,27 +26,30 @@ export interface IWinConfig {
     height: number;
     minWidth: number;
     minHeight: number;
-  };
+  }
 }
 
-export function createWindow({ position, windowSize }: IWinConfig) {
+export const createWindow = ({ position, windowSize }: IWinConfig) => {
   const config: BrowserWindowConstructorOptions = {
     width: windowSize.width,
     height: windowSize.height,
     minWidth: windowSize.minWidth,
     minHeight: windowSize.minHeight,
-    backgroundColor: "#80000000",
-    transparent: true,
-    darkTheme: settings.get("appearance.theme") === "ultra-dark" ? true : false,
-    vibrancy: "ultra-dark",
-    frame: true,
-    resizable: true,
     titleBarStyle: "hiddenInset",
+    frame: false,
+    darkTheme: settings.getSync("appearance.theme") === "ultra-dark" ? true : false,
+    vibrancy: settings.getSync("appearance.theme") === "ultra-dark" ? "ultra-dark" : "light",
+    transparent: true,
+    backgroundColor: "#80000000",
+    type: "textured",
+    resizable: true,
     icon: path.join(__dirname, "../build/app-icon.png"),
     webPreferences: {
+      enableRemoteModule: true,
       experimentalFeatures: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
+      spellcheck: false
     },
   };
   if (position) {
@@ -57,7 +61,7 @@ export function createWindow({ position, windowSize }: IWinConfig) {
   return new BrowserWindow(config);
 }
 
-export function buildAppUI() {
+export const buildAppUI = () => {
   const mainWindowState = windowStateKeeper({
     defaultWidth: 996,
     defaultHeight: 608,
@@ -78,7 +82,7 @@ export function buildAppUI() {
   mainWindowState.manage(win);
 
   if (isDev) {
-    win.webContents.openDevTools();
+    win.webContents.openDevTools({ mode: 'undocked' });
   }
 
   win.loadURL(
@@ -102,7 +106,7 @@ export function buildAppUI() {
     };
     dialog.showOpenDialog(options).then((result) => {
       try {
-        win.webContents.send("get-folder-path", result.filePaths);
+        win.webContents.send("get-folder-path", result);
       } catch (e) {
         log.error(e);
       }

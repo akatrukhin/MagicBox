@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 
 import { Set } from "../../data/set";
@@ -15,7 +15,7 @@ export class DialogService {
     private router: Router,
     private dialog: MatDialog,
     private setService: SetService
-  ) {}
+  ) { }
 
   public moveToSet(files: AppFile[], setFrom: Set, removeFiles: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {

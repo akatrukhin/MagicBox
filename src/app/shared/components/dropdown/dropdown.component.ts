@@ -20,14 +20,14 @@ export class DropdownComponent {
   @Input() object: Set | AppFile;
   @Output() status = new EventEmitter<boolean>();
   @Output() selectedFiles = new EventEmitter<File[]>();
-  @ViewChild("invisibleInput") fakeInput: ElementRef;
+  @ViewChild("invisibleInput", { static: false }) fakeInput: ElementRef;
 
   dropdownState = false;
   outsideClickEnable = false;
   choosenItem: string;
   dropdownList: string[];
 
-  constructor(private dropdownService: DropdownService) {}
+  constructor(private dropdownService: DropdownService) { }
 
   public open(): void {
     this.dropdownList = [...this.dropdownService.list];

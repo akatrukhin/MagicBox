@@ -35,8 +35,8 @@ export class ThemeService {
 
   public initTheme(): void {
     if (this.isElectron()) {
-      const theme = this.settings.get("appearance.theme");
-      this.switchTheme(JSON.parse(JSON.stringify(theme)));
+      const theme = this.settings.getSync("appearance.theme");
+      this.switchTheme(theme as Themes);
     }
   }
 

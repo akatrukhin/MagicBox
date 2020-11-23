@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { UploadEvent, FileSystemFileEntry, UploadFile } from "ngx-file-drop";
+import { NgxFileDropEntry, FileSystemFileEntry } from "ngx-file-drop";
 import {
   ILoading,
   OptimizationService,
@@ -15,7 +15,6 @@ import {
   DialogService,
   SetService,
 } from "../../../core/services";
-import { WebWorkerService } from "ngx-web-worker";
 import { Set, ViewMode, AppFile, IFile } from "../../../data";
 import { DropdownService } from "../dropdown/dropdown.service";
 
@@ -31,12 +30,11 @@ import {
   templateUrl: "./images.component.html",
   styleUrls: ["./images.component.scss"],
   animations: [ImportAnimation, FooterAnimation, LoadingBar, ViewTransition],
-  providers: [WebWorkerService],
 })
 export class ImagesComponent implements OnChanges, OnInit {
   @Input() set: Set;
   @Input() noFilesTitle = "Drop images here to add them to the list";
-  @ViewChild("inputFiles") inputFiles: ElementRef;
+  @ViewChild("inputFiles", { static: false }) inputFiles: ElementRef;
 
   // UI
   // Loading process
@@ -53,7 +51,6 @@ export class ImagesComponent implements OnChanges, OnInit {
   constructor(
     public router: Router,
     private optimizationService: OptimizationService,
-    private webWorkerService: WebWorkerService,
     private contextMenuService: ContextMenuService,
     private dialogService: DialogService,
     private dropdownService: DropdownService,
@@ -96,16 +93,16 @@ export class ImagesComponent implements OnChanges, OnInit {
 
   // Drag and Drop
   // Tray extends EventEmitter 'drop-files'
-  public async dropped(event: UploadEvent) {
-    console.time(`%cProcessing ${event.files.length} files`);
-    for (const file of event.files) {
-      await this.convertingFile(file);
+  public dropped(files: NgxFileDropEntry[]) {
+    console.time(`%cProcessing ${files.length} files`);
+    for (const droppedFile of files) {
+      this.setFile(droppedFile);
     }
     this.set.setStatistics();
     this.setService.saveSets();
-    this.webWorkerService.run(this.setService.watchFiles, this.set.files);
+    // this.webWorkerService.run(this.setService.watchFiles, this.set.files);
 
-    console.timeEnd(`%cProcessing ${event.files.length} files`);
+    console.timeEnd(`%cProcessing ${files.length} files`);
   }
 
   // Set file from system
@@ -115,7 +112,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     this.setFilesFromSystem(files);
     this.set.setStatistics();
     this.setService.saveSets();
-    this.webWorkerService.run(this.setService.watchFiles, this.set.files);
+    // this.webWorkerService.run(this.setService.watchFiles, this.set.files);
     console.log(`%cProcessing process completed`, "font-weight: bold");
   }
 
@@ -123,47 +120,36 @@ export class ImagesComponent implements OnChanges, OnInit {
     for (const file of files) {
       const _file = new AppFile(new IFile(file.path, file.type));
       if (!this.isFileDulicate(_file)) {
-        this.addFileToList(_file);
+        this.set.files.push(_file);
       }
     }
   }
 
-  hello(arg) {
-    console.log("Fired HEllO with", arg);
-  }
-
-  private async convertingFile(file: UploadFile) {
-    console.time(`${file.fileEntry.name}`);
-    await this.setFile(file);
-    console.timeEnd(`${file.fileEntry.name}`);
-  }
-
-  private setFile(file: UploadFile) {
-    return new Promise((resolve, reject) => {
-      try {
-        const fileEntry = file.fileEntry as FileSystemFileEntry;
-        fileEntry.file((converted: File) => {
-          if (
-            /\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(converted.name)
-          ) {
-            const appFile = new AppFile(
-              new IFile(
-                converted.path,
-                converted.type ? converted.type : "sketch"
-              )
-            );
-            if (!this.isFileDulicate(appFile)) {
-              this.addFileToList(appFile);
-            }
-          } else {
-            console.warn("File format is not supported");
+  private setFile(droppedFile: NgxFileDropEntry) {
+    try {
+      const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+      fileEntry.file((converted: File) => {
+        if (
+          /\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(converted.name)
+        ) {
+          const appFile = new AppFile(
+            new IFile(
+              converted.path,
+              converted.type ? converted.type : "sketch"
+            )
+          );
+          if (!this.isFileDulicate(appFile)) {
+            this.set.files.push(appFile);
           }
-          resolve();
-        });
-      } catch (error) {
-        throw new Error(`Unnable to process file: ${file.fileEntry.name}`);
-      }
-    });
+        } else {
+          console.warn("File format is not supported");
+        }
+      });
+    } catch (error) {
+      throw new Error(
+        `Unnable to process file: ${droppedFile.fileEntry.name}`
+      );
+    }
   }
 
   private isFileDulicate(file: AppFile): boolean {
@@ -175,10 +161,6 @@ export class ImagesComponent implements OnChanges, OnInit {
       return true;
     });
     return isDublicate;
-  }
-
-  private addFileToList(file: AppFile): void {
-    this.set.files.push(file);
   }
 
   public removeSelectedFiles(): void {

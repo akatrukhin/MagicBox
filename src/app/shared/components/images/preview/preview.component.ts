@@ -40,7 +40,7 @@ export class PreviewComponent implements OnInit {
   public file: AppFile;
   public currentState: FileOptions = FileOptions.Shrinked;
   public tabs = [TabItems.Preview];
-  public currentTab = 0;
+  public activeTabId = 0;
   // Editor
   public codeEditorOptions = {
     lineNumbers: true,
@@ -68,7 +68,7 @@ export class PreviewComponent implements OnInit {
     private dropdownService: DropdownService,
     private optimizationService: OptimizationService,
     private contextMenuService: ContextMenuService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.previewFileService.file.subscribe((file: AppFile) => {
@@ -117,7 +117,7 @@ export class PreviewComponent implements OnInit {
           break;
         case "sketch":
           this.tabs = [TabItems.Attachments];
-          this.currentTab = 2;
+          this.activeTabId = 2;
           import("jszip").then((JSZip) => {
             import("jszip-utils").then((JSZipUtils) => {
               JSZipUtils.getBinaryContent(
@@ -198,8 +198,8 @@ export class PreviewComponent implements OnInit {
         : FileOptions.Original;
   }
 
-  public updateTab(event): void {
-    this.currentTab = event;
+  public setActiveTabId(id: number): void {
+    this.activeTabId = id;
   }
 
   public trackByFn = (index: number) => index;

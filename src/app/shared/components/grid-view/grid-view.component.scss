@@ -2,8 +2,9 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: calc(100% + 20px);
-  max-height: calc(92vh - 68px);
+  flex-grow: 1;
+  // height: calc(100% + 20px);
+  // max-height: calc(92vh - 68px);
   margin-top: -20px;
   // Temporary disabled virtaul scroll
   // Waiting until will all envirement will be up to date

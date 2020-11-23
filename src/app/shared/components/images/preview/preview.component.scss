@@ -178,53 +178,46 @@
     }
   }
 
-  .page-tabs {
+  .tabs {
     height: 48px;
+    .tabs-container {
+      display: flex;
+      font-size: 24px;
+      text-shadow: var(--preview-tabs-shadow);
+      margin: 8px 0 24px;
 
-    textarea {
-      display: none;
-      opacity: 0;
-    }
-    ::ng-deep {
-      .nav-tabs {
-        display: flex;
-        font-size: 24px;
-        text-shadow: var(--preview-tabs-shadow);
-        margin: 8px 0 24px;
+      .tabs-item {
+        cursor: default;
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0 14px;
+        color: var(--preview-tabs-fg);
 
-        li {
-          cursor: default;
-          font-size: 15px;
-          font-weight: 600;
-          margin: 0 14px;
-          color: var(--preview-tabs-fg);
+        &.active {
+          position: relative;
+          color: var(--preview-tabs-fg-active);
 
-          &.active {
-            position: relative;
-            color: var(--preview-tabs-fg-active);
-
-            &:after {
-              content: "";
-              position: absolute;
-              width: 100%;
-              height: 3px;
-              bottom: -5px;
-              left: 0;
-              border-radius: 2px;
-              background: var(--accent-color);
-              box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5),
-                0 1px 2px rgba(59, 214, 180, 0.15),
-                0 2px 3px rgba(59, 214, 180, 0.15),
-                0 3px 6px rgba(59, 214, 180, 0.15),
-                0 4px 8px rgba(59, 214, 180, 0.15);
-            }
+          &:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            border-radius: 2px;
+            background: var(--accent-color);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5),
+              0 1px 2px rgba(59, 214, 180, 0.15),
+              0 2px 3px rgba(59, 214, 180, 0.15),
+              0 3px 6px rgba(59, 214, 180, 0.15),
+              0 4px 8px rgba(59, 214, 180, 0.15);
           }
         }
       }
     }
   }
 
-  .tabs-container {
+  .tabs-body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;

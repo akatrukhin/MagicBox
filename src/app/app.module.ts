@@ -9,17 +9,19 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
 
 // Third party libraries
-import { FileDropModule } from "ngx-file-drop";
+import { NgxFileDropModule } from "ngx-file-drop";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CodemirrorModule } from "@ctrl/ngx-codemirror";
-import { TabsModule } from "ngx-tabs";
-// Temporary disabled
-import { VirtualScrollerModule } from "ngx-virtual-scroller";
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+
 import {
   MatTableModule,
-  MatSortModule,
-  MatDialogModule,
-} from "@angular/material";
+} from "@angular/material/table";
+import {
+  MatDialogModule
+} from "@angular/material/dialog";
+import { MatSortModule } from "@angular/material/sort";
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 // Components
 import { AppRoutingModule } from "./app-routing.module";
@@ -63,6 +65,8 @@ import {
   SetService,
 } from "./core/services";
 import { DropdownService } from "./shared/components/dropdown/dropdown.service";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { AppConfig } from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -95,7 +99,7 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    FileDropModule,
+    NgxFileDropModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -103,14 +107,10 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
     MatTableModule,
     MatSortModule,
     MatDialogModule,
+    ScrollingModule,
+    CodemirrorModule,
     VirtualScrollerModule,
-    CodemirrorModule,
-    TabsModule,
-
-    CodemirrorModule,
-    TabsModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: AppConfig.production }),
   ],
   providers: [
     ElectronService,
@@ -124,4 +124,4 @@ import { DropdownService } from "./shared/components/dropdown/dropdown.service";
   entryComponents: [DialogComponent],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

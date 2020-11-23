@@ -42,12 +42,9 @@ enum ESettings {
 export class SettingsComponent implements OnInit, OnDestroy {
   settings: ISetting[];
   // Images quality
-  images: IImages;
+  images;
   // Appearance
-  appearance: {
-    theme: Themes;
-    smallNav: boolean;
-  };
+  appearance;
   themes = Themes;
   // Update
   updateStatus: string;
@@ -56,11 +53,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private electronService: ElectronService,
     private themeService: ThemeService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.settings = [];
-    const appSettings = this.electronService.settings.get("app");
+    const appSettings = this.electronService.settings.getSync("app");
     Object.keys(ESettings).forEach((item) => {
       this.settings.push({
         id: item,
@@ -68,8 +65,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         status: appSettings[item],
       });
     });
-    this.images = this.electronService.settings.get("images");
-    this.appearance = this.electronService.settings.get("appearance");
+    this.images = this.electronService.settings.getSync("images");
+    this.appearance = this.electronService.settings.getSync("appearance");
     this.appVersion = this.electronService.remote.app.getVersion();
 
     this.electronService.ipcRenderer.on("update-status", (e, message) => {
@@ -79,7 +76,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.electronService.settings.set("images", this.images);
+    this.electronService.settings.setSync("images", this.images);
   }
 
   public checkOwnProperty(setting: ISetting): boolean {
@@ -91,19 +88,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.settings.forEach((item) => {
       _settings[item.id] = item.status;
     });
-    this.electronService.settings.set("app", _settings);
+    this.electronService.settings.setSync("app", _settings);
   }
 
   public onThemeChange(e: "Dark" | "Light"): void {
     const theme = e === "Dark" ? Themes.Dark : Themes.Light;
     this.appearance.theme = theme;
     this.themeService.switchTheme(theme);
-    this.electronService.settings.set("appearance.theme", theme);
+    this.electronService.settings.setSync("appearance.theme", theme);
   }
 
   public setNavigationBarStyle(): void {
     this.appearance.smallNav = !this.appearance.smallNav;
-    this.electronService.settings.set("appearance", this.appearance);
+    this.electronService.settings.setSync("appearance", this.appearance);
   }
 
   public setUserSettings(setting: ISetting): void {

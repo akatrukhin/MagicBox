@@ -3,7 +3,7 @@
   --accent-color-2: #2dd597;
   --accent-color-dark: #239a70;
 
-  --window-bg: url(./assets/img/window-background.png),
+  --window-bg: url("../img/window-background.png"),
     linear-gradient(145deg, #f8f9fa 0, #99a2b394 100%);
   --widnow-bg-size: auto;
 
@@ -81,7 +81,6 @@
   --navigation-context-menu-border: 1px solid rgba(0, 0, 0, 0.1);
 
   /* Images */
-  --images-illustration-bg: red;
   --images-view-mode-fg: #b9bfce;
   --images-view-mode-bg: #f5f5f5;
   --images-view-mode-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
@@ -94,8 +93,8 @@
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
 
   /* Import */
-  --import-bg-1: url(./assets/img/import_light.svg);
-  --import-bg-2: url(./assets/img/import-2_light.svg);
+  --import-bg-1: url("../img/import_light.svg");
+  --import-bg-2: url("../img/import-2_light.svg");
 
   /* Grid View */
   --grid-file-preview-bg: #f5f5f5;

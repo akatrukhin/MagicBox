@@ -56,18 +56,7 @@ export class SetService {
   }
 
   public removeFiles = (setID: string, files: AppFile[]): void => {
-    let set;
-    switch (true) {
-      case setID === "import":
-        set = Import;
-        break;
-      case setID === "clipboard":
-        set = Clipboard;
-        break;
-      default:
-        set = this.getSet(setID);
-        break;
-    }
+    const set = this.getSet(setID);
     files.forEach((file) => {
       // Stop watching
       if (this.isElectron && this.getFromSettings("app.fileWatcher")) {
@@ -82,8 +71,22 @@ export class SetService {
     this.saveSets();
   };
 
+  public removeAllFiles = (setId: string): void => {
+    const set = this.getSet(setId);
+    set.files.length = 0;
+    set.setStatistics();
+    this.saveSets();
+  };
+
   public getSet = (id: string): Set => {
-    return this.Sets.find((set) => set.id === id);
+    switch (true) {
+      case id === "import":
+        return Import;
+      case id === "clipboard":
+        return Clipboard;
+      default:
+        return this.Sets.find((set) => set.id === id);
+    }
   };
 
   public saveSet = (id: string): void => {
@@ -112,13 +115,6 @@ export class SetService {
       }
     });
     this.getSet(setId).setStatistics();
-    this.saveSets();
-  };
-
-  public removeAllFilesInSet = (setId: string): void => {
-    const set = this.getSet(setId);
-    set.files.length = 0;
-    set.setStatistics();
     this.saveSets();
   };
 
@@ -179,9 +175,7 @@ export class SetService {
   private watchFile = (file: AppFile, set: Set): void => {
     if (this.settings.getSync("app.fileWatcher")) {
       console.log(
-        `File check:`,
-        `c%${file.original.name}`,
-        "font-weight: bold"
+        `File check: ${file.original.name}`
       );
       if (this.fs.existsSync(file.original.path)) {
         this.fs.watchFile(file.original.path, (curr, prev) => {
@@ -224,13 +218,9 @@ export class SetService {
     }
   };
 
-  public watchFiles = (set: Set): void => {
-    console.log(this.settings.getSync("app.fileWatcher"), "app.fileWatcher");
+  public watchFiles = (set: Set, files: AppFile[]): void => {
     if (this.settings.getSync("app.fileWatcher")) {
-      console.log(
-        `Traking files changes in ${set.name} for ${set.files.length}`
-      );
-      set.files.forEach((file) => {
+      files.forEach((file) => {
         this.watchFile(file, set);
       });
     } else {

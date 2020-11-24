@@ -45,11 +45,11 @@ export const createWindow = ({ position, windowSize }: IWinConfig) => {
     resizable: true,
     icon: path.join(__dirname, "../build/app-icon.png"),
     webPreferences: {
-      enableRemoteModule: true,
+      // enableRemoteModule: true,
       experimentalFeatures: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-      spellcheck: false
+      // spellcheck: false
     },
   };
   if (position) {
@@ -104,7 +104,14 @@ export const buildAppUI = () => {
       message:
         "All optimized images will be automaticly exported to selected folder",
     };
-    dialog.showOpenDialog(options).then((result) => {
+    // dialog.showOpenDialog(options).then((result) => {
+    //   try {
+    //     win.webContents.send("get-folder-path", result);
+    //   } catch (e) {
+    //     log.error(e);
+    //   }
+    // });
+    dialog.showOpenDialog(options, (result) => {
       try {
         win.webContents.send("get-folder-path", result);
       } catch (e) {

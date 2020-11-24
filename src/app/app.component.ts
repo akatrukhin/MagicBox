@@ -24,6 +24,7 @@ export class AppComponent {
   public clipboardNotificationView = false;
   public previewView = false;
   private currentRoute: string;
+  worker: any;
 
   constructor(
     private electronService: ElectronService,
@@ -32,6 +33,17 @@ export class AppComponent {
     private themeService: ThemeService,
     private setService: SetService
   ) {
+    // if (typeof Worker !== 'undefined') {
+    //   // Create a new
+    //   const worker = new Worker('./app.worker', { type: 'module' });
+    //   this.worker.onmessage = ({ data }) => {
+    //     console.log(`page got message: ${data}`);
+    //   };
+    //   this.worker.postMessage('Web worker is connected');
+    // } else {
+    //   console.warn("Web worker disabled");
+    // }
+
     this.themeService.initTheme();
 
     if (electronService.isElectron) {

@@ -1,1 +1,1 @@
-// export * from "./web-worker.service";
+export * from "./web-worker.service";

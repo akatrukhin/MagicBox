@@ -63,6 +63,7 @@ import {
   DialogService,
   ThemeService,
   SetService,
+  WebWorkerService
 } from "./core/services";
 import { DropdownService } from "./shared/components/dropdown/dropdown.service";
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -120,6 +121,7 @@ import { AppConfig } from "../environments/environment";
     DropdownService,
     ThemeService,
     SetService,
+    WebWorkerService
   ],
   entryComponents: [DialogComponent],
   bootstrap: [AppComponent],

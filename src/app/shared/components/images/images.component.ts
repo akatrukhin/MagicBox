@@ -14,6 +14,8 @@ import {
   ContextMenuService,
   DialogService,
   SetService,
+  WebWorkerService,
+  ElectronService,
 } from "../../../core/services";
 import { Set, ViewMode, AppFile, IFile } from "../../../data";
 import { DropdownService } from "../dropdown/dropdown.service";
@@ -54,7 +56,9 @@ export class ImagesComponent implements OnChanges, OnInit {
     private contextMenuService: ContextMenuService,
     private dialogService: DialogService,
     private dropdownService: DropdownService,
-    private setService: SetService
+    private webWorkerService: WebWorkerService,
+    private setService: SetService,
+    private electronService: ElectronService
   ) {
     this.dropdownService.setList(this.set);
   }
@@ -67,6 +71,7 @@ export class ImagesComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
+    console.log("On Changes")
     if (this.set.files.length) {
       this.set.files.forEach((file) => {
         if (file.selected) {
@@ -77,7 +82,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     }
     this.dropdownService.setList(this.set);
     this.set.setStatistics();
-    // this.setService.saveSets();
+    this.setService.saveSets();
   }
 
   public async optimizeFiles() {
@@ -93,16 +98,15 @@ export class ImagesComponent implements OnChanges, OnInit {
 
   // Drag and Drop
   // Tray extends EventEmitter 'drop-files'
-  public dropped(files: NgxFileDropEntry[]) {
-    console.time(`%cProcessing ${files.length} files`);
+  public async dropped(files: NgxFileDropEntry[]) {
+    console.time(`Processing ${files.length} files`);
     for (const droppedFile of files) {
-      this.setFile(droppedFile);
+      await this.convertingFile(droppedFile);
     }
     this.set.setStatistics();
     this.setService.saveSets();
-    // this.webWorkerService.run(this.setService.watchFiles, this.set.files);
-
-    console.timeEnd(`%cProcessing ${files.length} files`);
+    this.setService.watchFiles(this.set, this.set.files)
+    console.timeEnd(`Processing ${files.length} files`);
   }
 
   // Set file from system
@@ -112,7 +116,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     this.setFilesFromSystem(files);
     this.set.setStatistics();
     this.setService.saveSets();
-    // this.webWorkerService.run(this.setService.watchFiles, this.set.files);
+    this.setService.watchFiles(this.set, this.set.files)
     console.log(`%cProcessing process completed`, "font-weight: bold");
   }
 
@@ -120,36 +124,46 @@ export class ImagesComponent implements OnChanges, OnInit {
     for (const file of files) {
       const _file = new AppFile(new IFile(file.path, file.type));
       if (!this.isFileDulicate(_file)) {
-        this.set.files.push(_file);
+        this.addFileToList(_file);
       }
     }
   }
 
+  private async convertingFile(droppedFile: NgxFileDropEntry) {
+    console.time(`${droppedFile.fileEntry.name}`);
+    await this.setFile(droppedFile);
+    console.timeEnd(`${droppedFile.fileEntry.name}`);
+  }
+
   private setFile(droppedFile: NgxFileDropEntry) {
-    try {
-      const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-      fileEntry.file((converted: File) => {
-        if (
-          /\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(converted.name)
-        ) {
-          const appFile = new AppFile(
-            new IFile(
-              converted.path,
-              converted.type ? converted.type : "sketch"
-            )
-          );
-          if (!this.isFileDulicate(appFile)) {
-            this.set.files.push(appFile);
+    return new Promise((resolve, reject) => {
+      try {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((converted: File) => {
+          if (
+            /\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(converted.name)
+          ) {
+            const appFile = new AppFile(
+              new IFile(
+                converted.path,
+                converted.type ? converted.type : "sketch"
+              )
+            );
+            if (!this.isFileDulicate(appFile)) {
+              this.addFileToList(appFile);
+            }
+          } else {
+            console.warn("File format is not supported");
           }
-        } else {
-          console.warn("File format is not supported");
-        }
-      });
-    } catch (error) {
-      throw new Error(
-        `Unnable to process file: ${droppedFile.fileEntry.name}`
-      );
-    }
+          resolve();
+        });
+      } catch (error) {
+        throw new Error(
+          `Unnable to process file: ${droppedFile.fileEntry.name}`
+        );
+        reject();
+      }
+    });
   }
 
   private isFileDulicate(file: AppFile): boolean {
@@ -161,6 +175,10 @@ export class ImagesComponent implements OnChanges, OnInit {
       return true;
     });
     return isDublicate;
+  }
+
+  private addFileToList(file: AppFile): void {
+    this.set.files.push(file);
   }
 
   public removeSelectedFiles(): void {

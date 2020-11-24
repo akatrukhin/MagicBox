@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MenuItemConstructorOptions } from "electron";
 
-// import * as base64 from "base64-img";
+import * as base64 from "base64-img";
 import { Base64 } from "js-base64";
 
 import { ElectronService } from "./electron/electron.service";
@@ -116,10 +116,9 @@ export class ContextMenuService {
     copyFileAsBase64: (file: AppFile) => {
       return {
         label: ContextMenuLabels.ImageToBase64,
-        click: () => { },
-        // base64.base64(file.shrinked.path, (err, base64code: string) => {
-        //   this.electronService.clipboard.writeText(base64code);
-        // }),
+        click: () => base64.base64(file.shrinked.path, (err, base64code: string) => {
+          this.electronService.clipboard.writeText(base64code);
+        }),
       };
     },
     removeFiles: (
@@ -130,6 +129,15 @@ export class ContextMenuService {
       return {
         label,
         click: () => this.setService.removeFiles(setId, files),
+      };
+    },
+    removeAllFiles: (
+      label: string,
+      setId: string
+    ): MenuItemConstructorOptions => {
+      return {
+        label,
+        click: () => this.setService.removeAllFiles(setId),
       };
     },
     refresh: (setId: string): MenuItemConstructorOptions => {
@@ -291,9 +299,8 @@ export class ContextMenuService {
       this.menuItems.refresh(currentSet.id),
       this.menuItems.separator,
       this.menuItems.addFiles,
-      this.menuItems.removeFiles(
+      this.menuItems.removeAllFiles(
         ContextMenuLabels.RemoveAllFiles,
-        currentSet.files,
         currentSet.id
       ),
       this.menuItems.separator,

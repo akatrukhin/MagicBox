@@ -27,10 +27,10 @@ export class ThemeService {
     document.documentElement.setAttribute("data-theme", theme);
     const window = this.remote.getCurrentWindow();
     window.setVibrancy(theme);
-    if (process.platform === "darwin") {
-      this.remote.systemPreferences.appLevelAppearance =
-        theme === Themes.Light ? "light" : "dark";
-    }
+    // if (process.platform === "darwin") {
+    //   this.remote.systemPreferences.appLevelAppearance =
+    //     theme === Themes.Light ? "light" : "dark";
+    // }
   }
 
   public initTheme(): void {

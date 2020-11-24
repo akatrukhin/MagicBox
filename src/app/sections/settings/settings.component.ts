@@ -30,7 +30,7 @@ enum ESettings {
   updateCheck = "Auto-updates",
   // defaultGridView = "Files preview as Grid",
   clipboardWatcher = "Clipboard SVG watcher",
-  fileWatcher = "Track files updates",
+  fileWatcher = "Track files changes",
 }
 
 @Component({

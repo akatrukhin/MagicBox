@@ -23,7 +23,7 @@ export class DropdownService {
     public router: Router,
     private dialogService: DialogService,
     private setService: SetService
-  ) {}
+  ) { }
 
   public setList(object: Set | AppFile): void {
     this.list.length = 0;
@@ -63,7 +63,7 @@ export class DropdownService {
         this.setService.createSetFromImport();
         break;
       case Dropdown.removeFiles:
-        this.setService.removeAllFilesInSet(set.id);
+        this.setService.removeAllFiles(set.id);
         break;
       case Dropdown.deleteSet:
         this.setService.deleteSet(set.id);

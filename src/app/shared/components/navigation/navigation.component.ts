@@ -45,6 +45,7 @@ export class NavigationComponent {
     setTimeout(() => {
       this.router.navigate(["/sets/" + set.id]);
     });
+    this.setService.saveSets();
   }
 
   public openFeedbackPage(): void {

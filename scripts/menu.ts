@@ -65,20 +65,20 @@ export const appMenuInit = () =>
           { role: "redo" },
           { type: "separator" },
           { role: "copy" },
-          { role: "paste" },
-          // {
-          //   label: "Paste SVG code",
-          //   accelerator: "CmdOrCtrl+V",
-          //   click() {
-          //     const clipboardData = clipboard.readText();
-          //     if (
-          //       parser.validate(clipboardData) &&
-          //       clipboardData.includes("<svg")
-          //     ) {
-          //       optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
-          //     }
-          //   },
-          // },
+          // { role: "paste" },
+          {
+            label: "Paste SVG code",
+            accelerator: "CmdOrCtrl+V",
+            click() {
+              const clipboardData = clipboard.readText();
+              if (
+                parser.validate(clipboardData) &&
+                clipboardData.includes("<svg")
+              ) {
+                optimizeClipboardSVG("paste-svg-from-clipboard", clipboardData);
+              }
+            },
+          },
         ],
       },
       {

@@ -21,7 +21,8 @@
             "scripts": [],
             "customWebpackConfig": {
               "path": "./angular.webpack.js"
-            }
+            },
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "dev": {

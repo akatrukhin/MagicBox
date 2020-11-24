@@ -52,10 +52,11 @@ export const DEFAULT_APP_SETTINGS = {
     suffix: true,
     updateCheck: true,
     clipboardWatcher: false,
-    fileWatcher: true,
+    fileWatcher: false,
   },
   appearance: {
-    theme: systemPreferences.getEffectiveAppearance() === "light" ? "light" : "ultra-dark",
+    theme: "ultra-dark",
+    // theme: systemPreferences.getEffectiveAppearance() === "light" ? "light" : "ultra-dark",
     smallNav: false,
   },
   // Image Settings
@@ -155,7 +156,7 @@ export const svgoPluginSettings = (): SVGO => {
 };
 
 export function settingsInitialization() {
-  settings.unsetSync();
+  // settings.unsetSync();
   if (!Object.keys(settings.getSync()).length) {
     settings.setSync(DEFAULT_APP_SETTINGS);
   }

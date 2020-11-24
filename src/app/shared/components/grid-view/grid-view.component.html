@@ -13,6 +13,7 @@
       class="file"
       [id]="file.id"
       (contextmenu)="onRightClick(file)"
+      (dblclick)="previewFile(file)"
       (click)="addSelectedFile(file)"
       [class.selected]="file.selected"
     >

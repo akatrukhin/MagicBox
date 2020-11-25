@@ -1,5 +1,5 @@
-import { ElectronService } from "../core/services/electron/electron.service";
-import { generateID } from "../shared/utilities";
+import { statSync } from "fs";
+import * as _path from "path";
 
 export enum FileOptions {
   Original = "original",
@@ -17,18 +17,15 @@ export class IFile {
     public data?: string,
     public lastModified?: number
   ) {
-    const electron = new ElectronService();
     if (this.path) {
-      const fs = electron.fs.statSync(this.path);
-
       if (!this.name) {
-        this.name = electron.path.basename(this.path);
+        this.name = _path.basename(this.path);
       }
-      if (!this.size) {
-        this.size = fs.size;
+      if (!this.size && this.path) {
+        this.size = statSync(this.path).size;
       }
       if (!this.lastModified) {
-        this.lastModified = fs.mtimeMs;
+        this.lastModified = statSync(this.path).mtimeMs;
       }
     }
   }
@@ -43,11 +40,11 @@ export enum FileStatus {
 }
 
 export class AppFile {
-  id: string = generateID();
+  id: string = Math.random().toString(36).substr(2, 9);
   status: FileStatus = FileStatus.new;
   hasSourceFile = false;
   loading = false;
   selected = false;
 
-  constructor(public original: IFile, public shrinked?: IFile) {}
+  constructor(public original: IFile, public shrinked?: IFile) { }
 }

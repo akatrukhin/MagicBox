@@ -63,7 +63,8 @@ export class DropdownService {
         this.setService.createSetFromImport();
         break;
       case Dropdown.removeFiles:
-        this.setService.removeAllFiles(set.id);
+        set.clean();
+        this.setService.saveSets();
         break;
       case Dropdown.deleteSet:
         this.setService.deleteSet(set.id);

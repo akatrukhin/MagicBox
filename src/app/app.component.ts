@@ -33,17 +33,6 @@ export class AppComponent {
     private themeService: ThemeService,
     private setService: SetService
   ) {
-    // if (typeof Worker !== 'undefined') {
-    //   // Create a new
-    //   const worker = new Worker('./app.worker', { type: 'module' });
-    //   this.worker.onmessage = ({ data }) => {
-    //     console.log(`page got message: ${data}`);
-    //   };
-    //   this.worker.postMessage('Web worker is connected');
-    // } else {
-    //   console.warn("Web worker disabled");
-    // }
-
     this.themeService.initTheme();
 
     if (electronService.isElectron) {
@@ -104,14 +93,14 @@ export class AppComponent {
 
           switch (true) {
             case this.currentRoute.includes("/import"):
-              Import.files.push(optimizedSVG);
+              Import.addFile(optimizedSVG);
               break;
             case this.currentRoute.includes("/settings"):
-              Import.files.push(optimizedSVG);
+              Import.addFile(optimizedSVG);
               this.router.navigate(["/import"]);
               break;
             case this.currentRoute.includes("/clipboard"):
-              Clipboard.files.push(optimizedSVG);
+              Clipboard.addFile(optimizedSVG);
               break;
             case this.currentRoute.includes("/sets/"):
               const setId = this.currentRoute.slice(
@@ -120,7 +109,7 @@ export class AppComponent {
               );
               const set = this.setService.getSet(setId);
               if (set) {
-                set.files.push(optimizedSVG);
+                set.addFile(optimizedSVG);
                 set.setStatistics();
                 this.setService.saveSets();
               }

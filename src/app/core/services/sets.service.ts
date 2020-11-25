@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ipcRenderer, remote } from "electron";
 import * as fs from "fs";
 import * as settings from "electron-settings";
-import { Set, AppFile, FileStatus, Import, Clipboard } from "../../data";
+import { Set, AppFile, FileStatus, Import, Clipboard, Sets } from "../../data";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +13,6 @@ export class SetService {
   settings: typeof settings;
   remote: typeof remote;
   fs: typeof fs;
-  Sets = [];
 
   public getFromSettings(params: string) {
     if (this.isElectron) {
@@ -49,34 +48,11 @@ export class SetService {
         sets.forEach((item: object) => {
           const set = new Set({ ...item });
           set.setStatistics();
-          this.Sets.push(set);
+          Sets.push(set);
         });
       }
     }
   }
-
-  public removeFiles = (setID: string, files: AppFile[]): void => {
-    const set = this.getSet(setID);
-    files.forEach((file) => {
-      // Stop watching
-      if (this.isElectron && this.getFromSettings("app.fileWatcher")) {
-        this.unsubscribeFile(file);
-      }
-      // Remove from the list
-      set.files = set.files.filter((source: AppFile) => {
-        return source.id !== file.id;
-      });
-    });
-    set.setStatistics();
-    this.saveSets();
-  };
-
-  public removeAllFiles = (setId: string): void => {
-    const set = this.getSet(setId);
-    set.files.length = 0;
-    set.setStatistics();
-    this.saveSets();
-  };
 
   public getSet = (id: string): Set => {
     switch (true) {
@@ -85,7 +61,7 @@ export class SetService {
       case id === "clipboard":
         return Clipboard;
       default:
-        return this.Sets.find((set) => set.id === id);
+        return Sets.find((set) => set.id === id);
     }
   };
 
@@ -95,9 +71,9 @@ export class SetService {
     console.log(this.settings.getSync("sets"));
   };
 
-  public saveSets = (): void => {
+  public saveSets = async () => {
     if (this.isElectron) {
-      this.settings.setSync("sets", this.Sets);
+      await this.settings.set("sets", Sets as any[]);
     }
   };
 
@@ -150,24 +126,19 @@ export class SetService {
   }
 
   public deleteSet = (setId: string): void => {
-    const set = this.getSet(setId);
-    this.Sets.filter((_set, index) => {
-      if (set.id === set.id) {
-        this.Sets.splice(index, 1);
-      }
-    });
-    this.saveSets();
-    setTimeout(() => {
-      if (this.Sets.length) {
-        this.router.navigate(["/sets/" + this.Sets[this.Sets.length - 1].id]);
-      } else {
-        this.router.navigate(["/import"]);
-      }
+    this.router.navigate(Sets.length ? ["/sets/" + Sets[Sets.length - 1].id] : ["/import"]).then(e => {
+      const set = this.getSet(setId);
+      Sets.filter((_set, index) => {
+        if (set.id === set.id) {
+          Sets.splice(index, 1);
+        }
+      });
+      this.saveSets();
     });
   };
 
   public updateStatistics = () => {
-    this.Sets.forEach((set) => {
+    Sets.forEach((set) => {
       set.setStatistics();
     });
   };
@@ -208,9 +179,10 @@ export class SetService {
     }
   };
 
+
   private startWatchAllFiles = (): void => {
     if (this.settings.getSync("app.fileWatcher")) {
-      this.Sets.forEach((set) => {
+      Sets.forEach((set) => {
         set.files.forEach((file) => {
           this.watchFile(file, set);
         });
@@ -218,9 +190,10 @@ export class SetService {
     }
   };
 
-  public watchFiles = (set: Set, files: AppFile[]): void => {
+  public watchFiles = (set: Set): void => {
+    console.log(`Start to watch ${set.name} files`);
     if (this.settings.getSync("app.fileWatcher")) {
-      files.forEach((file) => {
+      set.files.forEach((file) => {
         this.watchFile(file, set);
       });
     } else {
@@ -230,7 +203,7 @@ export class SetService {
 
   public addSet = (name: string, files: AppFile[]) => {
     const newSet = new Set({ name, files });
-    this.Sets.push(newSet);
+    Sets.push(newSet);
     this.saveSets();
   };
 
@@ -238,7 +211,7 @@ export class SetService {
     this.addSet("From import", [...Import.files]);
     Import.files.length = 0;
     setTimeout(() => {
-      this.router.navigate(["/sets/" + this.Sets[this.Sets.length - 1].id]);
+      this.router.navigate(["/sets/" + Sets[Sets.length - 1].id]);
     });
   };
 

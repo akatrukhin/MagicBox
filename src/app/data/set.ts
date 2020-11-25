@@ -1,4 +1,3 @@
-import { generateID } from "../shared/utilities";
 import { AppFile, FileStatus } from "./file";
 
 export enum ViewMode {
@@ -36,7 +35,7 @@ export class Set extends Entity {
     super(fields);
     const { id, name, viewMode, files, statistics } = fields;
     if (!id) {
-      this.id = generateID();
+      this.id = Math.random().toString(36).substr(2, 9);
     }
     if (!name) {
       this.name = "Unnamed";
@@ -65,6 +64,34 @@ export class Set extends Entity {
     );
   };
 
+  public addFile = (file: AppFile): void => {
+    this.files.push(file);
+    this.setStatistics();
+  }
+
+  public removeFile = (file: AppFile): void => {
+    // Stop watching
+    // if (this.isElectron && this.getFromSettings("app.fileWatcher")) {
+    //   this.unsubscribeFile(file);
+    // }
+    this.files = this.files.filter((source: AppFile) => {
+      return source.id !== file.id;
+    });
+    this.setStatistics();
+  }
+
+  public removeFiles = (files: AppFile[]): void => {
+    files.forEach((file) => {
+      this.removeFile(file)
+    });
+    this.setStatistics();
+  };
+
+  public clean() {
+    this.files.length = 0;
+    this.setStatistics();
+  }
+
   public setStatistics = (): void => {
     const totalFilesSize = this.files.reduce(
       (a, b) => a + (b.original.size || 0),
@@ -92,3 +119,4 @@ export const Clipboard = new Set({
   id: "clipboard",
   name: StaticSets.Clipboard,
 });
+export const Sets: Set[] = []

@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  Inject,
   Input,
   OnChanges,
   OnInit,
@@ -14,8 +15,7 @@ import {
   ContextMenuService,
   DialogService,
   SetService,
-  WebWorkerService,
-  ElectronService,
+  WebWorkerService
 } from "../../../core/services";
 import { Set, ViewMode, AppFile, IFile } from "../../../data";
 import { DropdownService } from "../dropdown/dropdown.service";
@@ -56,9 +56,9 @@ export class ImagesComponent implements OnChanges, OnInit {
     private contextMenuService: ContextMenuService,
     private dialogService: DialogService,
     private dropdownService: DropdownService,
-    private webWorkerService: WebWorkerService,
     private setService: SetService,
-    private electronService: ElectronService
+    // private electronService: ElectronService,
+    private webWorkerService: WebWorkerService,
   ) {
     this.dropdownService.setList(this.set);
   }
@@ -71,7 +71,6 @@ export class ImagesComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    console.log("On Changes")
     if (this.set.files.length) {
       this.set.files.forEach((file) => {
         if (file.selected) {
@@ -103,10 +102,10 @@ export class ImagesComponent implements OnChanges, OnInit {
     for (const droppedFile of files) {
       await this.convertingFile(droppedFile);
     }
-    this.set.setStatistics();
-    this.setService.saveSets();
-    this.setService.watchFiles(this.set, this.set.files)
+    await this.setService.saveSets();
+    // this.setService.watchFiles(this.set, this.set.files)
     console.timeEnd(`Processing ${files.length} files`);
+    await this.webWorkerService.startToTrackFilesChanges(this.set)
   }
 
   // Set file from system
@@ -116,7 +115,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     this.setFilesFromSystem(files);
     this.set.setStatistics();
     this.setService.saveSets();
-    this.setService.watchFiles(this.set, this.set.files)
+    this.setService.watchFiles(this.set)
     console.log(`%cProcessing process completed`, "font-weight: bold");
   }
 
@@ -124,7 +123,7 @@ export class ImagesComponent implements OnChanges, OnInit {
     for (const file of files) {
       const _file = new AppFile(new IFile(file.path, file.type));
       if (!this.isFileDulicate(_file)) {
-        this.addFileToList(_file);
+        this.set.addFile(_file);
       }
     }
   }
@@ -150,7 +149,7 @@ export class ImagesComponent implements OnChanges, OnInit {
               )
             );
             if (!this.isFileDulicate(appFile)) {
-              this.addFileToList(appFile);
+              this.set.addFile(appFile);
             }
           } else {
             console.warn("File format is not supported");
@@ -177,12 +176,8 @@ export class ImagesComponent implements OnChanges, OnInit {
     return isDublicate;
   }
 
-  private addFileToList(file: AppFile): void {
-    this.set.files.push(file);
-  }
-
   public removeSelectedFiles(): void {
-    this.setService.removeFiles(this.set.id, this.selectedFiles);
+    this.set.removeFiles(this.selectedFiles);
   }
 
   public selectFile(file: AppFile): void {

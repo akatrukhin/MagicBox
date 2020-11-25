@@ -47,7 +47,6 @@ export class GridViewComponent {
 
   public onRightClick(file: AppFile): void {
     this.fileRightClick.emit(file);
-    console.log(file);
   }
 
   public onRightClickBody(): void {

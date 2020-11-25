@@ -16,7 +16,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets"],
+            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"],
             "styles": ["src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {
@@ -112,7 +112,7 @@
             "karmaConfig": "src/karma.conf.js",
             "scripts": [],
             "styles": ["src/styles.scss"],
-            "assets": ["src/assets"],
+            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"],
             "customWebpackConfig": {
               "path": "./angular.webpack.js"
             }

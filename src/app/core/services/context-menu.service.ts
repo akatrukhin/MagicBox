@@ -124,20 +124,26 @@ export class ContextMenuService {
     removeFiles: (
       label: string,
       files: AppFile[],
-      setId: string
+      set: Set
     ): MenuItemConstructorOptions => {
       return {
         label,
-        click: () => this.setService.removeFiles(setId, files),
+        click: () => {
+          set.removeFiles(files)
+          this.setService.saveSets()
+        },
       };
     },
     removeAllFiles: (
       label: string,
-      setId: string
+      set: Set
     ): MenuItemConstructorOptions => {
       return {
         label,
-        click: () => this.setService.removeAllFiles(setId),
+        click: () => {
+          set.clean()
+          this.setService.saveSets()
+        },
       };
     },
     refresh: (setId: string): MenuItemConstructorOptions => {
@@ -273,7 +279,7 @@ export class ContextMenuService {
         this.menuItems.removeFiles(
           ContextMenuLabels.RemoveFile,
           [file],
-          currentSet.id
+          currentSet
         )
       );
     }
@@ -287,7 +293,7 @@ export class ContextMenuService {
       this.menuItems.removeFiles(
         ContextMenuLabels.RemoveFiles,
         files,
-        currentSet.id
+        currentSet
       ),
       this.menuItems.separator,
       this.menuItems.unselectAll(files),
@@ -301,7 +307,7 @@ export class ContextMenuService {
       this.menuItems.addFiles,
       this.menuItems.removeAllFiles(
         ContextMenuLabels.RemoveAllFiles,
-        currentSet.id
+        currentSet
       ),
       this.menuItems.separator,
     ];
@@ -324,7 +330,7 @@ export class ContextMenuService {
       this.menuItems.removeFiles(
         ContextMenuLabels.RemoveAllFiles,
         currentSet.files,
-        currentSet.id
+        currentSet
       ),
       this.menuItems.separator,
     ];

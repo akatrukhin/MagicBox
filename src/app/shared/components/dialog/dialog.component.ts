@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { SetService } from "../../../core/services/sets.service";
-import { Set } from "../../../data";
+import { Sets, Set } from "../../../data";
 export interface DialogData {
   currentSet: Set | undefined;
 }
@@ -12,7 +12,7 @@ export interface DialogData {
   styleUrls: ["./dialog.component.scss"],
 })
 export class DialogComponent {
-  sets: Set[] = this.setService.Sets;
+  sets: Set[] = Sets;
   fileId: string;
   setId: string;
 
@@ -34,7 +34,7 @@ export class DialogComponent {
 
   public addSet(): void {
     const set = new Set({ name: `New set ${this.sets.length}` });
-    this.setService.Sets.push(set);
+    Sets.push(set);
     this.setService.saveSets();
   }
 

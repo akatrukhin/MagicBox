@@ -5,7 +5,7 @@ import {
   ContextMenuService,
   SetService,
 } from "../../../core/services";
-import { Set, Import } from "../../../data";
+import { Sets, Set, Import } from "../../../data";
 import { navigationNewItem } from "../../animations";
 
 @Component({
@@ -15,7 +15,7 @@ import { navigationNewItem } from "../../animations";
   animations: [navigationNewItem],
 })
 export class NavigationComponent {
-  public sets = this.setService.Sets;
+  public sets = Sets;
   public import = Import;
 
   constructor(
@@ -34,14 +34,14 @@ export class NavigationComponent {
   }
 
   public isThereNotOptimizedFiles(): boolean {
-    return !!this.setService.Sets.find(
+    return !!Sets.find(
       (set) => set.statistics.notOptimized > 0
     );
   }
 
   public addSet(): void {
     const set = new Set({ name: `New files set` });
-    this.setService.Sets.push(set);
+    Sets.push(set);
     setTimeout(() => {
       this.router.navigate(["/sets/" + set.id]);
     });

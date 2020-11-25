@@ -7,10 +7,7 @@
     "types": []
   },
   "include": ["main.ts", "polyfill.ts"],
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.worker.ts"
-  ],
+  "exclude": ["**/*.spec.ts", "**/workers/*.worker.ts"],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,

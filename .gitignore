@@ -1,7 +1,8 @@
 # compiled output
 angular/dist
-/electron/release
-src/**/*.js
+electron/release
+angular/src/**/*.js
+!anglar/angular.webpack.js
 !src/karma.conf.js
 *.js
 *.js.map

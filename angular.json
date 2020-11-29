@@ -24,9 +24,9 @@
             "styles": ["angular/src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {
-              "path": "./angular/angular.webpack.js"
+              "path": "angular/angular.webpack.js"
             },
-            "webWorkerTsConfig": "./angular/tsconfig.worker.json"
+            "webWorkerTsConfig": "angular/tsconfig.worker.json"
           },
           "configurations": {
             "dev": {
@@ -122,7 +122,7 @@
               "angular/src/about.html"
             ],
             "customWebpackConfig": {
-              "path": "./angular/angular.webpack.js"
+              "path": "angular/angular.webpack.js"
             }
           }
         }

@@ -1,5 +1,5 @@
 # compiled output
-/dist
+angular/dist
 /electron/release
 src/**/*.js
 !src/karma.conf.js

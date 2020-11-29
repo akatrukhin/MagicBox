@@ -17,9 +17,20 @@
     "files optimization",
     "shrink images",
     "sketch app",
-    "svg editor"
+    "svg editor",
+    "desktop app",
+    "file optimization",
+    "image shrinker",
+    "macos",
+    "windows",
+    "open source",
+    "svg",
+    "workspace",
+    "productivity",
+    "desktop",
+    "electron"
   ],
-  "main": "main.js",
+  "main": "electron/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
@@ -29,14 +40,14 @@
     "build:prod": "npm run build -- -c production",
     "build:env": "npm run electron:serve-tsc && npx electron .",
     "ng:serve": "ng serve -c web -o",
-    "electron:serve-tsc": "tsc -p tsconfig.serve.json",
+    "electron:serve-tsc": "tsc -p tsconfig.app.json",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
     "electron:local": "npm run build:prod && npx electron .",
     "electron:build": "npm run build:prod && electron-builder build",
     "electron:publish": "npm run build:prod && npx electron-builder build --mac -p always",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
-    "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
+    "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='electron/e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint"
   },
@@ -138,7 +149,7 @@
     "productName": "MagicBox",
     "appId": "com.electron.MagicBox",
     "directories": {
-      "output": "release/"
+      "output": "electron/release/"
     },
     "copyright": "MagicBox is licensed under CC BY-NC 4.0.",
     "files": [
@@ -150,20 +161,20 @@
       "!package-lock.json",
       "!src/",
       "!e2e/",
-      "!hooks/",
       "!.angular-cli.json",
       "!_config.yml",
       "!karma.conf.js",
       "!tsconfig.json",
-      "!tslint.json"
+      "!tslint.json",
+      "!electron/build"
     ],
     "mac": {
-      "icon": "./build/app-icon.icns",
+      "icon": ".electron/build/app-icon.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "artifactName": "MagicBox-${version}-${arch}.${ext}",
-      "entitlements": "./build/entitlements.mac.plist",
-      "entitlementsInherit": "./build/entitlements.mac.inherit.plist",
+      "entitlements": "./electron/build/entitlements.mac.plist",
+      "entitlementsInherit": "./electron/build/entitlements.mac.inherit.plist",
       "category": "public.app-category.developer-tools",
       "type": "distribution",
       "extendInfo": {
@@ -172,12 +183,13 @@
         }
       },
       "target": [
-        "zip"
+        "zip",
+        "dmg"
       ]
     },
     "dmg": {
       "sign": false,
-      "background": "./build/app-background-dmg.tiff",
+      "background": "./electron/build/app-background-dmg.tiff",
       "contents": [
         {
           "x": 410,

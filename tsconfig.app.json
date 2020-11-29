@@ -15,6 +15,6 @@
     "genDir": "aot",
     "skipMetadataEmit": true
   },
-  "files": ["main.ts"],
+  "files": ["electron/main.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

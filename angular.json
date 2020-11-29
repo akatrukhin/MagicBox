@@ -5,24 +5,28 @@
   "projects": {
     "magic-box": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "angular/src",
       "projectType": "application",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"],
-            "styles": ["src/styles.scss"],
+            "outputPath": "angular/dist",
+            "index": "angular/src/index.html",
+            "main": "angular/src/main.ts",
+            "tsConfig": "angular/src/tsconfig.app.json",
+            "polyfills": "angular/src/polyfills.ts",
+            "assets": [
+              "angular/src/assets/i18n",
+              "angular/src/assets/fonts",
+              "angular/src/about.html"
+            ],
+            "styles": ["angular/src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {
-              "path": "./angular.webpack.js"
+              "path": "./angular/angular.webpack.js"
             },
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "webWorkerTsConfig": "./angular/tsconfig.worker.json"
           },
           "configurations": {
             "dev": {
@@ -37,8 +41,8 @@
               "buildOptimizer": false,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.dev.ts"
                 }
               ]
             },
@@ -54,8 +58,8 @@
               "buildOptimizer": false,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.web.ts"
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.web.ts"
                 }
               ]
             },
@@ -71,12 +75,12 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "angular/src/environments/environment.ts",
+                  "with": "angular/src/environments/environment.prod.ts"
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "ngswConfigPath": "angular/ngsw-config.json"
             }
           }
         },
@@ -106,15 +110,19 @@
         "test": {
           "builder": "@angular-builders/custom-webpack:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills-test.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
+            "main": "angular/src/test.ts",
+            "polyfills": "angular/src/polyfills-test.ts",
+            "tsConfig": "angular/src/tsconfig.spec.json",
+            "karmaConfig": "angular/src/karma.conf.js",
             "scripts": [],
-            "styles": ["src/styles.scss"],
-            "assets": ["src/assets/i18n", "src/assets/fonts", "src/about.html"],
+            "styles": ["angular/src/styles.scss"],
+            "assets": [
+              "angular/src/assets/i18n",
+              "angular/src/assets/fonts",
+              "angular/src/about.html"
+            ],
             "customWebpackConfig": {
-              "path": "./angular.webpack.js"
+              "path": "./angular/angular.webpack.js"
             }
           }
         }

@@ -24,7 +24,7 @@ jobs:
       - name: Retrieve tag version
         id: ref
         run: |
-          pkgver=$(node ./scripts/get-pkg-version.js)
+          pkgver=$(node ./electron/scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
@@ -38,7 +38,7 @@ jobs:
         run: |
           npm install
       - name: Angular build
-       run: |
+        run: |
           npm run build:prod
       - name: MacOS build
         run: |
@@ -46,21 +46,21 @@ jobs:
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-      # - name: MacOS image
-      #  uses: actions/upload-artifact@v1
-      #  with:
-      #     name: MagicBox-${{steps.ref.outputs.version}}.dmg
-      #      path: ./release/MagicBox-${{steps.ref.outputs.version}}.dmg
+      - name: MacOS image
+        uses: actions/upload-artifact@v1
+        with:
+          name: MagicBox-${{steps.ref.outputs.version}}.dmg
+          path: ./electron/release/MagicBox-${{steps.ref.outputs.version}}.dmg
       - name: MacOS archive
         uses: actions/upload-artifact@v1
         with:
           name: MagicBox-${{steps.ref.outputs.version}}-mac.zip
-          path: ./release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
+          path: ./electron/release/MagicBox-${{steps.ref.outputs.version}}-mac.zip
       - name: Checksums file
         uses: actions/upload-artifact@v1
         with:
           name: latest-mac.yml
-          path: ./release/latest-mac.yml
+          path: ./electron/release/latest-mac.yml
   #
   #
   #

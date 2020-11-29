@@ -26,7 +26,7 @@ export const appMenuInit = () =>
               });
               about.loadURL(
                 url.format({
-                  pathname: path.join(__dirname, "../dist/about.html"),
+                  pathname: path.join(__dirname, "../../angular/dist/about.html"),
                   protocol: "file:",
                   slashes: true,
                 })

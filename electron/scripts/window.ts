@@ -87,7 +87,7 @@ export const buildAppUI = () => {
 
   win.loadURL(
     url.format({
-      pathname: path.join(__dirname, "../dist/index.html"),
+      pathname: path.join(__dirname, "../../angular/dist/index.html"),
       protocol: "file:",
       slashes: true,
     })

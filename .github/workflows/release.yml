@@ -30,7 +30,7 @@ jobs:
       # next step below.
       - name: Retrieve code signing certificate
         run: |
-          sh ./scripts/add-osx-cert.sh
+          sh ./electron/scripts/add-osx-cert.sh
         env:
           MAC_CERTS: ${{ secrets.MAC_CERTS }}
           MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}

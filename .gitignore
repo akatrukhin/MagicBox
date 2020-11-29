@@ -11,6 +11,9 @@ electron/scripts/*.js
 electron/scripts/*.js.map
 !electron/scripts/get-pkg-version.js
 
+# enviropment
+.env
+
 # dependencies
 /node_modules
 

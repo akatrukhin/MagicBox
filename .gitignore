@@ -2,7 +2,7 @@
 angular/dist
 electron/release
 angular/src/**/*.js
-!anglar/angular.webpack.js
+!angular/angular.webpack.js
 !src/karma.conf.js
 *.js
 *.js.map

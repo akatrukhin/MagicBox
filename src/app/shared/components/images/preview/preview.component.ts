@@ -82,6 +82,7 @@ export class PreviewComponent implements OnInit {
       }
       switch (file.original.type) {
         case "image/svg+xml":
+          console.log(file)
           this.tabs = [TabItems.Preview, TabItems.Code];
           // Get SVG code
           if (

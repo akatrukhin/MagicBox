@@ -212,3 +212,9 @@
   justify-content: space-between;
   padding: 0px 24px 100px 24px;
 }
+
+::ng-deep {
+  .select-files {
+    display: none;
+  }
+}

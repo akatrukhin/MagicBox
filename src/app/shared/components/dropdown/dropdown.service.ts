@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { AppFile, Set } from "../../../data";
+import { AppFile, FilesSet } from "../../../data";
 import { DialogService, SetService } from "../../../core/services";
 
 export enum Dropdown {
@@ -25,9 +25,9 @@ export class DropdownService {
     private setService: SetService
   ) { }
 
-  public setList(object: Set | AppFile): void {
+  public setList(object: FilesSet | AppFile): void {
     this.list.length = 0;
-    if (object instanceof Set) {
+    if (object instanceof FilesSet) {
       this.list.push(Dropdown.addFiles);
       if (object.files.length) {
         this.list.push(Dropdown.removeFiles);
@@ -50,8 +50,9 @@ export class DropdownService {
     }
   }
 
-  public selected(event: string, object: Set | AppFile): void {
-    const set: Set = object instanceof Set ? object : undefined;
+  public selected(event: string, object: FilesSet | AppFile): void {
+    console.log(event)
+    const set: FilesSet = object instanceof FilesSet ? object : undefined;
     switch (event) {
       case Dropdown.moveToSet:
         this.dialogService.moveToSet(this.getSelectedFiles(set), set, true);
@@ -80,7 +81,7 @@ export class DropdownService {
     }
   }
 
-  private getSelectedFiles(set: Set): AppFile[] {
+  private getSelectedFiles(set: FilesSet): AppFile[] {
     return set.files.filter((file) => file.selected);
   }
 }

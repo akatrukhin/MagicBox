@@ -52,7 +52,7 @@ export const DEFAULT_APP_SETTINGS = {
     suffix: true,
     updateCheck: true,
     clipboardWatcher: false,
-    fileWatcher: false,
+    // fileWatcher: false,
   },
   appearance: {
     theme: "ultra-dark",

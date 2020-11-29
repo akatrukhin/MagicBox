@@ -13,7 +13,6 @@
   font-size: 13px;
   font-weight: 600;
   box-shadow: var(--preview-shadow);
-  cursor: default;
 
   .header {
     align-items: flex-start;
@@ -41,7 +40,6 @@
         transform: translateY(2px);
         padding: 4px 13px;
         margin-top: 2px;
-        cursor: default;
         color: var(--preview-buttons-fg);
         text-shadow: none;
         background-color: var(--preview-buttons-bg);
@@ -187,15 +185,16 @@
       margin: 8px 0 24px;
 
       .tabs-item {
-        cursor: default;
         font-size: 15px;
         font-weight: 600;
         margin: 0 14px;
         color: var(--preview-tabs-fg);
+        cursor: pointer;
 
         &.active {
           position: relative;
           color: var(--preview-tabs-fg-active);
+          cursor: default;
 
           &:after {
             content: "";
@@ -314,6 +313,10 @@
     table {
       width: 100%;
       margin: 0 0 48px 0;
+
+      tr {
+        color: #000000a3;
+      }
 
       tr:nth-child(odd) {
         td {

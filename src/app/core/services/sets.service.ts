@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 import { ipcRenderer, remote } from "electron";
 import * as fs from "fs";
 import * as settings from "electron-settings";
-import { Set, AppFile, FileStatus, Import, Clipboard, Sets } from "../../data";
+import { FilesSet, AppFile, FileStatus, Import, Clipboard, Sets, getSet, saveSet } from "../../data";
 
 @Injectable({
   providedIn: "root",
@@ -30,7 +30,7 @@ export class SetService {
     return !!(window && window.process && window.process.type);
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private zone: NgZone) {
     if (this.isElectron) {
       this.settings = window
         .require("electron")
@@ -39,37 +39,20 @@ export class SetService {
       this.fs = window.require("fs");
       this.ipcRenderer = window.require("electron").ipcRenderer;
 
-      if (this.settings.getSync("app.fileWatcher")) {
-        this.startWatchAllFiles();
-      }
+      // if (this.settings.getSync("app.fileWatcher")) {
+      //   // this.startWatchAllFiles();
+      // }
 
       if (this.settings.has("sets")) {
         const sets = [...this.settings.getSync("sets") as Array<any>];
         sets.forEach((item: object) => {
-          const set = new Set({ ...item });
+          const set = new FilesSet({ ...item });
           set.setStatistics();
           Sets.push(set);
         });
       }
     }
   }
-
-  public getSet = (id: string): Set => {
-    switch (true) {
-      case id === "import":
-        return Import;
-      case id === "clipboard":
-        return Clipboard;
-      default:
-        return Sets.find((set) => set.id === id);
-    }
-  };
-
-  public saveSet = (id: string): void => {
-    // TODO:
-    this.getSet(id);
-    console.log(this.settings.getSync("sets"));
-  };
 
   public saveSets = async () => {
     if (this.isElectron) {
@@ -84,19 +67,19 @@ export class SetService {
   };
 
   public resetFileStatus = (setId: string): void => {
-    const set = this.getSet(setId);
+    const set = getSet(setId);
     set.files.forEach((file) => {
       if (this.fs.existsSync(file.original.path) || !file.shrinked) {
         file.status = FileStatus.needsUpdate;
       }
     });
-    this.getSet(setId).setStatistics();
-    this.saveSets();
+    getSet(setId).setStatistics();
+    saveSet(setId);
   };
 
   public async exportFolder(setId: string) {
     this.ipcRenderer.send("set-project-folder");
-    const set = this.getSet(setId);
+    const set = getSet(setId);
     await new Promise((resolve) => {
       ipcRenderer.once("get-folder-path", (event, path) => {
         set.path = path[0];
@@ -122,18 +105,19 @@ export class SetService {
         silent: true,
       }).show();
     }
-    this.saveSets();
+    saveSet(setId);
   }
 
   public deleteSet = (setId: string): void => {
-    this.router.navigate(Sets.length ? ["/sets/" + Sets[Sets.length - 1].id] : ["/import"]).then(e => {
-      const set = this.getSet(setId);
-      Sets.filter((_set, index) => {
-        if (set.id === set.id) {
-          Sets.splice(index, 1);
-        }
+    this.zone.run(() => {
+      this.router.navigate(["import"], { skipLocationChange: true }).then((e) => {
+        Sets.filter((set, index) => {
+          if (set.id === setId) {
+            Sets.splice(index, 1);
+          }
+        });
+        this.saveSets();
       });
-      this.saveSets();
     });
   };
 
@@ -143,66 +127,66 @@ export class SetService {
     });
   };
 
-  private watchFile = (file: AppFile, set: Set): void => {
-    if (this.settings.getSync("app.fileWatcher")) {
-      console.log(
-        `File check: ${file.original.name}`
-      );
-      if (this.fs.existsSync(file.original.path)) {
-        this.fs.watchFile(file.original.path, (curr, prev) => {
-          if (curr.size) {
-            if (curr.size !== file.shrinked.size) {
-              file.status = FileStatus.needsUpdate;
-            }
-          } else {
-            file.status = FileStatus.removed;
-          }
-          set.setStatistics();
-        });
-        if (file.hasSourceFile) {
-          if (file.shrinked.path) {
-            this.fs.watchFile(file.shrinked.path, (curr, prev) => {
-              if (!curr.size) {
-                file.status = FileStatus.needsUpdate;
-                set.setStatistics();
-              }
-            });
-          } else {
-            file.status = FileStatus.needsUpdate;
-          }
-        }
-      } else {
-        file.status = FileStatus.removed;
-      }
-      set.setStatistics();
-      this.saveSets();
-    }
-  };
+  // private watchFile = (file: AppFile, set: Set): void => {
+  //   if (this.settings.getSync("app.fileWatcher")) {
+  //     console.log(
+  //       `File check: ${file.original.name}`
+  //     );
+  //     if (this.fs.existsSync(file.original.path)) {
+  //       this.fs.watchFile(file.original.path, (curr, prev) => {
+  //         if (curr.size) {
+  //           if (curr.size !== file.shrinked.size) {
+  //             file.status = FileStatus.needsUpdate;
+  //           }
+  //         } else {
+  //           file.status = FileStatus.removed;
+  //         }
+  //         set.setStatistics();
+  //       });
+  //       if (file.hasSourceFile) {
+  //         if (file.shrinked.path) {
+  //           this.fs.watchFile(file.shrinked.path, (curr, prev) => {
+  //             if (!curr.size) {
+  //               file.status = FileStatus.needsUpdate;
+  //               set.setStatistics();
+  //             }
+  //           });
+  //         } else {
+  //           file.status = FileStatus.needsUpdate;
+  //         }
+  //       }
+  //     } else {
+  //       file.status = FileStatus.removed;
+  //     }
+  //     set.setStatistics();
+  //     this.saveSets();
+  //   }
+  // };
 
 
-  private startWatchAllFiles = (): void => {
-    if (this.settings.getSync("app.fileWatcher")) {
-      Sets.forEach((set) => {
-        set.files.forEach((file) => {
-          this.watchFile(file, set);
-        });
-      });
-    }
-  };
+  // private startWatchAllFiles = (): void => {
+  //   if (this.settings.getSync("app.fileWatcher")) {
+  //     Sets.forEach((set) => {
+  //       set.files.forEach((file) => {
+  //         this.watchFile(file, set);
+  //       });
+  //     });
+  //   }
+  // };
 
-  public watchFiles = (set: Set): void => {
-    console.log(`Start to watch ${set.name} files`);
-    if (this.settings.getSync("app.fileWatcher")) {
-      set.files.forEach((file) => {
-        this.watchFile(file, set);
-      });
-    } else {
-      console.log("Files tracking is disbaled");
-    }
-  };
+  // public watchFiles = (set: Set): void => {
+  //   console.log(`Start to watch ${set.name} files`);
+  //   if (this.settings.getSync("app.fileWatcher")) {
+  //     set.files.forEach((file) => {
+  //       this.watchFile(file, set);
+  //     });
+  //   } else {
+  //     console.log("Files tracking is disbaled");
+  //   }
+  // };
 
   public addSet = (name: string, files: AppFile[]) => {
-    const newSet = new Set({ name, files });
+    const newSet = new FilesSet({ name, files });
     Sets.push(newSet);
     this.saveSets();
   };

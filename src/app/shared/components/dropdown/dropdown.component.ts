@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { DropdownService } from "./dropdown.service";
 import { DropDownItemsAnimation } from "./dropdown.animations";
-import { Set, AppFile } from "../../../data";
+import { FilesSet, AppFile } from "../../../data";
 
 @Component({
   selector: "app-dropdown",
@@ -17,7 +17,7 @@ import { Set, AppFile } from "../../../data";
   animations: [DropDownItemsAnimation],
 })
 export class DropdownComponent {
-  @Input() object: Set | AppFile;
+  @Input() object: FilesSet | AppFile;
   @Output() status = new EventEmitter<boolean>();
   @Output() selectedFiles = new EventEmitter<File[]>();
   @ViewChild("invisibleInput", { static: false }) fakeInput: ElementRef;

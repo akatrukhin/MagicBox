@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { Subscription } from "rxjs";
-import { SetService } from "../../../core/services";
-import { Set } from "../../../data";
+import { getSet, FilesSet } from "../../data";
 
 @Component({
   selector: "app-set",
@@ -12,24 +11,25 @@ import { Set } from "../../../data";
       [noFilesTitle]="'Drop images here to add them to the set'"
     ></app-images>
   `,
+  styleUrls: ["../home/home.component.scss"],
 })
 export class SetComponent implements OnInit, OnDestroy {
-  set: Set;
+  set: FilesSet;
   subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private setService: SetService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Get Set at the first call
-    this.set = this.setService.getSet(this.route.snapshot.params["id"]);
+    this.set = getSet(this.route.snapshot.params["id"]);
     // Navigating inside Sets
     this.subscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.set = this.setService.getSet(this.route.snapshot.params["id"]);
+        console.log("Set router ", this.route.snapshot.params["id"])
+        this.set = getSet(this.route.snapshot.params["id"]);
       }
     });
   }

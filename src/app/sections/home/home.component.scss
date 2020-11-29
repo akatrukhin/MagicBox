@@ -1,14 +1,16 @@
 :host {
   position: relative;
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  transition: all ease-in-out 0.3s;
 }
 
 .home-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   position: relative;
   margin: 3.5vh 3.5vh 4.5vh 0;
-  width: 100%;
   min-width: 680px;
   user-select: none;
   overflow-y: scroll;

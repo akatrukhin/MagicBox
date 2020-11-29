@@ -110,7 +110,12 @@
     (onFileDrop)="dropped($event)"
   >
     <ng-template ngx-file-drop-content-tmp>
-      <div @ImportAnimation class="drop-zone import" *ngIf="!set.files.length">
+      <div
+        @ImportAnimation
+        class="drop-zone import"
+        *ngIf="!set.files.length"
+        (contextmenu)="onRightClickBody()"
+      >
         <div
           class="drop-content-container"
           *ngIf="isItTemporarySet(); else emptySet"
@@ -192,14 +197,34 @@
           (fileRightClick)="onRightClick($event)"
           (fileRightClickBody)="onRightClickBody()"
           (selectFile)="selectFile($event)"
-        ></app-table>
+        >
+          <input
+            #inputFiles
+            id="inputFiles"
+            type="file"
+            class="select-files"
+            (change)="getFilesFromSystem()"
+            multiple
+            accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
+          />
+        </app-table>
         <app-grid-view
           *ngSwitchCase="'grid'"
           [files]="set.files"
           (fileRightClick)="onRightClick($event)"
           (fileRightClickBody)="onRightClickBody()"
           (selectFile)="selectFile($event)"
-        ></app-grid-view>
+        >
+          <input
+            #inputFiles
+            id="inputFiles"
+            type="file"
+            class="select-files"
+            (change)="getFilesFromSystem()"
+            multiple
+            accept=".gif, .jpg, .jpeg, .tiff, .png, .svg, .sketch, .webp"
+          />
+        </app-grid-view>
       </div>
     </ng-template>
   </ngx-file-drop>
@@ -228,7 +253,7 @@
 </div>
 
 <ng-template #emptySet>
-  <div @ImportAnimation class="drop-zone">
+  <div @ImportAnimation class="drop-zone" (contextmenu)="onRightClickBody()">
     <div class="drop-content-container">
       <div class="empty-set f dc">
         <!-- Tip -->

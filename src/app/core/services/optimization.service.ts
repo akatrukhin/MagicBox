@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
 import { ElectronService } from "./electron/electron.service";
-import { Set } from "../../data/set";
+import { FilesSet } from "../../data/set";
 import { AppFile, IFile, FileStatus } from "../../data/file";
 import { convertSize } from "../../shared/utilities";
 import { SetService } from "./sets.service";
@@ -58,7 +58,7 @@ export class OptimizationService {
     }, 500);
   }
 
-  public async setOptimization(set: Set) {
+  public async setOptimization(set: FilesSet) {
     console.log(`%cProcessing files optimization`, "font-weight: bold");
     console.time(`Files optimization`);
     this.loadingProcess.next({ status: true, percentage: 0 });

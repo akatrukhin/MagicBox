@@ -3,9 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { HomeComponent } from "./sections/home/home.component";
 import { ImportComponent } from "./sections/import/import.component";
-import { SetsRoutingComponent } from "./sections/sets/sets-routing.component";
-import { SetsComponent } from "./sections/sets/sets.component";
-import { SetComponent } from "./sections/sets/set/set.component";
+import { SetComponent } from "./sections/set/set.component";
 import { SettingsComponent } from "./sections/settings/settings.component";
 
 const routes: Routes = [
@@ -23,18 +21,8 @@ const routes: Routes = [
         component: ImportComponent,
       },
       {
-        path: "sets",
-        component: SetsRoutingComponent,
-        children: [
-          {
-            path: "",
-            component: SetsComponent,
-          },
-          {
-            path: ":id",
-            component: SetComponent,
-          },
-        ],
+        path: "sets/:id",
+        component: SetComponent,
       },
       {
         path: "settings",
@@ -54,4 +42,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

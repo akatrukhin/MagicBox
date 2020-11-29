@@ -236,3 +236,9 @@ table {
     }
   }
 }
+
+::ng-deep {
+  .select-files {
+    display: none;
+  }
+}

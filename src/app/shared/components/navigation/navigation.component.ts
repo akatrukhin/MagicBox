@@ -5,7 +5,7 @@ import {
   ContextMenuService,
   SetService,
 } from "../../../core/services";
-import { Sets, Set, Import } from "../../../data";
+import { Sets, FilesSet, Import } from "../../../data";
 import { navigationNewItem } from "../../animations";
 
 @Component({
@@ -25,7 +25,7 @@ export class NavigationComponent {
     private setService: SetService
   ) { }
 
-  public getNotOptimizied(set: Set): number {
+  public getNotOptimizied(set: FilesSet): number {
     return set.statistics.notOptimized;
   }
 
@@ -40,7 +40,7 @@ export class NavigationComponent {
   }
 
   public addSet(): void {
-    const set = new Set({ name: `New files set` });
+    const set = new FilesSet({ name: `New files set` });
     Sets.push(set);
     setTimeout(() => {
       this.router.navigate(["/sets/" + set.id]);
@@ -56,7 +56,7 @@ export class NavigationComponent {
     return Boolean(this.electronService.settings.getSync("appearance.smallNav"));
   }
 
-  public onRightClick(set: Set): void {
+  public onRightClick(set: FilesSet): void {
     this.contextMenuService.showOnNavigationItem(set);
   }
 }

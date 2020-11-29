@@ -29,9 +29,7 @@ import { AppComponent } from "./app.component";
 import { ClipboardComponent } from "./sections/clipboard/clipboard.component";
 import { HomeComponent } from "./sections/home/home.component";
 import { ImportComponent } from "./sections/import/import.component";
-import { SetComponent } from "./sections/sets/set/set.component";
-import { SetsRoutingComponent } from "./sections/sets/sets-routing.component";
-import { SetsComponent } from "./sections/sets/sets.component";
+import { SetComponent } from "./sections/set/set.component";
 import { SettingsComponent } from "./sections/settings/settings.component";
 import {
   NavigationComponent,
@@ -75,8 +73,6 @@ import { AppConfig } from "../environments/environment";
     HomeComponent,
     NavigationComponent,
     SetComponent,
-    SetsComponent,
-    SetsRoutingComponent,
     ImportComponent,
     DropdownComponent,
     TableComponent,

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { MenuItemConstructorOptions } from "electron";
 
 import * as base64 from "base64-img";
@@ -6,7 +6,7 @@ import { Base64 } from "js-base64";
 
 import { ElectronService } from "./electron/electron.service";
 import { DialogService } from "./dialog.service";
-import { Set, AppFile } from "../../data";
+import { FilesSet, AppFile } from "../../data";
 import { setSvgCopiedFromApp } from "../../data/temp";
 import { svgCssReady } from "../../shared/utilities";
 import { SetService } from "./sets.service";
@@ -52,7 +52,8 @@ export class ContextMenuService {
   constructor(
     private dialogService: DialogService,
     private electronService: ElectronService,
-    private setService: SetService
+    private setService: SetService,
+    private zone: NgZone
   ) { }
 
   private menuItems = {
@@ -77,13 +78,13 @@ export class ContextMenuService {
       };
     },
     separator: { type: ContextMenuType.Separator } as Type,
-    moveFiles: (files: AppFile[], set: Set): MenuItemConstructorOptions => {
+    moveFiles: (files: AppFile[], set: FilesSet): MenuItemConstructorOptions => {
       return {
         label: ContextMenuLabels.MoveToSet,
         click: () => this.dialogService.moveToSet(files, set, true),
       };
     },
-    copyFiles: (files: AppFile[], set: Set): MenuItemConstructorOptions => {
+    copyFiles: (files: AppFile[], set: FilesSet): MenuItemConstructorOptions => {
       return {
         label: ContextMenuLabels.CopyToSet,
         click: () => this.dialogService.moveToSet(files, set, false),
@@ -124,25 +125,29 @@ export class ContextMenuService {
     removeFiles: (
       label: string,
       files: AppFile[],
-      set: Set
+      set: FilesSet
     ): MenuItemConstructorOptions => {
       return {
         label,
         click: () => {
-          set.removeFiles(files)
-          this.setService.saveSets()
+          this.zone.run(() => {
+            set.removeFiles(files)
+            this.setService.saveSets()
+          })
         },
       };
     },
     removeAllFiles: (
       label: string,
-      set: Set
+      set: FilesSet
     ): MenuItemConstructorOptions => {
       return {
         label,
         click: () => {
-          set.clean()
-          this.setService.saveSets()
+          this.zone.run(() => {
+            set.clean()
+            this.setService.saveSets()
+          })
         },
       };
     },
@@ -154,7 +159,9 @@ export class ContextMenuService {
     },
     addFiles: {
       label: ContextMenuLabels.AddFiles,
-      click: () => document.getElementById("inputFiles").click(),
+      click: () => {
+        this.electronService.ipcRenderer.send("get-files-from-system");
+      },
     },
     newSet: {
       label: ContextMenuLabels.CreateSet,
@@ -226,7 +233,7 @@ export class ContextMenuService {
     }
   }
 
-  public showOnFile(file: AppFile, currentSet?: Set): void {
+  public showOnFile(file: AppFile, currentSet?: FilesSet): void {
     let items: MenuItemConstructorOptions[] = [];
     if (file.original.path) {
       items.push(
@@ -286,7 +293,7 @@ export class ContextMenuService {
     this.buildContextMenu(items);
   }
 
-  public showOnSelectedFiles(files: AppFile[], currentSet: Set): void {
+  public showOnSelectedFiles(files: AppFile[], currentSet: FilesSet): void {
     this.buildContextMenu([
       this.menuItems.moveFiles(files, currentSet),
       this.menuItems.copyFiles(files, currentSet),
@@ -300,41 +307,47 @@ export class ContextMenuService {
     ]);
   }
 
-  public showOnBody(currentSet: Set): void {
-    const items: MenuItemConstructorOptions[] = [
-      this.menuItems.refresh(currentSet.id),
-      this.menuItems.separator,
+  public showOnBody(currentSet: FilesSet): void {
+    const items: MenuItemConstructorOptions[] = [];
+    currentSet.files.length && items.push(this.menuItems.refresh(currentSet.id), this.menuItems.separator)
+    items.push(
       this.menuItems.addFiles,
+    );
+    currentSet.files.length && items.push(
       this.menuItems.removeAllFiles(
         ContextMenuLabels.RemoveAllFiles,
         currentSet
-      ),
-      this.menuItems.separator,
-    ];
-    if (this.setService.isItStaticSet(currentSet.name)) {
-      items.push(
-        this.menuItems.newSet,
-        this.menuItems.moveFiles(currentSet.files, currentSet)
-      );
+      )
+    )
+    if (this.setService.isItStaticSet(currentSet.id)) {
+      if (currentSet.files.length) {
+        items.push(
+          this.menuItems.separator,
+          this.menuItems.newSet,
+          this.menuItems.moveFiles(currentSet.files, currentSet)
+        );
+      }
     } else {
-      items.push(this.menuItems.removeSet(currentSet.id));
+      items.push(this.menuItems.separator, this.menuItems.removeSet(currentSet.id));
     }
     this.buildContextMenu(items);
   }
 
-  public showOnNavigationItem(currentSet: Set): void {
-    const items: MenuItemConstructorOptions[] = [
-      this.menuItems.refresh(currentSet.id),
-      this.menuItems.separator,
-      this.menuItems.addFiles,
+  public showOnNavigationItem(currentSet: FilesSet): void {
+    const items: MenuItemConstructorOptions[] = [];
+    currentSet.files.length && items.push(this.menuItems.refresh(currentSet.id), this.menuItems.separator)
+    items.push(this.menuItems.addFiles)
+    currentSet.files.length && items.push(
       this.menuItems.removeFiles(
         ContextMenuLabels.RemoveAllFiles,
         currentSet.files,
         currentSet
       ),
+    );
+    items.push(
       this.menuItems.separator,
-    ];
-    items.push(this.menuItems.removeSet(currentSet.id));
+      this.menuItems.removeSet(currentSet.id)
+    );
     this.buildContextMenu(items);
   }
 

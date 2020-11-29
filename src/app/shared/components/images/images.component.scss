@@ -1,6 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 .images {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   min-height: 100%;
   max-height: 100%;
   font-weight: 600;
@@ -466,4 +473,12 @@
       text-shadow: 0 2px 18px rgba(59, 214, 180, 0.72);
     }
   }
+}
+
+.input-files {
+  position: relative;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: -1;
 }

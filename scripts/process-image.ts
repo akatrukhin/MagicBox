@@ -265,7 +265,7 @@ export const ProcessFile = (file, customPath?: string) => {
             const out = mozjpegJs.encode(input, {
               quality: settings.getSync("jpeg.quality"),
             });
-            fs.writeFile(newPath, out.data, (_error) => {
+            fs.writeFile(newPath, (out as any).data, (_error) => {
               sendToRenderer(_error, file.id, newPath);
             });
           }

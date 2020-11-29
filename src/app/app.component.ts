@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import {
   ElectronService,
@@ -13,6 +13,7 @@ import {
   AppFile,
   FileStatus,
   IFile,
+  getSet,
 } from "./data";
 
 @Component({
@@ -31,7 +32,8 @@ export class AppComponent {
     private router: Router,
     private previewFileService: PreviewFileService,
     private themeService: ThemeService,
-    private setService: SetService
+    private setService: SetService,
+    private zone: NgZone
   ) {
     this.themeService.initTheme();
 
@@ -57,21 +59,23 @@ export class AppComponent {
         electronService.ipcRenderer.on(
           "get-svg-from-clipboard",
           (event, svg) => {
-            if (svg.source !== svgCopiedFromApp) {
-              electronService.showNotification({
-                title: `SVG data copied`,
-                body: `New svg file was added to your clipboard page`,
-                silent: true,
-              });
-              const optimizedSVG = new AppFile(
-                this.createSvgFile(svg.source),
-                this.createSvgFile(svg.optimized)
-              );
-              optimizedSVG.hasSourceFile = true;
-              optimizedSVG.status = FileStatus.optimized;
-              Clipboard.files.push(optimizedSVG);
-              this.clipboardNotificationView = true;
-            }
+            this.zone.run(() => {
+              if (svg.source !== svgCopiedFromApp) {
+                electronService.showNotification({
+                  title: `SVG data copied`,
+                  body: `New svg file was added to your clipboard page`,
+                  silent: true,
+                });
+                const optimizedSVG = new AppFile(
+                  this.createSvgFile(svg.source),
+                  this.createSvgFile(svg.optimized)
+                );
+                optimizedSVG.hasSourceFile = true;
+                optimizedSVG.status = FileStatus.optimized;
+                Clipboard.files.push(optimizedSVG);
+                this.clipboardNotificationView = true;
+              }
+            })
           }
         );
       }
@@ -79,42 +83,44 @@ export class AppComponent {
       electronService.ipcRenderer.on(
         "paste-svg-from-clipboard",
         (event, svg) => {
-          const optimizedSVG = new AppFile(
-            this.createSvgFile(svg.source),
-            this.createSvgFile(svg.optimized)
-          );
-          optimizedSVG.hasSourceFile = true;
-          optimizedSVG.status = FileStatus.optimized;
+          this.zone.run(() => {
+            const optimizedSVG = new AppFile(
+              this.createSvgFile(svg.source),
+              this.createSvgFile(svg.optimized)
+            );
+            optimizedSVG.hasSourceFile = true;
+            optimizedSVG.status = FileStatus.optimized;
 
-          console.log(
-            `Route: ${this.currentRoute} recieved SVG from clipboard: \n`,
-            optimizedSVG
-          );
+            console.log(
+              `Route: ${this.currentRoute} recieved SVG from clipboard: \n`,
+              optimizedSVG
+            );
 
-          switch (true) {
-            case this.currentRoute.includes("/import"):
-              Import.addFile(optimizedSVG);
-              break;
-            case this.currentRoute.includes("/settings"):
-              Import.addFile(optimizedSVG);
-              this.router.navigate(["/import"]);
-              break;
-            case this.currentRoute.includes("/clipboard"):
-              Clipboard.addFile(optimizedSVG);
-              break;
-            case this.currentRoute.includes("/sets/"):
-              const setId = this.currentRoute.slice(
-                6,
-                this.currentRoute.length
-              );
-              const set = this.setService.getSet(setId);
-              if (set) {
-                set.addFile(optimizedSVG);
-                set.setStatistics();
-                this.setService.saveSets();
-              }
-              break;
-          }
+            switch (true) {
+              case this.currentRoute.includes("/import"):
+                Import.addFile(optimizedSVG);
+                break;
+              case this.currentRoute.includes("/settings"):
+                Import.addFile(optimizedSVG);
+                this.router.navigate(["/import"]);
+                break;
+              case this.currentRoute.includes("/clipboard"):
+                Clipboard.addFile(optimizedSVG);
+                break;
+              case this.currentRoute.includes("/sets/"):
+                const setId = this.currentRoute.slice(
+                  6,
+                  this.currentRoute.length
+                );
+                const set = getSet(setId);
+                if (set) {
+                  set.addFile(optimizedSVG);
+                  set.setStatistics();
+                  this.setService.saveSets();
+                }
+                break;
+            }
+          })
         }
       );
     }

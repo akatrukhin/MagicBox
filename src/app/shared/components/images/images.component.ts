@@ -1,8 +1,8 @@
 import {
   Component,
   ElementRef,
-  Inject,
   Input,
+  NgZone,
   OnChanges,
   OnInit,
   ViewChild,
@@ -15,9 +15,10 @@ import {
   ContextMenuService,
   DialogService,
   SetService,
-  WebWorkerService
+  ElectronService
+  // WebWorkerService
 } from "../../../core/services";
-import { Set, ViewMode, AppFile, IFile } from "../../../data";
+import { FilesSet, ViewMode, AppFile, IFile, saveSet } from "../../../data";
 import { DropdownService } from "../dropdown/dropdown.service";
 
 import {
@@ -34,7 +35,7 @@ import {
   animations: [ImportAnimation, FooterAnimation, LoadingBar, ViewTransition],
 })
 export class ImagesComponent implements OnChanges, OnInit {
-  @Input() set: Set;
+  @Input() set: FilesSet;
   @Input() noFilesTitle = "Drop images here to add them to the list";
   @ViewChild("inputFiles", { static: false }) inputFiles: ElementRef;
 
@@ -57,8 +58,8 @@ export class ImagesComponent implements OnChanges, OnInit {
     private dialogService: DialogService,
     private dropdownService: DropdownService,
     private setService: SetService,
-    // private electronService: ElectronService,
-    private webWorkerService: WebWorkerService,
+    private electronService: ElectronService,
+    private zone: NgZone
   ) {
     this.dropdownService.setList(this.set);
   }
@@ -68,6 +69,22 @@ export class ImagesComponent implements OnChanges, OnInit {
       this.loading = loadingStatus;
     });
     this.set.setStatistics();
+    this.electronService.ipcRenderer.once("set-files-from-system", (event, paths: string[]) => {
+      console.log('Process files from system: ', paths, this.set.files)
+      this.zone.run(() => {
+        paths.forEach((path: string) => {
+          if (!this.duplicateCheck(path)) {
+            this.set.addFile(
+              new AppFile(
+                new IFile(path, "")
+              )
+            );
+          }
+        });
+      })
+      this.set.setStatistics();
+      saveSet(this.set.id)
+    });
   }
 
   ngOnChanges() {
@@ -97,87 +114,79 @@ export class ImagesComponent implements OnChanges, OnInit {
 
   // Drag and Drop
   // Tray extends EventEmitter 'drop-files'
-  public async dropped(files: NgxFileDropEntry[]) {
+  public dropped(files: NgxFileDropEntry[]) {
     console.time(`Processing ${files.length} files`);
     for (const droppedFile of files) {
-      await this.convertingFile(droppedFile);
+      this.setFile(droppedFile);
     }
-    await this.setService.saveSets();
+    saveSet(this.set.id);
     // this.setService.watchFiles(this.set, this.set.files)
     console.timeEnd(`Processing ${files.length} files`);
-    await this.webWorkerService.startToTrackFilesChanges(this.set)
+    // this.webWorkerService.startToTrackFilesChanges(this.set.id)
   }
 
   // Set file from system
   public getFilesFromSystem() {
     const files: File[] = this.inputFiles.nativeElement.files;
-    console.log(`%cProcessing ${files.length} files`, "font-weight: bold");
     this.setFilesFromSystem(files);
     this.set.setStatistics();
-    this.setService.saveSets();
-    this.setService.watchFiles(this.set)
-    console.log(`%cProcessing process completed`, "font-weight: bold");
+    saveSet(this.set.id)
+    // this.webWorkerService.startToTrackFilesChanges(this.set.id)
+    console.log(`%c${files.length} files added`, "font-weight: bold");
   }
 
   public setFilesFromSystem(files: File[]): void {
     for (const file of files) {
-      const _file = new AppFile(new IFile(file.path, file.type));
-      if (!this.isFileDulicate(_file)) {
-        this.set.addFile(_file);
+      if (!this.duplicateCheck(file.path)) {
+        this.set.addFile(
+          new AppFile(
+            new IFile(
+              file.path,
+              file.type,
+              file.name,
+              file.size,
+              undefined,
+              file.lastModified
+            )
+          )
+        );
       }
     }
   }
 
-  private async convertingFile(droppedFile: NgxFileDropEntry) {
-    console.time(`${droppedFile.fileEntry.name}`);
-    await this.setFile(droppedFile);
-    console.timeEnd(`${droppedFile.fileEntry.name}`);
-  }
-
   private setFile(droppedFile: NgxFileDropEntry) {
-    return new Promise((resolve, reject) => {
-      try {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((converted: File) => {
-          if (
-            /\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(converted.name)
-          ) {
-            const appFile = new AppFile(
-              new IFile(
-                converted.path,
-                converted.type ? converted.type : "sketch"
-              )
-            );
-            if (!this.isFileDulicate(appFile)) {
-              this.set.addFile(appFile);
-            }
-          } else {
-            console.warn("File format is not supported");
-          }
-          resolve();
-        });
-      } catch (error) {
-        throw new Error(
-          `Unnable to process file: ${droppedFile.fileEntry.name}`
-        );
-        reject();
-      }
-    });
+    if (/\.(gif|jpg|jpeg|tiff|png|svg|sketch|webp)$/i.test(droppedFile.fileEntry.name)) {
+      const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+      fileEntry.file((converted: File) => {
+        if (!this.duplicateCheck(converted.path)) {
+          const appFile = new AppFile(
+            new IFile(
+              converted.path,
+              converted.type ? converted.type : "sketch",
+              converted.name,
+              converted.size,
+              undefined,
+              converted.lastModified
+            )
+          );
+          this.set.addFile(appFile)
+        } else {
+          console.warn("File duplicate found");
+        }
+      });
+    } else {
+      console.warn("File format is not supported");
+    }
   }
 
-  private isFileDulicate(file: AppFile): boolean {
-    let isDublicate = false;
-    this.set.files = this.set.files.filter((source: AppFile) => {
-      if (JSON.stringify(source.original) === JSON.stringify(file.original)) {
-        isDublicate = true;
-      }
-      return true;
-    });
-    return isDublicate;
+  private duplicateCheck(path: string): AppFile | undefined {
+    return this.set.files.find((source: AppFile) => source.original.path === path);
   }
 
   public removeSelectedFiles(): void {
-    this.set.removeFiles(this.selectedFiles);
+    this.zone.run(() => {
+      this.set.removeFiles(this.selectedFiles);
+    })
   }
 
   public selectFile(file: AppFile): void {
@@ -206,7 +215,7 @@ export class ImagesComponent implements OnChanges, OnInit {
   }
 
   public setTitle(): void {
-    this.setService.saveSets();
+    saveSet(this.set.id);
   }
 
   public getOptimizedFiles(): number {
@@ -216,7 +225,7 @@ export class ImagesComponent implements OnChanges, OnInit {
   public switchViewMode(): void {
     this.set.viewMode =
       this.set.viewMode === ViewMode.grid ? ViewMode.list : ViewMode.grid;
-    this.setService.saveSets();
+    saveSet(this.set.id);
   }
 
   public isItTemporarySet(): boolean {

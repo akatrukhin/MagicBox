@@ -1,4 +1,6 @@
 import { AppFile, FileStatus } from "./file";
+import * as settings from "electron-settings";
+import * as fs from "fs";
 
 export enum ViewMode {
   grid = "grid",
@@ -17,13 +19,13 @@ export interface ISetStat {
   notOptimized: number;
 }
 
-class Entity {
+export class Entity {
   constructor(fields?: any) {
     Object.assign(this, fields);
   }
 }
 
-export class Set extends Entity {
+export class FilesSet extends Entity {
   id: string;
   name: string;
   path?: string;
@@ -31,7 +33,7 @@ export class Set extends Entity {
   files: AppFile[];
   statistics: ISetStat;
 
-  constructor(fields: Partial<Set>) {
+  constructor(fields: Partial<FilesSet>) {
     super(fields);
     const { id, name, viewMode, files, statistics } = fields;
     if (!id) {
@@ -114,9 +116,30 @@ export class Set extends Entity {
   };
 }
 
-export const Import = new Set({ id: "import", name: StaticSets.Import });
-export const Clipboard = new Set({
+export const Import = new FilesSet({ id: "import", name: StaticSets.Import });
+export const Clipboard = new FilesSet({
   id: "clipboard",
   name: StaticSets.Clipboard,
 });
-export const Sets: Set[] = []
+export const Sets: FilesSet[] = []
+
+// TODO:
+//   1) Rename Sets 
+//   2) Sets as Map 
+//   
+export const saveSet = async (id: string) => {
+  const key = Sets.findIndex(set => set.id === id)
+  await settings.set(`sets[${key}]`, Sets[key] as any)
+}
+
+export const getSet = (id: string): FilesSet => {
+  switch (true) {
+    case id === "import":
+      return Import;
+    case id === "clipboard":
+      return Clipboard;
+    default:
+      return Sets.find((set) => set.id === id);
+  }
+};
+

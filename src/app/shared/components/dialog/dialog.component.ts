@@ -1,9 +1,9 @@
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { SetService } from "../../../core/services/sets.service";
-import { Sets, Set } from "../../../data";
+import { Sets, FilesSet } from "../../../data";
 export interface DialogData {
-  currentSet: Set | undefined;
+  currentSet: FilesSet | undefined;
 }
 
 @Component({
@@ -12,7 +12,7 @@ export interface DialogData {
   styleUrls: ["./dialog.component.scss"],
 })
 export class DialogComponent {
-  sets: Set[] = Sets;
+  sets: FilesSet[] = Sets;
   fileId: string;
   setId: string;
 
@@ -24,7 +24,7 @@ export class DialogComponent {
     this.setId = this.data.currentSet ? this.data.currentSet.id : "";
   }
 
-  public selectSet(set: Set): void {
+  public selectSet(set: FilesSet): void {
     this.fileId = set.id;
   }
 
@@ -33,12 +33,12 @@ export class DialogComponent {
   }
 
   public addSet(): void {
-    const set = new Set({ name: `New set ${this.sets.length}` });
+    const set = new FilesSet({ name: `New set ${this.sets.length}` });
     Sets.push(set);
     this.setService.saveSets();
   }
 
-  public trackByFn(index: string, set: Set): string {
+  public trackByFn(index: string, set: FilesSet): string {
     return set.id;
   }
 }

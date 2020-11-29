@@ -119,6 +119,23 @@ export const buildAppUI = () => {
       }
     });
   });
+
+  ipcMain.once("get-files-from-system", () => {
+    const options: OpenDialogOptions = {
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg', 'webp'] },
+        { name: 'Custom File Type', extensions: ['sketch'] },
+      ]
+    };
+    dialog.showOpenDialog(options, (result) => {
+      try {
+        win.webContents.send("set-files-from-system", result);
+      } catch (e) {
+        log.error(e);
+      }
+    });
+  });
 }
 
 // Quit when all windows are closed.

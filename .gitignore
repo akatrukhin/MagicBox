@@ -2,15 +2,15 @@
 angular/dist
 electron/release
 angular/src/**/*.js
-!angular/angular.webpack.js
-!src/karma.conf.js
 *.js
 *.js.map
-!postinstall.js
-!postinstall-web.js
 electron/scripts/*.js
 electron/scripts/*.js.map
+!postinstall.js
+!postinstall-web.js
 !electron/scripts/get-pkg-version.js
+!angular/angular.webpack.js
+!src/karma.conf.js
 
 # enviropment
 .env

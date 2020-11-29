@@ -36,15 +36,13 @@ jobs:
           MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
       - name: Set up build environment
         run: |
-          yarn install
-      # This step also signs and notarizes the app. NOTE that forge does this,
-      # as we shall not notarize and/or sign the resulting DMG file as well!
-      - name: Compile Angular
+          npm install --unsafe-perm=true --allow-root
+      - name: Angular build
         run: |
-          yarn run build:prod
-      - name: MacOS Build
+          npm run build:prod
+      - name: MacOS build
         run: |
-          npx electron-builder build --mac
+          npm run build:env
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}

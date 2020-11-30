@@ -42,7 +42,7 @@ jobs:
           npm run build:prod
       - name: MacOS build
         run: |
-          npm run build:prod && npx electron-builder build --mac
+          npm run build:prod && npx electron-builder build --mac -p never
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}

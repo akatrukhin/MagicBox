@@ -169,12 +169,12 @@
       "!electron/build"
     ],
     "mac": {
-      "icon": ".electron/build/app-icon.icns",
+      "icon": "electron/build/app-icon.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "artifactName": "MagicBox-${version}-${arch}.${ext}",
-      "entitlements": "./electron/build/entitlements.mac.plist",
-      "entitlementsInherit": "./electron/build/entitlements.mac.inherit.plist",
+      "entitlements": "electron/build/entitlements.mac.plist",
+      "entitlementsInherit": "electron/build/entitlements.mac.inherit.plist",
       "category": "public.app-category.developer-tools",
       "type": "distribution",
       "extendInfo": {
@@ -189,7 +189,7 @@
     },
     "dmg": {
       "sign": false,
-      "background": "./electron/build/app-background-dmg.tiff",
+      "background": "electron/build/app-background-dmg.tiff",
       "contents": [
         {
           "x": 410,
